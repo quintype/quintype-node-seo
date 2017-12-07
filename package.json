@@ -1,0 +1,32 @@
+{
+  "name": "@quintype/seo",
+  "version": "0.0.1",
+  "description": "SEO Modules for Quintype",
+  "main": "dist/index.cjs.js",
+  "repository": "https://github.com/quintype/quintype-node-seo",
+  "author": "Quintype Developers <dev-core@quintype.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "lodash": "^4.17.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "prepack": "yarn run build",
+    "prepublishOnly": "yarn test && git diff --quiet && git tag v$(cat package.json | grep version | head -n1  | cut -d \\\" -f 4) && git push --tags origin master",
+    "test": "yarn run build && mocha test"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "mocha": "^4.0.1",
+    "rollup": "^0.52.1",
+    "rollup-plugin-babel": "^3.0.2"
+  }
+}
