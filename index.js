@@ -54,7 +54,7 @@ function getPropertyName(key) {
 export class SEO {
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;
-    this.generators = (seoConfig.generators || [BasicTags, OgTags, TwitterTags, StaticTags, StructudDataTags]).concat(seoConfig.extraGenerators || []);
+    this.generators = (seoConfig.generators || [BasicTags, OgTags, TwitterTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
   }
 
   getMetaTags(config, pageType, data) {
