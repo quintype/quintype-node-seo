@@ -17,10 +17,10 @@ export class MetaTagList {
 }
 
 export function BasicTags(seoConfig, config, pageType, data) {
-  // All pages have title, canonical, and description
+  // All pages have title, and description
   // Specific Pages:
   // Home and Section have keywords
-  // Stories have Keywords and News Keywords
+  // Stories have Canonical, Keywords and News Keywords
   return [];
 }
 
@@ -36,7 +36,7 @@ export function TwitterTags(seoConfig, config, pageType, data) {
   return [];
 }
 
-export function StaticTags(seoConfig, config, pageType, data) {  
+export function StaticTags(seoConfig, config, pageType, data) {
   return entries(seoConfig.staticTags || {})
     .map(([key, value]) => ({[getPropertyName(key)]: key, content: value}));
 }
