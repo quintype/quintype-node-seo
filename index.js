@@ -1,4 +1,4 @@
-import {omit, entries, get} from "lodash";
+import {omit, entries, get, flatMap} from "lodash";
 import React from "react";
 import ReactDomServer from"react-dom/server";
 
@@ -105,8 +105,7 @@ export class SEO {
     this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
   }
 
-  getMetaTags(config, pageType, data, params) {
-    return Promise.all(this.generators.map(generator => Promise.resolve(generator(this.seoConfig, config, pageType, data, params))))
-      .then(listOfListofTags => new MetaTagList([].concat.apply([], listOfListofTags)));
+  getMetaTags(config, pageType, data, params = {}) {
+    return new MetaTagList(flatMap(this.generators, generator => generator(this.seoConfig, config, pageType, data, params)));
   }
 }
