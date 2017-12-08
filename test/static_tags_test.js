@@ -1,12 +1,8 @@
-const {SEO, StaticTags} = require("..");
+const {StaticTags} = require("..");
+const {getSeoMetadata, assertContains} = require("./utils");
 
-var assert = require('assert');
-
-function getSeoMetadata(seoConfig, config, pageType, data) {
-  return new SEO(seoConfig)
-    .getMetaTags(config, pageType, data)
-    .toString();
-}
+const assert = require('assert');
+const url = require("url");
 
 describe('SEO', function() {
   describe('StaticTags', function() {
