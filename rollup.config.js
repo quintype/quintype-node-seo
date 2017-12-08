@@ -11,5 +11,5 @@ export default {
       presets: ["react"]
     })
   ],
-  external: ["react","react-dom/server","lodash"]
+  external: ["react","react-dom/server","lodash","quintype-js"]
 }

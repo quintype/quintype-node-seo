@@ -4,6 +4,8 @@ import ReactDomServer from"react-dom/server";
 
 export * from './src/text-tags.js';
 export * from './src/static-tags.js';
+export * from './src/author-tags.js';
+export * from './src/image-tags.js';
 
 export class MetaTagList {
   constructor(tags) {
@@ -17,17 +19,6 @@ export class MetaTagList {
   addTag() {
     return new MetaTagList(this.tags.concat([].slice.call(arguments)));
   }
-}
-
-export function ImageTags(seoConfig, config, pageType, data, {url}) {
-  // Story Pages have og:image, height, width
-  // Story Pages have twitter:image
-  return [];
-}
-
-export function AuthorTags(seoConfig, config, pageType, data, {url}) {
-  // Story pages have creator and twitter creator
-  return [];
 }
 
 export function StructuredDataTags(seoConfig, config, pageType, data, {url}) {
