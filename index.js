@@ -2,10 +2,12 @@ import {omit, flatMap} from "lodash";
 import React from "react";
 import ReactDomServer from"react-dom/server";
 
-export * from './src/text-tags.js';
-export * from './src/static-tags.js';
-export * from './src/author-tags.js';
-export * from './src/image-tags.js';
+import {TextTags} from './src/text-tags.js';
+import {StaticTags} from './src/static-tags.js';
+import {AuthorTags} from './src/author-tags.js';
+import {ImageTags} from './src/image-tags.js';
+
+export {TextTags, StaticTags, AuthorTags, ImageTags};
 
 export class MetaTagList {
   constructor(tags) {
