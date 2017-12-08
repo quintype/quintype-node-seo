@@ -25,7 +25,7 @@ export class MetaTagList {
   }
 }
 
-export function TextTags(seoConfig, config, pageType, data) {
+export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   function findRelevantConfig(pred) {
     const seoMetadata = config['seo-metadata'].find(pred) || {};
@@ -48,20 +48,16 @@ export function TextTags(seoConfig, config, pageType, data) {
   const basicTags = {
     'description': seoData.description,
     'title': seoData.title,
-    'keywords': seoData.keywords
+    'keywords': seoData.keywords,
   };
 
   const newsTags = seoConfig.enableNews && pageType == 'story' ? {
     "news_keywords": seoData.keywords
   } : undefined;
 
-  const storyTags = pageType == 'story' ? {
-    // canonical
-  } : undefined;
-
   const ogTags = seoConfig.enableOgTags ? {
     'og:type': pageType == 'story-page' ? 'article' : 'website',
-    //'og:url': undefined,
+    'og:url': `${config['sketches-host']}${url.pathname}`,
     'og:title': seoData.title,
     'og:description': seoData.description
   } : undefined;
@@ -72,27 +68,32 @@ export function TextTags(seoConfig, config, pageType, data) {
     'twitter:description': seoData.description,
   } : undefined;
 
-  const allTags = Object.assign(basicTags, newsTags, storyTags, ogTags, twitterTags);
+  const allTags = Object.assign(basicTags, newsTags, ogTags, twitterTags);
 
-  return [{tag: "title", children: data.title || seoData['page-title']}].concat(objectToTags(allTags));
+  const titleAndCanonical = [
+    {tag: "title", children: data.title || seoData['page-title']},
+    {tag: "link", rel: "canonical", href: `${config['sketches-host']}${url.pathname}`}
+  ]
+
+  return titleAndCanonical.concat(objectToTags(allTags));
 }
 
-export function ImageTags(seoConfig, config, pageType, data) {
+export function ImageTags(seoConfig, config, pageType, data, {url}) {
   // Story Pages have og:image, height, width
   // Story Pages have twitter:image
   return [];
 }
 
-export function AuthorTags(seoConfig, config, pageType, data) {
+export function AuthorTags(seoConfig, config, pageType, data, {url}) {
   // Story pages have creator
   return [];
 }
 
-export function StaticTags(seoConfig, config, pageType, data) {
+export function StaticTags(seoConfig, config, pageType, data, {url}) {
   return objectToTags(seoConfig.staticTags || {})
 }
 
-export function StructuredDataTags(seoConfig, config, pageType, data) {
+export function StructuredDataTags(seoConfig, config, pageType, data, {url}) {
   // All Pages have: Publisher, Site
   // Story Page have : Article/NewsArticle/LiveBlog/Review as appropriate
   return [];
@@ -104,8 +105,8 @@ export class SEO {
     this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
   }
 
-  getMetaTags(config, pageType, data) {
-    return Promise.all(this.generators.map(generator => Promise.resolve(generator(this.seoConfig, config, pageType, data))))
+  getMetaTags(config, pageType, data, params) {
+    return Promise.all(this.generators.map(generator => Promise.resolve(generator(this.seoConfig, config, pageType, data, params))))
       .then(listOfListofTags => new MetaTagList([].concat.apply([], listOfListofTags)));
   }
 }
