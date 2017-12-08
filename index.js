@@ -26,7 +26,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url}) {
 }
 
 export function AuthorTags(seoConfig, config, pageType, data, {url}) {
-  // Story pages have creator
+  // Story pages have creator and twitter creator
   return [];
 }
 
