@@ -1,6 +1,15 @@
-import {omit, entries} from "lodash";
+import {omit, entries, get} from "lodash";
 import React from "react";
 import ReactDomServer from"react-dom/server";
+
+function objectToTags(object) {
+  return entries(object)
+    .map(([key, value]) => ({[getPropertyName(key)]: key, content: value}));
+}
+
+function getPropertyName(key) {
+  return (key.startsWith('fb:') || key.startsWith('og:')) ? 'property' : 'name';
+}
 
 export class MetaTagList {
   constructor(tags) {
@@ -16,29 +25,71 @@ export class MetaTagList {
   }
 }
 
-export function BasicTags(seoConfig, config, pageType, data) {
-  // All pages have title, and description
-  // Specific Pages:
-  // Home and Section have keywords
-  // Stories have Canonical, Keywords and News Keywords
-  return [];
+export function TextTags(seoConfig, config, pageType, data) {
+
+  function findRelevantConfig(pred) {
+    const seoMetadata = config['seo-metadata'].find(pred) || {};
+    return seoMetadata.data;
+  }
+
+  function getSeoData(pageType) {
+    switch(pageType) {
+      case 'home-page': return findRelevantConfig(page => page['owner-type'] === 'home')
+      case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData('home-page');
+      default: return getSeoData('home-page');
+    }
+  }
+
+  const seoData = getSeoData(pageType);
+
+  if(!seoData)
+    return [];
+
+  const basicTags = {
+    'description': seoData.description,
+    'title': seoData.title,
+    'keywords': seoData.keywords
+  };
+
+  const newsTags = seoConfig.enableNews && pageType == 'story' ? {
+    "news_keywords": seoData.keywords
+  } : undefined;
+
+  const storyTags = pageType == 'story' ? {
+    // canonical
+  } : undefined;
+
+  const ogTags = seoConfig.enableOgTags ? {
+    'og:type': pageType == 'story-page' ? 'article' : 'website',
+    //'og:url': undefined,
+    'og:title': seoData.title,
+    'og:description': seoData.description
+  } : undefined;
+
+  const twitterTags = seoConfig.enableTwitterCards ? {
+    'twitter:card': "summary_large_image",
+    'twitter:title': seoData.title,
+    'twitter:description': seoData.description,
+  } : undefined;
+
+  const allTags = Object.assign(basicTags, newsTags, storyTags, ogTags, twitterTags);
+
+  return [{tag: "title", children: data.title || seoData['page-title']}].concat(objectToTags(allTags));
 }
 
-export function OgTags(seoConfig, config, pageType, data) {
-  // All pages have og:type, og:url, og:title, og:description
+export function ImageTags(seoConfig, config, pageType, data) {
   // Story Pages have og:image, height, width
+  // Story Pages have twitter:image
   return [];
 }
 
-export function TwitterTags(seoConfig, config, pageType, data) {
-  // All stories have card, title, description, image
+export function AuthorTags(seoConfig, config, pageType, data) {
   // Story pages have creator
   return [];
 }
 
 export function StaticTags(seoConfig, config, pageType, data) {
-  return entries(seoConfig.staticTags || {})
-    .map(([key, value]) => ({[getPropertyName(key)]: key, content: value}));
+  return objectToTags(seoConfig.staticTags || {})
 }
 
 export function StructuredDataTags(seoConfig, config, pageType, data) {
@@ -47,14 +98,10 @@ export function StructuredDataTags(seoConfig, config, pageType, data) {
   return [];
 }
 
-function getPropertyName(key) {
-  return (key.startsWith('fb:') || key.startsWith('og:')) ? 'property' : 'name';
-}
-
 export class SEO {
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;
-    this.generators = (seoConfig.generators || [BasicTags, OgTags, TwitterTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
+    this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
   }
 
   getMetaTags(config, pageType, data) {
