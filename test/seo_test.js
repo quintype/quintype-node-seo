@@ -35,6 +35,15 @@ describe('SEO', function() {
       };
       const string = getSeoMetadata(seoConfig, {}, 'home-page', {});
       assert.equal('<meta property="og:site_name" content="Quintype"/>', string);
+    });
+
+    it('removes undefined keys', function() {
+      const seoConfig = {
+        generators: [StaticTags],
+        staticTags: { "og:site_name": undefined }
+      };
+      const string = getSeoMetadata(seoConfig, {}, 'home-page', {});
+      assert.equal('', string);
     })
   });
 });

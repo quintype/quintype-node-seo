@@ -4,6 +4,7 @@ import ReactDomServer from"react-dom/server";
 
 function objectToTags(object) {
   return entries(object)
+    .filter(([key, value]) => value)
     .map(([key, value]) => ({[getPropertyName(key)]: key, content: value}));
 }
 
