@@ -6,8 +6,9 @@ import {TextTags} from './src/text-tags.js';
 import {StaticTags} from './src/static-tags.js';
 import {AuthorTags} from './src/author-tags.js';
 import {ImageTags} from './src/image-tags.js';
+import {StructuredDataTags} from './src/structured-data-tags.js';
 
-export {TextTags, StaticTags, AuthorTags, ImageTags};
+export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags};
 
 export class MetaTagList {
   constructor(tags) {
@@ -21,12 +22,6 @@ export class MetaTagList {
   addTag() {
     return new MetaTagList(this.tags.concat([].slice.call(arguments)));
   }
-}
-
-export function StructuredDataTags(seoConfig, config, pageType, data, {url}) {
-  // All Pages have: Publisher, Site
-  // Story Page have : Article/NewsArticle/LiveBlog/Review as appropriate
-  return [];
 }
 
 export class SEO {
