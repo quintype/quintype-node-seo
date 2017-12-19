@@ -7,8 +7,9 @@ import {StaticTags} from './src/static-tags.js';
 import {AuthorTags} from './src/author-tags.js';
 import {ImageTags} from './src/image-tags.js';
 import {StructuredDataTags} from './src/structured-data-tags.js';
+import {StoryAmpTags} from './src/amp-tags.js';
 
-export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags};
+export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags};
 
 export class MetaTagList {
   constructor(tags) {
@@ -27,7 +28,7 @@ export class MetaTagList {
 export class SEO {
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;
-    this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags]).concat(seoConfig.extraGenerators || []);
+    this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags, StoryAmpTags]).concat(seoConfig.extraGenerators || []);
   }
 
   getMetaTags(config, pageType, data, params = {}) {
