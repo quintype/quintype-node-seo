@@ -109,6 +109,6 @@ describe('TextTags', function() {
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<meta name="news_keywords" content="Footag"/>', string);
       assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);
-    })
+    });
   })
 });

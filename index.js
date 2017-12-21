@@ -1,4 +1,4 @@
-import {omit, flatMap} from "lodash";
+import {omit, flatMap, get} from "lodash";
 import React from "react";
 import ReactDomServer from"react-dom/server";
 
@@ -32,6 +32,7 @@ export class SEO {
   }
 
   getMetaTags(config, pageType, data, params = {}) {
+    pageType = get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
     return new MetaTagList(flatMap(this.generators, generator => generator(this.seoConfig, config, pageType, data, params)));
   }
 }

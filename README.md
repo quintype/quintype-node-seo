@@ -33,3 +33,17 @@ new SEO({
   ampStoryPages: true
 });
 ```
+
+### Page Type Aliases
+
+Sometimes, a page will have the same SEO characteristics as another page, but required different data loading logic. For example, a particular section may have some extra data, and a completely different layout.
+
+In this case, the preferred solution is to use a different PAGE_TYPE, and the pass the following flags to the SEO module.
+
+```javascript
+new SEO({
+  pageTypeAliases: {
+    "awesome-page": "section-page"
+  }
+})
+```
