@@ -123,6 +123,7 @@ describe('TextTags', function() {
       const seo = new SEO({generators: []});
       const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
       assert.equal("My Title", seo.getTitle(config, 'home-page', {title: "My Title"}, {}));
+      assert.equal("My Title", seo.getTitle(config, 'home-page', {data: {title: "My Title"}}, {}));
     });
   });
 });

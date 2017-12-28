@@ -78,8 +78,11 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 }
 
 export function getTitle(seoConfig, config, pageType, data, params) {
-  if(data && data.title)
-    return data.title;
+  if(get(data, ["title"]))
+    return get(data, ["title"]);
+
+  if(get(data, ["data", "title"]))
+    return get(data, ["data", "title"]);
 
   const seoData = getSeoData(config, pageType, data) || {};
   return seoData['page-title'];
