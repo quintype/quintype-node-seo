@@ -1,4 +1,4 @@
-const {TextTags} = require("..");
+const {TextTags, SEO} = require("..");
 const {getSeoMetadata, assertContains} = require("./utils");
 
 const assert = require('assert');
@@ -110,5 +110,19 @@ describe('TextTags', function() {
       assertContains('<meta name="news_keywords" content="Footag"/>', string);
       assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);
     });
-  })
+  });
+
+  describe("Getting the title", function() {
+    it("can also get the title only", function() {
+      const seo = new SEO({generators: []});
+      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      assert.equal("Foobar", seo.getTitle(config, 'home-page', {}, {}));
+    });
+
+    it("can also get the title if passed in from data", function() {
+      const seo = new SEO({generators: []});
+      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      assert.equal("My Title", seo.getTitle(config, 'home-page', {title: "My Title"}, {}));
+    });
+  });
 });

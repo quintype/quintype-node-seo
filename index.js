@@ -2,7 +2,7 @@ import {omit, flatMap, get} from "lodash";
 import React from "react";
 import ReactDomServer from"react-dom/server";
 
-import {TextTags} from './src/text-tags.js';
+import {TextTags, getTitle} from './src/text-tags.js';
 import {StaticTags} from './src/static-tags.js';
 import {AuthorTags} from './src/author-tags.js';
 import {ImageTags} from './src/image-tags.js';
@@ -34,5 +34,9 @@ export class SEO {
   getMetaTags(config, pageType, data, params = {}) {
     pageType = get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
     return new MetaTagList(flatMap(this.generators, generator => generator(this.seoConfig, config, pageType, data, params)));
+  }
+
+  getTitle(config, pageType, data, params = {}) {
+    return getTitle(this.seoConfig, config, pageType, data, params)
   }
 }
