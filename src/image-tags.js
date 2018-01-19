@@ -18,10 +18,10 @@ export function ImageTags(seoConfig, config, pageType, data, {url}) {
   }
 
   if(seoConfig.enableOgTags) {
-    tags.push({name: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress"})}`});
-    tags.push({name: "og:image:width", content: 1200});
+    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress"})}`});
+    tags.push({property: "og:image:width", content: 1200});
     if(get(story, ["hero-image-metadata", "focus-point"])) {
-      tags.push({name: "og:image:height", content: 630})
+      tags.push({property: "og:image:height", content: 630})
     }
   }
 
