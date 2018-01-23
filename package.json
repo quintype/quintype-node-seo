@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "rollup -c",
+    "coverage": "nyc npm test",
     "prepack": "npm run build",
     "prepublishOnly": "npm install && npm test && git diff --quiet && git tag v$(cat package.json | grep version | head -n1  | cut -d \\\" -f 4) && git push --tags origin master",
     "test": "npm run build && mocha test"
@@ -22,6 +23,7 @@
     "babel-preset-react": "^6.24.1",
     "lodash": "^4.17.4",
     "mocha": "^4.0.1",
+    "nyc": "^11.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "rollup": "^0.52.1",
