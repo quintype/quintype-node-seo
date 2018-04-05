@@ -8,8 +8,9 @@ import {AuthorTags} from './src/author-tags.js';
 import {ImageTags} from './src/image-tags.js';
 import {StructuredDataTags} from './src/structured-data-tags.js';
 import {StoryAmpTags} from './src/amp-tags.js';
+import {generateCommonSeo} from './src/generate-common-seo';
 
-export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags};
+export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags, generateCommonSeo};
 
 export class MetaTagList {
   constructor(tags) {
