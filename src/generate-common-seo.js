@@ -1,9 +1,13 @@
-export function generateCommonSeo(config) {
-  const title = config["publisher-settings"]["title"];
-  const themeConfig = config["theme-attributes"];
+export function getTitle(config) {
+  return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
+}
 
-  const STATIC_TAGS = {
-    "twitter:site": title ? title : "Madrid",
+export function generateStaticData(config) {
+  const title = getTitle(config);
+  const themeConfig = config["theme-attributes"] || {};
+
+  return {
+    "twitter:site": title,
     "twitter:domain": config["sketches-host"],
     "twitter:app:name:ipad": themeConfig["twitter:app:name:ipad"],
     "twitter:app:name:googleplay": themeConfig["twitter:app:name:googleplay"],
@@ -14,11 +18,16 @@ export function generateCommonSeo(config) {
     "google-play-app": themeConfig["google-play-app"],
     "fb:app_id": themeConfig["fb:app-id"],
     "fb:pages": themeConfig["fb:pages"],
-    "og:site_name": title ? title : "Madrid"
+    "og:site_name": title
   };
+}
 
+export function generateStructuredData(config) {
+  const title = getTitle(config);
+  const themeConfig = config["theme-attributes"];
   const socialLinks = config["social-links"];
-  const STRUCTURED_DATA = {
+
+  return {
     organization: {
       name: title,
       url: config["sketches-host"],
@@ -26,12 +35,4 @@ export function generateCommonSeo(config) {
       sameAs: socialLinks ? Object.values(socialLinks) : []
     }
   }
-
-  return {
-    staticTags: STATIC_TAGS,
-    enableTwitterCards: true,
-    enableOgTags: true,
-    enableNews: true,
-    structuredData: STRUCTURED_DATA
-  };
 }
