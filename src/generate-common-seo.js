@@ -1,3 +1,5 @@
+import {omitBy, isUndefined} from 'lodash';
+
 export function getTitle(config) {
   return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
 }
@@ -5,8 +7,7 @@ export function getTitle(config) {
 export function generateStaticData(config) {
   const title = getTitle(config);
   const themeConfig = config["theme-attributes"] || {};
-
-  return {
+  const staticData = {
     "twitter:site": title,
     "twitter:domain": config["sketches-host"],
     "twitter:app:name:ipad": themeConfig["twitter-app-name-ipad"],
@@ -20,6 +21,8 @@ export function generateStaticData(config) {
     "fb:pages": themeConfig["fb-pages"],
     "og:site_name": title
   };
+
+  return omitBy(staticData, isUndefined); 
 }
 
 export function generateStructuredData(config) {
