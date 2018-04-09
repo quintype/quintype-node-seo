@@ -9,15 +9,15 @@ export function generateStaticData(config) {
   return {
     "twitter:site": title,
     "twitter:domain": config["sketches-host"],
-    "twitter:app:name:ipad": themeConfig["twitter:app:name:ipad"],
-    "twitter:app:name:googleplay": themeConfig["twitter:app:name:googleplay"],
-    "twitter:app:id:googleplay": themeConfig["twitter:app:id:googleplay"],
-    "twitter:app:name:iphone": themeConfig["twitter:app:name:iphone"],
-    "twitter:app:id:iphone": themeConfig["twitter:app:id:iphone"],
+    "twitter:app:name:ipad": themeConfig["twitter-app-name-ipad"],
+    "twitter:app:name:googleplay": themeConfig["twitter-app-name-googleplay"],
+    "twitter:app:id:googleplay": themeConfig["twitter-app-id-googleplay"],
+    "twitter:app:name:iphone": themeConfig["twitter-app-name-iphone"],
+    "twitter:app:id:iphone": themeConfig["twitter-app-id-iphone"],
     "apple-itunes-app": themeConfig["apple-itunes-app"],
     "google-play-app": themeConfig["google-play-app"],
-    "fb:app_id": themeConfig["fb:app-id"],
-    "fb:pages": themeConfig["fb:pages"],
+    "fb:app_id": themeConfig["fb-app-id"],
+    "fb:pages": themeConfig["fb-pages"],
     "og:site_name": title
   };
 }

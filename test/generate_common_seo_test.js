@@ -9,15 +9,15 @@ describe('Seo Helpers', function() {
     "sketches-host": "abc.com",
     "publisher-name": "Abc",
     "theme-attributes": {
-      "twitter:app:name:ipad": "",
-      "twitter:app:name:googleplay": "",
-      "twitter:app:id:googleplay": "",
-      "twitter:app:name:iphone": "",
-      "twitter:app:id:iphone": "",
+      "twitter-app-name-ipad": "",
+      "twitter-app-name-googleplay": "",
+      "twitter-app-id-googleplay": "",
+      "twitter-app-name-iphone": "",
+      "twitter-app-id-iphone": "",
       "apple-itunes-app": "",
       "google-play-app": "",
-      "fb:app-id": "",
-      "fb:pages": "",
+      "fb-app-id": "",
+      "fb-pages": "",
       "logo": "https://quintype.com/abc.png"
     },
     "social-links": {
