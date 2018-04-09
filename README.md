@@ -47,3 +47,19 @@ new SEO({
   }
 })
 ```
+
+### Example Usage (v1.5.0 and above)
+
+```javascript
+import {SEO, generateStaticData, generateStructuredData} from "@quintype/seo";
+
+function generateSeo(config) {
+  return new SEO({
+    staticTags: generateStaticData(config),
+    structuredData: generateStructuredData(config),
+    enableTwitterCards: true,
+    enableOgTags: true,
+    enableNews: true
+  })
+}
+```
