@@ -10,15 +10,15 @@ export function generateStaticData(config) {
   const staticData = {
     "twitter:site": title,
     "twitter:domain": config["sketches-host"],
-    "twitter:app:name:ipad": themeConfig["twitter-app-name-ipad"],
-    "twitter:app:name:googleplay": themeConfig["twitter-app-name-googleplay"],
-    "twitter:app:id:googleplay": themeConfig["twitter-app-id-googleplay"],
-    "twitter:app:name:iphone": themeConfig["twitter-app-name-iphone"],
-    "twitter:app:id:iphone": themeConfig["twitter-app-id-iphone"],
-    "apple-itunes-app": themeConfig["apple-itunes-app"],
-    "google-play-app": themeConfig["google-play-app"],
-    "fb:app_id": themeConfig["fb-app-id"],
-    "fb:pages": themeConfig["fb-pages"],
+    "twitter:app:name:ipad": themeConfig["twitter_app_name_ipad"],
+    "twitter:app:name:googleplay": themeConfig["twitter_app_name_googleplay"],
+    "twitter:app:id:googleplay": themeConfig["twitter_app_id_googleplay"],
+    "twitter:app:name:iphone": themeConfig["twitter_app_name_iphone"],
+    "twitter:app:id:iphone": themeConfig["twitter_app_id_iphone"],
+    "apple-itunes-app": themeConfig["apple_itunes_app"],
+    "google-play-app": themeConfig["google_play_app"],
+    "fb:app_id": themeConfig["fb_app_id"],
+    "fb:pages": themeConfig["fb_pages"],
     "og:site_name": title
   };
 
