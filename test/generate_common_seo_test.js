@@ -168,4 +168,33 @@ describe('Seo Helpers', function() {
     const actualStructuredData = generateStructuredData(config)
     assert.deepEqual(actualStructuredData, expectedStructuredData)
   })
+
+  it('structured data: does not crash when theme attributes is null', function() {
+    const config = {
+      "publisher-settings": {
+        "title": "abc"
+      },
+      "sketches-host": "abc.com",
+      "publisher-name": "Abc",
+      "theme-attributes": null,
+      "social-links": {
+        "facebook-url": "https://www.facebook.com/abc/",
+        "google-plus-url": "",
+        "instagram-url": "https://www.instagram.com/abc",
+        "twitter-url": "https://twitter.com/abc"
+      }
+    }
+
+    const expectedStructuredData = {
+      organization: {
+        name: "abc",
+        url: "abc.com",
+        logo: "https://quintype.com/logo.png",
+        sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
+      }
+    }
+
+    const actualStructuredData = generateStructuredData(config)
+    assert.deepEqual(actualStructuredData, expectedStructuredData)
+  })
 })
