@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import {get, isEmpty} from 'lodash';
 import {objectToTags} from './utils';
 
 function buildTagsFromStory(config, story, url = {}) {
@@ -6,11 +6,14 @@ function buildTagsFromStory(config, story, url = {}) {
         return;
 
     function getStoryCardMetadata(cardId) {
-        const { metadata } = story.cards.find(card => card.id === cardId);
-        return {
-            title: metadata['social-share'].title || story.headline,
-            description: metadata['social-share'].message || story.summary,
-        };
+        const { metadata } = story.cards.find(card => card.id === cardId) || {};
+        if(metadata && !isEmpty(metadata)){
+            return {
+                title: metadata['social-share'].title || story.headline,
+                description: metadata['social-share'].message || story.summary,
+            };
+        }
+        return {};
     }
 
     const seo = story.seo || {};
