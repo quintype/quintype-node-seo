@@ -26,5 +26,43 @@ describe('ImageTags', function() {
     assertContains('<meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress"/>', string);
     assertContains('<meta property="og:image:width" content="1200"/>', string);
     assertContains('<meta property="og:image:height" content="630"/>', string);
-  })
+  });
+
+  it("gets card image values instead of story image values on card share", function() {
+    const story = {
+        "hero-image-s3-key": "my/image.png",
+        "cards" : [
+          {
+              "id" : "sample-card-id",
+              "metadata" : {
+                  "social-share": {
+                    "title": "share-card-title",
+                    "message": "share-card-description",
+                    "image": {
+                      "key": "my/card/image.jpg",
+                      "metadata": {
+                        "width": 1300,
+                        "height": 1065,
+                        "mime-type": "image/jpeg"
+                      }
+                    }
+                  }
+              }
+          }
+        ]
+    };
+
+    const opts = {
+        url : {
+            query : {
+                cardId : 'sample-card-id'
+            }
+        }
+    };
+
+    const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, opts);
+
+    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress"/>', string);
+  });
+
 });
