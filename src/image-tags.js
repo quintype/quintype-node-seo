@@ -17,9 +17,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
       const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId) || {};
       if(metadata
         && !isEmpty(metadata)
-        && metadata['social-share']
-        && metadata['social-share'].image
-        && metadata['social-share'].image.key){
+        && get(metadata, ['social-share', 'image', 'key'], false)){
           image = new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
       }
   }

@@ -150,7 +150,7 @@ describe('TextTags', function() {
                 "title": undefined,
                 "message": "",
                 "image": {
-                  "key": null,
+                  "key": "my/card/image.jpg",
                   "metadata": {
                     "width": 1300,
                     "height": 1065,
