@@ -11,15 +11,13 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
     return [];
 
   const tags = [];
-  let image = {};
+  let image = new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {});
 
   if(url.query && url.query.cardId){
       const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId);
       if(metadata  && !isEmpty(metadata)){
           image = new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
       }
-  } else {
-          image = new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {});
   }
 
   if(seoConfig.enableTwitterCards) {
