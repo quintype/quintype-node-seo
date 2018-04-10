@@ -14,8 +14,12 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   let image = new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {});
 
   if(url.query && url.query.cardId){
-      const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId);
-      if(metadata  && !isEmpty(metadata)){
+      const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId) || {};
+      if(metadata
+        && !isEmpty(metadata)
+        && metadata['social-share']
+        && metadata['social-share'].image
+        && metadata['social-share'].image.key){
           image = new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
       }
   }
