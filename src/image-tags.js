@@ -1,7 +1,7 @@
-import {get} from 'lodash';
+import {get, isEmpty} from 'lodash';
 import {FocusedImage} from 'quintype-js';
 
-export function ImageTags(seoConfig, config, pageType, data, {url}) {
+export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   if(pageType != 'story-page')
     return [];
 
@@ -11,7 +11,16 @@ export function ImageTags(seoConfig, config, pageType, data, {url}) {
     return [];
 
   const tags = [];
-  const image = new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {});
+  let image = new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {});
+
+  if(url.query && url.query.cardId){
+      const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId) || {};
+      if(metadata
+        && !isEmpty(metadata)
+        && get(metadata, ['social-share', 'image', 'key'], false)){
+          image = new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
+      }
+  }
 
   if(seoConfig.enableTwitterCards) {
     tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress"})}`})

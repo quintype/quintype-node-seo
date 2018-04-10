@@ -1,15 +1,26 @@
-import {get} from 'lodash';
+import {get, isEmpty} from 'lodash';
 import {objectToTags} from './utils';
 
-function buildTagsFromStory(config, story) {
+function buildTagsFromStory(config, story, url = {}) {
   if(!story)
     return;
+
+  function getStoryCardMetadata(cardId) {
+    const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+    if(metadata && !isEmpty(metadata) &&  metadata['social-share']){
+      return {
+        title: metadata['social-share'].title || story.headline,
+        description: metadata['social-share'].message || story.summary,
+      };
+    }
+    return metadata;
+  }
 
   const seo = story.seo || {};
 
   const storyUrl = `${config['sketches-host']}/${story.slug}`;
 
-  return {
+  const storyMetaData = {
     title: seo["meta-title"] || story.headline,
     "page-title": story.headline,
     description: seo["meta-description"] || story.summary,
@@ -17,10 +28,17 @@ function buildTagsFromStory(config, story) {
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
     storyUrl: storyUrl
+  };
+
+  if(url.query && url.query.cardId){
+    const storyCardMetadata = getStoryCardMetadata(url.query.cardId);
+    return Object.assign({}, storyMetaData, storyCardMetadata); //TODO rewrite in spread syntax, add babel plugin
   }
+
+  return storyMetaData;
 }
 
-function getSeoData(config, pageType, data) {
+function getSeoData(config, pageType, data, url = {}) {
   function findRelevantConfig(pred) {
     const seoMetadata = config['seo-metadata'].find(pred) || {};
     return seoMetadata.data;
@@ -28,14 +46,14 @@ function getSeoData(config, pageType, data) {
 
   switch(pageType) {
     case 'home-page': return findRelevantConfig(page => page['owner-type'] === 'home')
-    case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data);
-    case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"])) || getSeoData(config, "home-page", data);
-    default: return getSeoData(config, 'home-page', data);
+    case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
+    case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    default: return getSeoData(config, 'home-page', data, url);
   }
 }
 
 export function TextTags(seoConfig, config, pageType, data, {url}) {
-  const seoData = getSeoData(config, pageType, data);
+  const seoData = getSeoData(config, pageType, data, url);
 
   if(!seoData)
     return [];
