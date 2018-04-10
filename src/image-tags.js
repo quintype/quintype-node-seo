@@ -1,7 +1,7 @@
-import {get} from 'lodash';
+import {get, isEmpty} from 'lodash';
 import {FocusedImage} from 'quintype-js';
 
-export function ImageTags(seoConfig, config, pageType, data, {url}) {
+export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   if(pageType != 'story-page')
     return [];
 
@@ -14,8 +14,8 @@ export function ImageTags(seoConfig, config, pageType, data, {url}) {
   let image = {};
 
   if(url.query && url.query.cardId){
-      const { metadata } = story.cards.find(card => card.id === url.query.cardId) || {};
-      if(metadata){
+      const { metadata = {} } = story.cards.find(card => card.id === url.query.cardId);
+      if(metadata  && !isEmpty(metadata)){
           image = new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
       }
   } else {

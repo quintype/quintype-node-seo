@@ -6,14 +6,14 @@ function buildTagsFromStory(config, story, url = {}) {
         return;
 
     function getStoryCardMetadata(cardId) {
-        const { metadata } = story.cards.find(card => card.id === cardId) || {};
+        const { metadata = {} } = story.cards.find(card => card.id === cardId);
         if(metadata && !isEmpty(metadata)){
             return {
                 title: metadata['social-share'].title || story.headline,
                 description: metadata['social-share'].message || story.summary,
             };
         }
-        return {};
+        return metadata;
     }
 
     const seo = story.seo || {};
