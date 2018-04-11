@@ -85,6 +85,7 @@ describe('TextTags', function() {
     it("Generates SEO tags for a card in story page", function () {
       const seoConfig = {
         generators: [TextTags],
+        enableOgTags: true
       };
 
       const story = {
@@ -128,6 +129,7 @@ describe('TextTags', function() {
       assertContains('<meta name="description" content="share-card-description"/>', string);
       assertContains('<meta name="keywords" content="Footag"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+      assertContains('<meta property="og:url" content="http://foo.com/politics/awesome?cardId=sample-card-id"/>', string);
     });
 
 

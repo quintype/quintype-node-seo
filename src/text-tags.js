@@ -7,10 +7,12 @@ function buildTagsFromStory(config, story, url = {}) {
 
   function getStoryCardMetadata(cardId) {
     const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+    const urlWithCardId = `${config['sketches-host']}/${story.slug}?cardId=${cardId}`;
     if(metadata && !isEmpty(metadata) &&  metadata['social-share']){
       return {
         title: metadata['social-share'].title || story.headline,
         description: metadata['social-share'].message || story.summary,
+        ogUrl: urlWithCardId,
       };
     }
     return metadata;
