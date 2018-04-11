@@ -12,7 +12,6 @@ function buildTagsFromStory(config, story, url = {}) {
       return {
         title: metadata['social-share'].title || story.headline,
         description: metadata['social-share'].message || story.summary,
-        canonicalUrl: urlWithCardId,
         ogUrl: urlWithCardId,
       };
     }
