@@ -10,11 +10,26 @@ function ldJson(type, fields) {
   };
 }
 
-export function StructuredDataTags({structuredData = {}}, config, pageType, data, {url}) {
+export function StructuredDataTags({structuredData = {}}, config, pageType, data = {}, {url}) {
   const tags = [];
+  const {story = {}, config: publisherConfig = {}} = data.data;
+  const {storyType = ''} = publisherConfig['publisher-settings'] || {};
+
+
+  const articleStructureData = {
+    'headline' : story.headline,
+    "alternativeHeadline": story.subheadline,
+    "image": [`${publisherConfig['cdn-image']}/${story['hero-image-s3-key']}`],
+    "datePublished": new Date(story['published-at']),
+    "description": story.summary,
+  };
 
   if(structuredData.organization) {
-    tags.push(ldJson("Organization", structuredData.organization))
+    tags.push(ldJson("Organization", structuredData.organization));
+  }
+
+  if(storyType === 'news-article') {
+    tags.push(ldJson('news-article', articleStructureData));
   }
 
   // All Pages have: Publisher, Site
