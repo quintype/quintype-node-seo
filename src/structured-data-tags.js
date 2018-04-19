@@ -12,11 +12,16 @@ function ldJson(type, fields) {
 
 function generateArticleData (story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
+  const { authors = [] } = story;
   return {
-    "author": story['author-name'],
-    "editor": story['author-name'],
+    "author": authors.map(author => ({
+        "@type": "Person",
+        "givenName": author.name,
+        "name": author.name
+    })),
+    "editor": story['owner-name'],
     "keywords": metaKeywords,
-    "publisher": story['author-name'],
+    "publisher": publisherConfig['publisher-name'],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "dateCreated": new Date(story['created-at']),
     "dateModified": new Date(story['updated-at']),
