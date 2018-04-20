@@ -102,24 +102,18 @@ describe('Seo Helpers', function() {
           url: "abc.com",
           logo: "https://quintype.com/abc.png",
           sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
-        }
-      }
+        },
+        enableNewsArticle: false
+      };
       const actualStructuredData = generateStructuredData(config)
       assert.deepEqual(actualStructuredData, expectedStructuredData)
     })
   
     it('does not crash when the config is empty', function() {
-      const expectedStructuredData = {
-        organization: {
-          name: undefined,
-          url: undefined,
-          logo: "https://quintype.com/logo.png",
-          sameAs: []
-        }
-      }
-      const actualStructuredData = generateStructuredData({})
-      assert.deepEqual(actualStructuredData, expectedStructuredData)
-    })
+      const expectedStructuredData = {};
+      const actualStructuredData = generateStructuredData({});
+      assert.deepEqual(actualStructuredData, expectedStructuredData);
+    });
   
     it('does not crash when social links is null', function() {
       const config = {
@@ -132,7 +126,7 @@ describe('Seo Helpers', function() {
           "logo": "https://quintype.com/abc.png"
         },
         "social-links": null
-      }
+      };
   
       const expectedStructuredData = {
         organization: {
@@ -140,12 +134,13 @@ describe('Seo Helpers', function() {
           url: "abc.com",
           logo: "https://quintype.com/abc.png",
           sameAs: []
-        }
-      }
+        },
+        enableNewsArticle: false
+      };
   
-      const actualStructuredData = generateStructuredData(config)
+      const actualStructuredData = generateStructuredData(config);
       assert.deepEqual(actualStructuredData, expectedStructuredData)
-    })
+    });
   
     it('does not crash when theme attributes is null', function() {
       const config = {
@@ -161,19 +156,9 @@ describe('Seo Helpers', function() {
           "instagram-url": "https://www.instagram.com/abc",
           "twitter-url": "https://twitter.com/abc"
         }
-      }
-  
-      const expectedStructuredData = {
-        organization: {
-          name: "abc",
-          url: "abc.com",
-          logo: "https://quintype.com/logo.png",
-          sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
-        }
-      }
-  
-      const actualStructuredData = generateStructuredData(config)
-      assert.deepEqual(actualStructuredData, expectedStructuredData)
+      };
+      const actualStructuredData = generateStructuredData(config);
+      assert.deepEqual(actualStructuredData, {});
     })
   })
-})
+});
