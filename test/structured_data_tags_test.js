@@ -28,7 +28,7 @@ describe('StructuredDataTags', function() {
 
 describe('StructuredDataTags with news article data ', function() {
   describe('On all pages', function() {
-    it("puts the news article along with article tag when news-article is truthy in theme-attributes config", function() {
+    it("puts the news article along with article tag when structured_data_news_article is truthy in theme-attributes config", function() {
       const seoConfig = {
         generators: [StructuredDataTags],
         structuredData: {
@@ -116,28 +116,8 @@ describe('StructuredDataTags with news article data ', function() {
             "facebook-url": "https://www.facebook.com/quintypeinc",
             "twitter-url": "https://twitter.com/quintype_inc"
           },
-          "publisher-theme": {
-            "monogram": "",
-            "logo": "",
-            "primary_color": "#000",
-            "secondary_color": "",
-            "header_text_color": "",
-            "header_background_color": "",
-            "footer_text_color": "",
-            "footer_background_color": "",
-            "dfp_network_id": "60988533"
-          },
           "theme-attributes": {
-            "monogram": "",
-            "logo": "",
-            "primary_color": "#000",
-            "secondary_color": "",
-            "header_text_color": "",
-            "header_background_color": "",
-            "footer_text_color": "",
-            "footer_background_color": "",
-            "dfp_network_id": "60988533",
-            "news-article": true
+            "structured_data_news_article": true
           }
         }
       };
@@ -153,7 +133,7 @@ describe('StructuredDataTags with news article data ', function() {
 
 describe('StructuredDataTags without news article data ', function() {
   describe('On all pages', function() {
-    it("puts only the article tag when news-article is false in theme-attributes config", function() {
+    it("puts only the article tag when structured_data_news_article is false in theme-attributes config", function() {
       const seoConfig = {
         generators: [StructuredDataTags],
         structuredData: {
@@ -241,28 +221,11 @@ describe('StructuredDataTags without news article data ', function() {
             "facebook-url": "https://www.facebook.com/quintypeinc",
             "twitter-url": "https://twitter.com/quintype_inc"
           },
-          "publisher-theme": {
-            "monogram": "",
-            "logo": "",
-            "primary_color": "#000",
-            "secondary_color": "",
-            "header_text_color": "",
-            "header_background_color": "",
-            "footer_text_color": "",
-            "footer_background_color": "",
-            "dfp_network_id": "60988533"
-          },
           "theme-attributes": {
-            "monogram": "",
             "logo": "",
             "primary_color": "#000",
             "secondary_color": "",
-            "header_text_color": "",
-            "header_background_color": "",
-            "footer_text_color": "",
-            "footer_background_color": "",
-            "dfp_network_id": "60988533",
-            "news-article": false
+            "structured_data_news_article": false
           }
         }
       };

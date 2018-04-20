@@ -38,9 +38,9 @@ export function generateStructuredData(config) {
     organization: {
       name: title,
       url: config["sketches-host"],
-      logo: themeConfig ? themeConfig.logo : "https://quintype.com/logo.png",
+      logo: themeConfig.logo,
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
-    enableNewsArticle: themeConfig['news-article'] ? themeConfig['news-article'] : false
+    enableNewsArticle: !!themeConfig['structured_data_news_article'],
   }
 }
