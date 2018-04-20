@@ -30,12 +30,17 @@ export function generateStructuredData(config) {
   const themeConfig = config["theme-attributes"];
   const socialLinks = config["social-links"];
 
+  if(!themeConfig || !themeConfig.logo) {
+    return {};
+  }
+
   return {
     organization: {
       name: title,
       url: config["sketches-host"],
       logo: themeConfig ? themeConfig.logo : "https://quintype.com/logo.png",
       sameAs: socialLinks ? Object.values(socialLinks) : []
-    }
+    },
+    enableNewsArticle: themeConfig['news-article'] ? themeConfig['news-article'] : false
   }
 }

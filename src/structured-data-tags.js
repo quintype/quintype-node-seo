@@ -13,7 +13,7 @@ function ldJson(type, fields) {
 function generateArticleData (story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const { authors = [] } = story;
-  const {themeConfig = {}} = publisherConfig["theme-attributes"];
+  const {themeConfig = {}} = publisherConfig["theme-attributes"] || {};
 
   return {
     "author": authors.map(author => ({
@@ -22,14 +22,6 @@ function generateArticleData (story = {}, publisherConfig = {}){
       "name": author.name
     })),
     "keywords": metaKeywords,
-    "publisher": {
-      "@type": "Organization",
-      "name": publisherConfig['publisher-name'],
-      "logo": {
-        "@type": "ImageObject",
-        "url": themeConfig.logo ? themeConfig.logo : "https://quintype.com/logo.png",
-      }
-    },
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "dateCreated": new Date(story['created-at']),
     "dateModified": new Date(story['updated-at']),
@@ -49,7 +41,7 @@ function generateNewsArticleData (story = {}, publisherConfig = {}) {
 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
-  const {story = {}} = response.data;
+  const {story = {}} = response.data || {};
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
 
@@ -61,8 +53,13 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     tags.push(ldJson("Organization", structuredData.organization));
   }
 
-  if(articleType === 'news-article') {
-    const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(story, publisherConfig));
+  if(structuredData.organization && structuredData.enableNewsArticle) {
+    const publisherObject = {
+      "@type": "Organization",
+      "@context": "http://schema.org",
+      "publisher" : structuredData.organization
+    };
+    const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(story, publisherConfig), publisherObject);
     tags.push(ldJson('NewsArticle', newsArticleData));
   }
 
