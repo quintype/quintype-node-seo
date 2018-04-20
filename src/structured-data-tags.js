@@ -13,15 +13,24 @@ function ldJson(type, fields) {
 function generateArticleData (story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const { authors = [] } = story;
+  const {themeConfig = {}} = publisherConfig["theme-attributes"];
+
   return {
     "author": authors.map(author => ({
-        "@type": "Person",
-        "givenName": author.name,
-        "name": author.name
+      "@type": "Person",
+      "givenName": author.name,
+      "name": author.name
     })),
     "editor": story['owner-name'],
     "keywords": metaKeywords,
-    "publisher": publisherConfig['publisher-name'],
+    "publisher": {
+      "@type": "Organization",
+      "name": publisherConfig['publisher-name'],
+      "logo": {
+        "@type": "ImageObject",
+        "url": themeConfig.logo ? themeConfig.logo : "https://quintype.com/logo.png",
+      }
+    },
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "dateCreated": new Date(story['created-at']),
     "dateModified": new Date(story['updated-at']),
@@ -29,19 +38,20 @@ function generateArticleData (story = {}, publisherConfig = {}){
 }
 
 function generateNewsArticleData (story = {}, publisherConfig = {}) {
+  const {alternative = {}} = story.alternative || {};
   return {
     'headline' : story.headline,
-    "alternativeHeadline": story.subheadline,
-    "image": [`${publisherConfig['cdn-image']}/${story['hero-image-s3-key']}`],
+    "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
+    "image": [`${publisherConfig['cdn-image']}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
     "datePublished": new Date(story['published-at']),
     "description": story.summary,
   };
 }
 
-export function StructuredDataTags({structuredData = {}}, config, pageType, data = {}, {url}) {
+export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
-  const {story = {}} = data.data;
-  const {config: publisherConfig = {}} = data;
+  const {story = {}} = response.data;
+  const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
 
   const articleData = generateArticleData(story, publisherConfig);
