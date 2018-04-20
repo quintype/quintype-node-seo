@@ -21,7 +21,6 @@ function generateArticleData (story = {}, publisherConfig = {}){
       "givenName": author.name,
       "name": author.name
     })),
-    "editor": story['owner-name'],
     "keywords": metaKeywords,
     "publisher": {
       "@type": "Organization",
