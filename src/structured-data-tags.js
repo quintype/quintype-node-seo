@@ -1,5 +1,5 @@
 function ldJson(type, fields) {
-  const json = JSON.stringify(Object.assign({"@type": type, "@context": "http://schema.org"}, fields))
+  const json = JSON.stringify(Object.assign({}, fields, {"@type": type, "@context": "http://schema.org"}))
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
