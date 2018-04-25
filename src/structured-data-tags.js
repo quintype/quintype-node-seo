@@ -44,16 +44,17 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {story = {}} = response.data || {};
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
-
   const articleData = generateArticleData(story, publisherConfig);
-
-  tags.push(ldJson("Article", articleData));
 
   if(structuredData.organization) {
     tags.push(ldJson("Organization", structuredData.organization));
   }
 
-  if(structuredData.organization && structuredData.enableNewsArticle) {
+  if(pageType === 'story-page' && !structuredData.enableNewsArticle) {
+    tags.push(ldJson("Article", articleData));
+  }
+
+  if(pageType === 'story-page' && structuredData.enableNewsArticle) {
     const publisherObject = {
       "@type": "Organization",
       "@context": "http://schema.org",
