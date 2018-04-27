@@ -12,6 +12,14 @@ function pickImageFromStory(story) {
   return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
 }
 
+function pickImageFromCollection(collection) {
+  const coverImage = get(collection, ["metadata", "cover-image"], {});
+  if(!coverImage["cover-image-s3-key"])
+    return;
+
+  return new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {})
+}
+
 // The image is grabbed from the story, else from from the collection
 function pickImage(pageType, data, url) {
   if(pageType == 'story-page' && url.query && url.query.cardId) {
@@ -20,6 +28,8 @@ function pickImage(pageType, data, url) {
   } else if(pageType == 'story-page') {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromStory(story);
+  } else if(get(data, ['data', 'collection'])) {
+    return pickImageFromCollection(get(data, ['data', 'collection']))
   }
 }
 
@@ -39,7 +49,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   if(seoConfig.enableOgTags) {
     tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress"})}`});
     tags.push({property: "og:image:width", content: 1200});
-    if(get(data, ["data", "story", "hero-image-metadata", "focus-point"])) {
+    if(get(image, ["metadata", "focus-point"])) {
       tags.push({property: "og:image:height", content: 630})
     }
   }
