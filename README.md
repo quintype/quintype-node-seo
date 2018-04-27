@@ -34,6 +34,12 @@ new SEO({
 });
 ```
 
+## Where does my tags come from?
+
+### Image Tags
+
+Image tags come from the hero image of a story. If a cardId was passed, the card's hero image is picked. If a collection is passed, then the images come from the cover image of the collection.
+
 ### Page Type Aliases
 
 Sometimes, a page will have the same SEO characteristics as another page, but required different data loading logic. For example, a particular section may have some extra data, and a completely different layout.
