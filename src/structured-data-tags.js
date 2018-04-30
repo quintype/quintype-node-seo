@@ -30,10 +30,11 @@ function generateArticleData (story = {}, publisherConfig = {}){
 
 function generateNewsArticleData (story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
+  const imageSrc = /^[http|https].*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
   return {
     'headline' : story.headline,
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
-    "image": [`${publisherConfig['cdn-image']}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
+    "image": [`${imageSrc}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
     "datePublished": new Date(story['published-at']),
     "description": story.summary,
   };
@@ -56,9 +57,15 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(pageType === 'story-page' && structuredData.enableNewsArticle) {
     const publisherObject = {
-      "@type": "Organization",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": structuredData.organization.url
+      },
       "@context": "http://schema.org",
-      "publisher" : structuredData.organization
+      "publisher" : Object.assign({}, {
+        "@type": "Organization",
+        "@context": "http://schema.org"
+      }, structuredData.organization)
     };
     const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(story, publisherConfig), publisherObject);
     tags.push(ldJson('NewsArticle', newsArticleData));
