@@ -30,11 +30,7 @@ export function generateStructuredData(config) {
   const themeConfig = config["theme-attributes"];
   const socialLinks = config["social-links"];
 
-  // if(!themeConfig || !themeConfig.logo) {
-  //   return {};
-  // }
-
-  if(!themeConfig) {
+  if(!themeConfig || !themeConfig.logo) {
     return {};
   }
 

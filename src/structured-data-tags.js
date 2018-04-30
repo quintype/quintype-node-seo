@@ -10,34 +10,47 @@ function ldJson(type, fields) {
   };
 }
 
-function generateArticleData (story = {}, publisherConfig = {}){
+function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
+  const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
+  return {
+    'headline' : story.headline,
+    "image": [`${imageSrc}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
+    "url": `${publisherConfig['sketches-host']}/${story.slug}`,
+    "datePublished": new Date(story['published-at']),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": structuredData.organization.url,
+    },
+    "publisher" : Object.assign({}, {
+      "@type": "Organization",
+      "@context": "http://schema.org"
+    }, structuredData.organization)
+  }
+}
+
+function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const { authors = [] } = story;
   const {themeConfig = {}} = publisherConfig["theme-attributes"] || {};
 
-  return {
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authors.map(author => ({
       "@type": "Person",
       "givenName": author.name,
       "name": author.name
     })),
     "keywords": metaKeywords,
-    "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "dateCreated": new Date(story['created-at']),
     "dateModified": new Date(story['updated-at']),
-  }
+  });
 }
 
-function generateNewsArticleData (story = {}, publisherConfig = {}) {
+function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
-  const imageSrc = /^[http|https].*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
-  return {
-    'headline' : story.headline,
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
-    "image": [`${imageSrc}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
-    "datePublished": new Date(story['published-at']),
     "description": story.summary,
-  };
+  });
 }
 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
@@ -45,29 +58,20 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {story = {}} = response.data || {};
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
-  const articleData = generateArticleData(story, publisherConfig);
+  const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
+  let articleData = {};
 
-  if(structuredData.organization) {
+  if(!isStructuredDataEmpty) {
+    articleData = generateArticleData(structuredData, story, publisherConfig);
     tags.push(ldJson("Organization", structuredData.organization));
   }
 
-  if(pageType === 'story-page' && !structuredData.enableNewsArticle) {
+  if(!isStructuredDataEmpty && pageType === 'story-page' && !structuredData.enableNewsArticle) {
     tags.push(ldJson("Article", articleData));
   }
 
-  if(pageType === 'story-page' && structuredData.enableNewsArticle) {
-    const publisherObject = {
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": structuredData.organization.url
-      },
-      "@context": "http://schema.org",
-      "publisher" : Object.assign({}, {
-        "@type": "Organization",
-        "@context": "http://schema.org"
-      }, structuredData.organization)
-    };
-    const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(story, publisherConfig), publisherObject);
+  if(!isStructuredDataEmpty && pageType === 'story-page' && structuredData.enableNewsArticle) {
+    const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig));
     tags.push(ldJson('NewsArticle', newsArticleData));
   }
 
