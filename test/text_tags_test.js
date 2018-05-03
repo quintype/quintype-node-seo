@@ -24,13 +24,41 @@ describe('TextTags', function() {
       assert.equal('', string);
     });
 
-    it("gets the meta config for the section", function() {
+    it("gets the meta config for the section when section metadata is available", function() {
       const seoConfig = {
         generators: [TextTags],
-      }
-      const config = {"seo-metadata": [{"owner-type": 'section', 'owner-id': 42, data: {'page-title': "Foobar"}}]};
-      const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")})
-      assertContains('<title>Foobar</title>', string);
+      };
+      const data = {
+        'page-title': "Quintype Demo Homepage",
+        title: "Quintype Demo Homepage Meta",
+        description: "This is a demo page for Quintype",
+        keywords: "quintype, demo"
+      };
+      const config = {"seo-metadata": [{"owner-type": 'section', 'owner-id': 42, data}]};
+      const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")});
+      assertContains('<meta name="description" content="This is a demo page for Quintype"/><meta name="title" content="Quintype Demo Homepage Meta"/><meta name="keywords" content="quintype, demo"/>', string);
+    });
+
+    it("fallback to homepage description when description attribute in section metadata is unavailable", function() {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+      const data = {
+        'page-title': "Quintype Demo Homepage",
+        title: "Quintype Demo Homepage Meta",
+        keywords: "quintype, demo"
+      };
+      const config = {
+        "seo-metadata": [
+          {"owner-type": 'section', 'owner-id': 42, data},
+          {"owner-type": 'home', 'owner-id': 42, data : { 'description': 'home description'} }
+        ]
+      };
+      const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")});
+      assertContains('<title>Quintype Demo Homepage</title>', string);
+      assertContains('<meta name="description" content="home description"/>', string);
+      assertContains('<meta name="title" content="Quintype Demo Homepage Meta"/>', string);
+      assertContains('<meta name="keywords" content="quintype, demo"/>', string);
     });
 
     it("defaults to the homepage config if section is not found", function() {
