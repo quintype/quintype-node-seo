@@ -36,7 +36,10 @@ describe('TextTags', function() {
       };
       const config = {"seo-metadata": [{"owner-type": 'section', 'owner-id': 42, data}]};
       const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")});
-      assertContains('<meta name="description" content="This is a demo page for Quintype"/><meta name="title" content="Quintype Demo Homepage Meta"/><meta name="keywords" content="quintype, demo"/>', string);
+      assertContains('<title>Quintype Demo Homepage</title>', string);
+      assertContains('<meta name="description" content="This is a demo page for Quintype"/>', string);
+      assertContains('<meta name="title" content="Quintype Demo Homepage Meta"/>', string);
+      assertContains('<meta name="keywords" content="quintype, demo"/>', string);
     });
 
     it("fallback to homepage description when description attribute in section metadata is unavailable", function() {
