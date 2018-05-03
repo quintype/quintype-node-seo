@@ -61,6 +61,60 @@ describe('TextTags', function() {
       assertContains('<meta name="keywords" content="quintype, demo"/>', string);
     });
 
+    it("fallback to section name when title attribute in section metadata is unavailable", function() {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+      const data = {
+        'page-title': "Quintype Demo Homepage",
+        'description': "Section Description",
+        'keywords': "quintype, demo"
+      };
+      const config = {
+        "sections": [
+          {
+          "id": 42,
+          "name": "Current Affairs",
+          }
+        ],
+        "seo-metadata": [
+          {"owner-type": 'section', 'owner-id': 42, data},
+        ]
+      };
+      const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")});
+      assertContains('<title>Quintype Demo Homepage</title>', string);
+      assertContains('<meta name="description" content="Section Description"/>', string);
+      assertContains('<meta name="title" content="Current Affairs"/>', string);
+      assertContains('<meta name="keywords" content="quintype, demo"/>', string);
+    });
+
+    it("fallback to section name when page-title attribute in section metadata is unavailable", function() {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+      const data = {
+        'title': "Quintype Demo",
+        'description': "Section Description",
+        'keywords': "quintype, demo"
+      };
+      const config = {
+        "sections": [
+          {
+          "id": 42,
+          "name": "Current Affairs",
+          }
+        ],
+        "seo-metadata": [
+          {"owner-type": 'section', 'owner-id': 42, data},
+        ]
+      };
+      const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")});
+      assertContains('<title>Current Affairs</title>', string);
+      assertContains('<meta name="description" content="Section Description"/>', string);
+      assertContains('<meta name="title" content="Quintype Demo"/>', string);
+      assertContains('<meta name="keywords" content="quintype, demo"/>', string);
+    });
+
     it("defaults to the homepage config if section is not found", function() {
       const seoConfig = {
         generators: [TextTags],
