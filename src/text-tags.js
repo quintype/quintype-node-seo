@@ -43,6 +43,16 @@ function buildTagsFromStory(config, story, url = {}) {
 function getSeoData(config, pageType, data, url = {}) {
   function findRelevantConfig(pred) {
     const seoMetadata = config['seo-metadata'].find(pred) || {};
+    const {sections = []} = config;
+    if(seoMetadata.data && (!seoMetadata.data['page-title'] || !seoMetadata.data['title'])) {
+      const sectionData = sections.find(section => section.id === seoMetadata['owner-id']) || {};
+      seoMetadata.data['page-title'] = seoMetadata.data['page-title'] || sectionData.name;
+      seoMetadata.data['title'] = seoMetadata.data['title'] || sectionData.name;
+    }
+    if(seoMetadata.data && !seoMetadata.data['description']) {
+      const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {};
+      seoMetadata.data['description'] = (homeSeoData.data && homeSeoData.data.description) ? homeSeoData.data.description : '';
+    }
     return seoMetadata.data;
   }
 
