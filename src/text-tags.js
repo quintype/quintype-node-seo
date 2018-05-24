@@ -25,7 +25,7 @@ function buildTagsFromStory(config, story, url = {}) {
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
     "page-title": story.headline,
-    description: seo["meta-description"] || story.summary,
+    description: seo["meta-description"] || story.subheadline || story.summary,
     keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
