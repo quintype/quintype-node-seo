@@ -1,5 +1,9 @@
+function ldJsonFields(type, fields) {
+  return Object.assign({}, fields, {"@type": type, "@context": "http://schema.org"});
+}
+
 function ldJson(type, fields) {
-  const json = JSON.stringify(Object.assign({}, fields, {"@type": type, "@context": "http://schema.org"}))
+  const json = JSON.stringify(ldJsonFields(type, fields))
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
@@ -10,11 +14,16 @@ function ldJson(type, fields) {
   };
 }
 
-function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
+function imageUrl(publisherConfig, s3Key) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
+  return `${imageSrc}/${s3Key}?w=480&auto=format%2Ccompress&fit=max`;
+}
+
+function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
+
   return {
     'headline' : story.headline,
-    "image": [`${imageSrc}/${story['hero-image-s3-key']}?w=480&auto=format%2Ccompress&fit=max`],
+    "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "datePublished": new Date(story['published-at']),
     "mainEntityOfPage": {
@@ -28,17 +37,20 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   }
 }
 
+function authorData(authors) {
+  return authors.map(author => ({
+    "@type": "Person",
+    "givenName": author.name,
+    "name": author.name
+  }));
+}
+
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const { authors = [] } = story;
-  const {themeConfig = {}} = publisherConfig["theme-attributes"] || {};
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
-    "author": authors.map(author => ({
-      "@type": "Person",
-      "givenName": author.name,
-      "name": author.name
-    })),
+    "author": authorData(authors),
     "keywords": metaKeywords,
     "dateCreated": new Date(story['created-at']),
     "dateModified": new Date(story['updated-at']),
@@ -47,10 +59,36 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 
 function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
-  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
+  return {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
-  });
+  };
+}
+
+function findStoryElementField(card, type, field, defaultValue) {
+  const elements = card['story-elements'].filter(e => e.type == type || e.subtype == type);
+  if(elements.length > 0)
+    return elements[0][field];
+  else
+    return defaultValue;
+}
+
+function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
+  return {
+    "coverageEndTime": new Date(story['last-published-at']),
+    "coverageStartTime": new Date(story['created-at']),
+    "liveBlogUpdate": story.cards.map(card => {
+      return {
+        "@type": "BlogPosting",
+        "dateModified": new Date(card['card-updated-at']),
+        "dateCreated": new Date(card['card-added-at']),
+        "author": authorData(story.authors),
+        "headline": findStoryElementField(card, "title", "text", story.headline),
+        "image": imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key'])),
+        //video, articleBody
+      };
+    }),
+  };
 }
 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
@@ -66,13 +104,20 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     tags.push(ldJson("Organization", structuredData.organization));
   }
 
-  if(!isStructuredDataEmpty && pageType === 'story-page' && !structuredData.enableNewsArticle) {
-    tags.push(ldJson("Article", articleData));
+  if(!isStructuredDataEmpty && pageType == 'story-page') {
+    tags.push(storyTags());
   }
 
-  if(!isStructuredDataEmpty && pageType === 'story-page' && structuredData.enableNewsArticle) {
-    const newsArticleData = Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig));
-    tags.push(ldJson('NewsArticle', newsArticleData));
+  function storyTags() {
+    if(structuredData.enableLiveBlog && story['story-template'] == 'live-blog') {
+      return ldJson("LiveBlogPosting", Object.assign({}, articleData, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
+    }
+
+    if(structuredData.enableNewsArticle) {
+      return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig)))
+    }
+
+    return ldJson("Article", articleData);
   }
 
   // All Pages have: Publisher, Site
