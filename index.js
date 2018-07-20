@@ -6,7 +6,7 @@ import {TextTags, getTitle} from './src/text-tags.js';
 import {StaticTags} from './src/static-tags.js';
 import {AuthorTags} from './src/author-tags.js';
 import {ImageTags} from './src/image-tags.js';
-import {StructuredDataTags} from './src/structured-data-tags.js';
+import {StructuredDataTags} from './src/structured-data/structured-data-tags.js';
 import {StoryAmpTags} from './src/amp-tags.js';
 import {generateStaticData, generateStructuredData} from './src/generate-common-seo';
 
