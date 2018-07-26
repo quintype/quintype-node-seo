@@ -1,9 +1,19 @@
-function ldJsonFields(type, fields) {
-  return Object.assign({}, fields, {"@type": type, "@context": "http://schema.org"});
+import {
+  getSchemaContext,
+  getSchemaType,
+  getSchemaPerson,
+  getSchemaBlogPosting,
+  getSchemaPublisher,
+  getSchemaMainEntityOfPage,
+  getSchemaWebsite
+} from './schema';
+
+function getLdJsonFields(type, fields) {
+  return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
 }
 
 function ldJson(type, fields) {
-  const json = JSON.stringify(ldJsonFields(type, fields))
+  const json = JSON.stringify(getLdJsonFields(type, fields))
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
@@ -20,29 +30,18 @@ function imageUrl(publisherConfig, s3Key) {
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
-
-  return {
-    'headline' : story.headline,
+  return Object.assign({},
+    {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
-    "datePublished": new Date(story['published-at']),
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": structuredData.organization.url,
-    },
-    "publisher" : Object.assign({}, {
-      "@type": "Organization",
-      "@context": "http://schema.org"
-    }, structuredData.organization)
-  }
+    "datePublished": new Date(story['published-at'])},
+    getSchemaMainEntityOfPage(structuredData.organization.url),
+    getSchemaPublisher(structuredData.organization)
+  )
 }
 
 function authorData(authors) {
-  return authors.map(author => ({
-    "@type": "Person",
-    "givenName": author.name,
-    "name": author.name
-  }));
+  return authors.map(author => getSchemaPerson(author.name));
 }
 
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
@@ -77,18 +76,20 @@ function generateLiveBlogPostingData (structuredData = {}, story = {}, publisher
   return {
     "coverageEndTime": new Date(story['last-published-at']),
     "coverageStartTime": new Date(story['created-at']),
-    "liveBlogUpdate": story.cards.map(card => {
-      return {
-        "@type": "BlogPosting",
-        "dateModified": new Date(card['card-updated-at']),
-        "dateCreated": new Date(card['card-added-at']),
-        "author": authorData(story.authors),
-        "headline": findStoryElementField(card, "title", "text", story.headline),
-        "image": imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key'])),
-        //video, articleBody
-      };
-    }),
+    "liveBlogUpdate": story.cards.map(card =>
+      getSchemaBlogPosting(card,
+        authorData(story.authors),
+        findStoryElementField(card, "title", "text", story.headline),
+        imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key'])),
+        structuredData,
+        story
+      )
+    )
   };
+}
+
+function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
+  return getSchemaWebsite(structuredData.website);
 }
 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
@@ -102,6 +103,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
     tags.push(ldJson("Organization", structuredData.organization));
+  }
+
+  if(!isStructuredDataEmpty && pageType == 'home-page') {
+    tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
   }
 
   if(!isStructuredDataEmpty && pageType == 'story-page') {
