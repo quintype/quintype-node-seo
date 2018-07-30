@@ -38,7 +38,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
 }
 
 function authorData(authors) {
-  return authors.map(author => ({
+  return (authors || []).map(author => ({
     "@type": "Person",
     "givenName": author.name,
     "name": author.name
@@ -47,7 +47,7 @@ function authorData(authors) {
 
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
-  const { authors = [] } = story;
+  const authors = story.authors ? story.authors : [{name: story["author-name"] || ""}];
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
