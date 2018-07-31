@@ -41,12 +41,12 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
 }
 
 function authorData(authors) {
-  return authors.map(author => getSchemaPerson(author.name));
+  return (authors || []).map(author => getSchemaPerson(author.name));
 }
 
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
-  const { authors = [] } = story;
+  const authors = story.authors && story.authors.length !== 0 ? story.authors : [{name: story["author-name"] || ""}];
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
