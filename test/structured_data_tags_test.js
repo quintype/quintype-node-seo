@@ -141,26 +141,26 @@ describe('StructuredDataTags', function() {
     });
   });
 
-  describe('with null authors in article data', function() {
-    it("should fallback to the author-name", function() {
+  describe('with authors value null in article data', function() {
+    it("should fallback to the given author-name", function() {
       const string = getSeoMetadata(getSeoConfig({}), {}, 'story-page', sampleStoryData(null, [], null));
       assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":["https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&auto=format%2Ccompress&fit=max"],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-04-20T06:03:25.102Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"dateCreated":"2018-04-20T06:03:20.588Z","dateModified":"2018-04-20T06:03:20.588Z","@type":"Article","@context":"http://schema.org"}</script>', string);
     });
-  })
+  });
 
-  describe('with empty array authors in article data', function() {
-    it("should fallback to the author-name", function() {
+  describe('with authors value an empty array in article data', function() {
+    it("should fallback to the given author-name", function() {
       const string = getSeoMetadata(getSeoConfig({}), {}, 'story-page', sampleStoryData(null, [], []));
       assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":["https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&auto=format%2Ccompress&fit=max"],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-04-20T06:03:25.102Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"dateCreated":"2018-04-20T06:03:20.588Z","dateModified":"2018-04-20T06:03:20.588Z","@type":"Article","@context":"http://schema.org"}</script>', string);
     });
-  })
+  });
 
   describe('with given authors array in article data', function() {
     it("should read from the authors array", function() {
       const string = getSeoMetadata(getSeoConfig({}), {}, 'story-page', sampleStoryData(null, [], sampleAuthorsData()));
       assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":["https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&auto=format%2Ccompress&fit=max"],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-04-20T06:03:25.102Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"dateCreated":"2018-04-20T06:03:20.588Z","dateModified":"2018-04-20T06:03:20.588Z","@type":"Article","@context":"http://schema.org"}</script>', string);
     });
-  })
+  });
 
   describe('with live blog data', function() {
     it("puts the news article when enableNewsArticle truthy in theme-attributes config", function() {
