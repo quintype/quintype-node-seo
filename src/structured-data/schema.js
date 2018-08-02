@@ -49,7 +49,7 @@ export function getSchemaMainEntityOfPage(id) {
   }
 }
 
-export function getSchemaWebsite(website) {
+export function getSchemaWebsite(website = {}) {
   return Object.assign({},
     getSchemaContext,
     getSchemaType("WebSite"),
