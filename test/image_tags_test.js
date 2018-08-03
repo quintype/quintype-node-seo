@@ -66,6 +66,57 @@ describe('ImageTags', function() {
   });
 
 
+  it("gets element image values instead of card image values on image share", function() {
+    const story = {
+        "hero-image-s3-key": "my/image.png",
+        "cards" : [
+          {
+              "id" : "sample-card-id",
+              "metadata" : {
+                  "social-share": {
+                    "title": "share-card-title",
+                    "message": "share-card-description",
+                    "image": {
+                      "key": "my/card/image.jpg",
+                      "metadata": {
+                        "width": 1300,
+                        "height": 1065,
+                        "mime-type": "image/jpeg"
+                      }
+                    }
+                  }
+              },
+              "story-elements": [
+                {
+                  "image-url": "my/element/image.jpg",
+                  "image-metadata": {
+                    "width": 1024,
+                    "height": 768,
+                    "mime-type": "image/jpeg"
+                  },
+                  "id": "sample-element-id",
+                  "image-s3-key": "my/element/image.jpg",
+                }
+              ]
+          }
+        ]
+    };
+
+    const opts = {
+        url : {
+            query : {
+                cardId : 'sample-card-id',
+                elementId : 'sample-element-id'
+            }
+        }
+    };
+
+    const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, opts);
+
+    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Felement%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress"/>', string);
+  });
+
+
 
   it("gets story data as fallback if the card metadata is falsy", function () {
 
