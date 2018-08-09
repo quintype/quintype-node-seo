@@ -40,7 +40,16 @@ function buildTagsFromStory(config, story, url = {}) {
   return storyMetaData;
 }
 
-function getSeoData(config, pageType, data, url = {}) {
+
+function buildCustomTags(customTags = {}, pageType = ''){
+  const configObject = customTags[pageType];
+  if(configObject) {
+    return configObject;
+  }
+  return {};
+}
+
+function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   function findRelevantConfig(pred) {
     const seoMetadata = config['seo-metadata'].find(pred) || {};
     const {sections = []} = config;
@@ -56,6 +65,10 @@ function getSeoData(config, pageType, data, url = {}) {
     return seoMetadata.data;
   }
 
+  if(seoConfig.customTags && seoConfig.customTags[pageType]){
+    return buildCustomTags(seoConfig.customTags, pageType);
+  }
+
   switch(pageType) {
     case 'home-page': return findRelevantConfig(page => page['owner-type'] === 'home')
     case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
@@ -65,7 +78,7 @@ function getSeoData(config, pageType, data, url = {}) {
 }
 
 export function TextTags(seoConfig, config, pageType, data, {url}) {
-  const seoData = getSeoData(config, pageType, data, url);
+  const seoData = getSeoData(config, pageType, data, url, seoConfig);
 
   if(!seoData)
     return [];
@@ -79,7 +92,7 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
   };
 
   const ogTags = seoConfig.enableOgTags ? {
-    'og:type': pageType == 'story-page' ? 'article' : 'website',
+    'og:type': pageType === 'story-page' ? 'article' : 'website',
     'og:url': seoData.ogUrl || currentUrl,
     'og:title': seoData.title,
     'og:description': seoData.description
@@ -96,9 +109,9 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
   const commonTags = [
     {tag: "title", children: data.title || seoData['page-title']},
     {tag: "link", rel: "canonical", href: seoData.canonicalUrl || currentUrl}
-  ]
+  ];
 
-  if(pageType == 'story-page' && seoConfig.enableNews) {
+  if(pageType === 'story-page' && seoConfig.enableNews) {
     commonTags.push({name: "news_keywords", content: seoData.keywords});
     if(get(data, ["data", "story", "seo", "meta-google-news-standout"]))
       commonTags.push({tag: "link", rel: "standout", href: seoData.storyUrl || currentUrl});
