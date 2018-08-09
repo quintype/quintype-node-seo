@@ -24,6 +24,26 @@ describe('TextTags', function() {
       assert.equal('', string);
     });
 
+    it('generates tags for custom static pages', function() {
+      const seoConfig = {
+        generators: [TextTags],
+        customTags:{
+          'services-page' : {
+            title: "services-page-title",
+            "page-title": "services-page-title",
+            description: "services-page-desc",
+            keywords: ['services-page1','services-page2']
+          }
+        }
+      };
+      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      const string = getSeoMetadata(seoConfig, config, 'services-page', {}, {url: url.parse("/")})
+      assertContains('<title>services-page-title</title>', string);
+      assertContains('<meta name="description" content="services-page-desc"/>', string);
+      assertContains('<meta name="title" content="services-page-title"/>', string);
+      assertContains('<meta name="keywords" content="services-page1,services-page2"/>', string);
+    });
+
     it("gets the meta config for the section when section metadata is available", function() {
       const seoConfig = {
         generators: [TextTags],
@@ -150,6 +170,7 @@ describe('TextTags', function() {
       assertContains('<link rel="canonical" href="http://foo.com/"/>', string);
     });
   });
+
 
   describe('Story Page', function() {
     it("Generates SEO tags for a story page", function () {
