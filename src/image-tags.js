@@ -1,18 +1,28 @@
 import {get, isEmpty} from 'lodash';
 import {FocusedImage} from 'quintype-js';
 
-function pickImageFromCard(story, cardId) {
-  const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
-  if(metadata && !isEmpty(metadata) && get(metadata, ['social-share', 'image', 'key'], false)) {
-    return new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
+function pickImageFromCard(story, urlQuery = {}) {
+  const {cardId, elementId} = urlQuery;
+  if (!cardId && !elementId) {
+    return undefined;
+  }
+
+  const card = story.cards.find(card => card.id === cardId) || {};
+  const element = elementId && (card['story-elements'] || []).find( element => element.id === elementId);
+  if(element && element['image-s3-key']){
+    return new FocusedImage(element['image-s3-key'],element['image-metadata']||{});
+  }
+
+  if(card.metadata && !isEmpty(card.metadata) && get(card.metadata, ['social-share', 'image', 'key'], false)) {
+    return new FocusedImage(card.metadata['social-share'].image.key, card.metadata['social-share'].image.metadata || {});
   }
 }
 
-function pickImageFromElement(story, cardId, elementId) {
-  const { 'story-elements': storyElements = [] } = story.cards.find(card => card.id === cardId) || {};
-  const { 'image-s3-key': imageS3Key } = storyElements && storyElements.find( element => element.id === elementId) || {};
-  return imageS3Key;
-}
+// function pickImageFromElement(story, cardId, elementId) {
+//   const { 'story-elements': storyElements = [] } = story.cards.find(card => card.id === cardId) || {};
+//   const { 'image-s3-key': imageS3Key } = storyElements && storyElements.find( element => element.id === elementId) || {};
+//   return imageS3Key;
+// }
 
 function pickImageFromStory(story) {
   return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
@@ -28,18 +38,10 @@ function pickImageFromCollection(collection) {
 
 // The image is grabbed from the story, else from from the collection
 function pickImage(pageType, data, url) {
-  if(pageType == 'story-page' && url.query && url.query.cardId) {
-    const story = get(data, ['data', 'story']) || {};
-    if (url.query.elementId) {
-      const imageS3Key = pickImageFromElement(story, url.query.cardId, url.query.elementId);
-      if(imageS3Key){
-        return new FocusedImage(imageS3Key,{});
-      }
-    }
-    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType == 'story-page') {
-    const story = get(data, ['data', 'story']) || {};
-    return pickImageFromStory(story);
+  const story = get(data, ['data', 'story']) || {};
+  if(pageType == 'story-page') {
+    return pickImageFromCard(story, url.query) || 
+           pickImageFromStory(story);
   } else if(get(data, ['data', 'collection'])) {
     return pickImageFromCollection(get(data, ['data', 'collection']))
   }
