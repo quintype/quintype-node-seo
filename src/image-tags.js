@@ -18,12 +18,6 @@ function pickImageFromCard(story, urlQuery = {}) {
   }
 }
 
-// function pickImageFromElement(story, cardId, elementId) {
-//   const { 'story-elements': storyElements = [] } = story.cards.find(card => card.id === cardId) || {};
-//   const { 'image-s3-key': imageS3Key } = storyElements && storyElements.find( element => element.id === elementId) || {};
-//   return imageS3Key;
-// }
-
 function pickImageFromStory(story) {
   return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
 }
@@ -41,7 +35,7 @@ function pickImage(pageType, data, url) {
   const story = get(data, ['data', 'story']) || {};
   if(pageType == 'story-page') {
     return pickImageFromCard(story, url.query) || 
-           pickImageFromStory(story);
+      pickImageFromStory(story);
   } else if(get(data, ['data', 'collection'])) {
     return pickImageFromCollection(get(data, ['data', 'collection']))
   }
