@@ -105,16 +105,16 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     tags.push(ldJson("Organization", structuredData.organization));
   }
 
-  if(!isStructuredDataEmpty && pageType == 'home-page') {
+  if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
   }
 
-  if(!isStructuredDataEmpty && pageType == 'story-page') {
+  if(!isStructuredDataEmpty && pageType === 'story-page') {
     tags.push(storyTags());
   }
 
   function storyTags() {
-    if(structuredData.enableLiveBlog && story['story-template'] == 'live-blog') {
+    if(structuredData.enableLiveBlog && story['story-template'] === 'live-blog') {
       return ldJson("LiveBlogPosting", Object.assign({}, articleData, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
     }
 

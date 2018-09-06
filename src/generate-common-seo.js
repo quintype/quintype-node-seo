@@ -22,7 +22,18 @@ export function generateStaticData(config) {
     "og:site_name": title
   };
 
-  return omitBy(staticData, isUndefined); 
+  return omitBy(staticData, isUndefined);
+}
+
+export function generateImageObject(config = {}) {
+  const {"theme-attributes": themeConfig = {}} = config;
+  return ({
+    "@context": "http://schema.org",
+    "@type": "ImageObject",
+    "author": config['publisher-name'],
+    "contentUrl": themeConfig.logo,
+    "name": "logo"
+  });
 }
 
 export function generateStructuredData(config) {
@@ -38,7 +49,7 @@ export function generateStructuredData(config) {
     organization: {
       name: title,
       url: config["sketches-host"],
-      logo: themeConfig.logo,
+      logo: generateImageObject(config),
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
     enableNewsArticle: !!themeConfig['structured_data_news_article'],

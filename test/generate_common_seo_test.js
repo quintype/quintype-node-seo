@@ -85,6 +85,7 @@ describe('Seo Helpers', function() {
         "publisher-settings": {
           "title": "abc"
         },
+        'publisher-name': 'abc',
         "sketches-host": "abc.com",
         "theme-attributes": {
           "logo": "https://quintype.com/abc.png"
@@ -95,19 +96,19 @@ describe('Seo Helpers', function() {
           "instagram-url": "https://www.instagram.com/abc",
           "twitter-url": "https://twitter.com/abc"
         }
-      }
+      };
       const expectedStructuredData = {
         organization: {
           name: "abc",
           url: "abc.com",
-          logo: "https://quintype.com/abc.png",
+          logo: {"@context": "http://schema.org","@type": "ImageObject","author": "abc","contentUrl": "https://quintype.com/abc.png","name": "logo"},
           sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
         },
         enableNewsArticle: false
       };
       const actualStructuredData = generateStructuredData(config)
       assert.deepEqual(actualStructuredData, expectedStructuredData)
-    })
+    });
   
     it('does not crash when the config is empty', function() {
       const expectedStructuredData = {};
@@ -132,7 +133,7 @@ describe('Seo Helpers', function() {
         organization: {
           name: "abc",
           url: "abc.com",
-          logo: "https://quintype.com/abc.png",
+          logo: {"@context": "http://schema.org","@type": "ImageObject","author": "Abc","contentUrl": "https://quintype.com/abc.png","name": "logo"},
           sameAs: []
         },
         enableNewsArticle: false
