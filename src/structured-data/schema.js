@@ -18,7 +18,7 @@ export function getSchemaBlogPosting(card = {}, author = {}, headline = '', imag
   const {website : {url = ''} = {}} = structuredData;
   return Object.assign({},
     getSchemaType("BlogPosting"),
-    getSchemaMainEntityOfPage(`${url}${story.slug}`),
+    getSchemaMainEntityOfPage(`${url}/${story.slug}`),
     getSchemaPublisher(structuredData.organization),
     {
       "dateModified": new Date(card['card-updated-at']),
