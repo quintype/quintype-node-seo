@@ -57,7 +57,7 @@ export function getSchemaWebsite(website = {}) {
       "url": website.url,
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `${website.url}${website.searchpath}`,
+        "target": `${website.url}/${website.searchpath}`,
         "query-input": website.queryinput
       }
     }
