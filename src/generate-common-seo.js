@@ -53,5 +53,10 @@ export function generateStructuredData(config) {
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
     enableNewsArticle: !!themeConfig['structured_data_news_article'],
+    website: {
+      url: config["sketches-host"],
+      searchpath: "search?q={query}",
+      queryinput: "required name=query"
+    },
   }
 }

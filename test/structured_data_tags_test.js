@@ -17,7 +17,7 @@ const organization = {
 }
 
 const website = {
-  url: "https://madrid.quintype.io/",
+  url: "https://madrid.quintype.io",
   searchpath: "search?q={query}",
   queryinput: "required name=query"
 }
@@ -119,7 +119,7 @@ function sampleStoryData(template, cards, authors) {
 }
 
 const sampleOrganisationTag = '<script type="application/ld+json">{"name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],"@type":"Organization","@context":"http://schema.org"}</script>';
-const sampleWebsiteTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","url":"https://madrid.quintype.io/","potentialAction":{"@type":"SearchAction","target":"https://madrid.quintype.io/search?q={query}","query-input":"required name=query"}}</script>'
+const sampleWebsiteTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","url":"https://madrid.quintype.io","potentialAction":{"@type":"SearchAction","target":"https://madrid.quintype.io/search?q={query}","query-input":"required name=query"}}</script>'
 
 describe('StructuredDataTags', function() {
   it("puts the organization & website tag", function() {

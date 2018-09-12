@@ -104,7 +104,12 @@ describe('Seo Helpers', function() {
           logo: {"@context": "http://schema.org","@type": "ImageObject","author": "abc","contentUrl": "https://quintype.com/abc.png","name": "logo"},
           sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
         },
-        enableNewsArticle: false
+        enableNewsArticle: false,
+        website: {
+          url: "abc.com",
+          searchpath: "search?q={query}",
+          queryinput: "required name=query"
+        },
       };
       const actualStructuredData = generateStructuredData(config)
       assert.deepEqual(actualStructuredData, expectedStructuredData)
@@ -136,7 +141,12 @@ describe('Seo Helpers', function() {
           logo: {"@context": "http://schema.org","@type": "ImageObject","author": "Abc","contentUrl": "https://quintype.com/abc.png","name": "logo"},
           sameAs: []
         },
-        enableNewsArticle: false
+        enableNewsArticle: false,
+        website: {
+          url: "abc.com",
+          searchpath: "search?q={query}",
+          queryinput: "required name=query"
+        },
       };
   
       const actualStructuredData = generateStructuredData(config);
