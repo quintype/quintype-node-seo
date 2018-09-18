@@ -32,7 +32,8 @@ export function generateImageObject(config = {}) {
     "@type": "ImageObject",
     "author": config['publisher-name'],
     "contentUrl": themeConfig.logo,
-    "name": "logo"
+    "url": themeConfig.logo,
+    "name": "logo",
   });
 }
 
