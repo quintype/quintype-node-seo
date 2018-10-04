@@ -64,6 +64,8 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {};
       seoMetadata.data['description'] = (homeSeoData.data && homeSeoData.data.description) ? homeSeoData.data.description : '';
     }
+    seoMetadata.data['ogTitle'] = seoMetadata.data['title'];
+    seoMetadata.data['ogDescription'] = seoMetadata.data['description'];
     return seoMetadata.data;
   }
 
