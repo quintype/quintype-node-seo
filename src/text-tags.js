@@ -24,11 +24,13 @@ function buildTagsFromStory(config, story, url = {}) {
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
-    "page-title": story.headline,
-    description: seo["meta-description"] || story.subheadline || story.summary,
+    "page-title": seo["meta-title"] || story.headline,
+    description: seo["meta-description"] || story.summary,
     keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
+    ogTitle: story.headline,
+    ogDescription: story.summary,
     storyUrl: storyUrl
   };
 
@@ -62,6 +64,10 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {};
       seoMetadata.data['description'] = (homeSeoData.data && homeSeoData.data.description) ? homeSeoData.data.description : '';
     }
+    if(seoMetadata.data) {
+      seoMetadata.data['ogTitle'] = seoMetadata.data['title'];
+      seoMetadata.data['ogDescription'] = seoMetadata.data['description'];
+    }
     return seoMetadata.data;
   }
 
@@ -94,8 +100,8 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
   const ogTags = seoConfig.enableOgTags ? {
     'og:type': pageType === 'story-page' ? 'article' : 'website',
     'og:url': seoData.ogUrl || currentUrl,
-    'og:title': seoData.title,
-    'og:description': seoData.description
+    'og:title': seoData.ogTitle,
+    'og:description': seoData.ogDescription
   } : undefined;
 
   const twitterTags = seoConfig.enableTwitterCards ? {
