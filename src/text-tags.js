@@ -43,8 +43,7 @@ function buildTagsFromStory(config, story, url = {}) {
 }
 
 function buildTagsFromTopic(config, tag, url = {}) {
-  console.log('tag', tag);
-  console.log('url', url);
+
   if(!tag)
     return;
 
