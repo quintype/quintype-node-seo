@@ -156,12 +156,12 @@ describe('TextTags', function() {
       assertContains('<title>The Title</title>', string);
     });
 
-    it("Alse generates all other fields", function() {
+    it("Also generates all other fields", function() {
       const seoConfig = {
         generators: [TextTags],
         enableOgTags: true,
         enableTwitterCards: true
-      }
+      };
       const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'title': "Foobar"}}]};
       const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")})
       assertContains('<meta name="title" content="Foobar"/>', string);
@@ -169,6 +169,21 @@ describe('TextTags', function() {
       assertContains('<meta property="og:title" content="Foobar"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/"/>', string);
     });
+
+    it("twitter title will be headline if its a story page", function() {
+      const seoConfig = {
+        generators: [TextTags],
+        enableOgTags: true,
+        enableTwitterCards: true
+      };
+      const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'title': "Foobar"}}]};
+      const string = getSeoMetadata(seoConfig, config, 'story-page', {data:{story:{slug:'story-slug',headline:'story-headline'}}}, {url: url.parse("/")})
+      assertContains('<meta name="title" content="story-headline"/>', string);
+      assertContains('<meta name="twitter:title" content="story-headline"/>', string);
+      assertContains('<meta property="og:title" content="story-headline"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/story-slug"/>', string);
+    });
+
   });
 
 
