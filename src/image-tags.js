@@ -22,10 +22,10 @@ function pickImageFromCollection(collection) {
 
 // The image is grabbed from the story, else from from the collection
 function pickImage(pageType, data, url) {
-  if(pageType == 'story-page' && url.query && url.query.cardId) {
+  if(pageType === 'story-page' && url.query && url.query.cardId) {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType == 'story-page') {
+  } else if(pageType === 'story-page') {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromStory(story);
   } else if(get(data, ['data', 'collection'])) {

@@ -106,7 +106,7 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   const twitterTags = seoConfig.enableTwitterCards ? {
     'twitter:card': "summary_large_image",
-    'twitter:title': seoData.title,
+    'twitter:title': pageType === 'story-page' ? get(data, ['data', 'story', 'headline'], 'error') : seoData.title,
     'twitter:description': seoData.description,
   } : undefined;
 
