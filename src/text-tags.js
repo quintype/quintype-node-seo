@@ -44,7 +44,7 @@ function buildTagsFromStory(config, story, url = {}) {
 
 function buildTagsFromTopic(config, tag, url = {}) {
 
-  if(!tag)
+  if(isEmpty(tag))
     return;
 
   const topicUrl = `${config['sketches-host']}${url.pathname}`;
