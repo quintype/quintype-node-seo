@@ -42,6 +42,25 @@ function buildTagsFromStory(config, story, url = {}) {
   return storyMetaData;
 }
 
+function buildTagsFromTopic(config, tag, url = {}) {
+
+  if(isEmpty(tag))
+    return;
+
+  const topicUrl = `${config['sketches-host']}${url.pathname}`;
+
+  const topicMetaData = {
+    "page-title":tag.name,
+    description: tag.description || tag.name,
+    keywords: tag.name,
+    canonicalUrl: topicUrl,
+    ogUrl: topicUrl,
+    ogTitle: tag.name,
+    ogDescription: tag.tagDescription || tag.name
+  };
+
+  return topicMetaData;
+}
 
 function buildCustomTags(customTags = {}, pageType = ''){
   const configObject = customTags[pageType];
@@ -78,6 +97,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   switch(pageType) {
     case 'home-page': return findRelevantConfig(page => page['owner-type'] === 'home')
     case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
+    case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
     default: return getSeoData(config, 'home-page', data, url);
   }
