@@ -406,12 +406,12 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const tag = {slug: "Foobar", description: "Some Foobar", name: "Footag"}
-      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'tag-page', {data: {tag: tag}}, {url: url.parse("/tag-page")})
+      const tag = {slug: "Foobar", description: "Some Foobar", name: "Footag", path: "/Foopath"}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'tag-page', {data: {tag: tag}}, {url: url.parse("/my-page")})
       assertContains('<title>Footag</title>', string);
       assertContains('<meta name="description" content="Some Foobar"/>', string);
       assertContains('<meta name="keywords" content="Footag"/>', string);
-      assertContains('<link rel="canonical" href="http://foo.com/tag-page"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/Foopath"/>', string);
     });
   });
 
