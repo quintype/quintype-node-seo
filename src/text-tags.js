@@ -47,14 +47,12 @@ function buildTagsFromTopic(config, tag, url = {}) {
   if(isEmpty(tag))
     return;
 
-  const topicUrl = `${config['sketches-host']}${url.pathname}`;
-
   const topicMetaData = {
     "page-title":tag.name,
     description: tag.description || tag.name,
     keywords: tag.name,
-    canonicalUrl: topicUrl,
-    ogUrl: topicUrl,
+    canonicalUrl: `${config['sketches-host']}${tag.path}`,
+    ogUrl: `${config['sketches-host']}${tag.path}`,
     ogTitle: tag.name,
     ogDescription: tag.tagDescription || tag.name
   };
