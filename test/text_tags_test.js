@@ -413,6 +413,18 @@ describe('TextTags', function() {
       assertContains('<meta name="keywords" content="Footag"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/Foopath"/>', string);
     });
+    it("gets tag data as fallback if the tag metadata is falsy", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const tag = {}
+      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar", 'description': "Some Foobar", 'keywords': "keywords", 'canonicalUrl': "http://foo.com"}}]};
+      const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")});
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="keywords"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com"/>', string);
+    });
   });
 
 });
