@@ -1,16 +1,28 @@
-import {omit, flatMap, get} from "lodash";
+import { omit, flatMap, get } from "lodash";
 import React from "react";
-import ReactDomServer from"react-dom/server";
+import ReactDomServer from "react-dom/server";
 
-import {TextTags, getTitle} from './src/text-tags.js';
-import {StaticTags} from './src/static-tags.js';
-import {AuthorTags} from './src/author-tags.js';
-import {ImageTags} from './src/image-tags.js';
-import {StructuredDataTags} from './src/structured-data/structured-data-tags.js';
-import {StoryAmpTags} from './src/amp-tags.js';
-import {generateStaticData, generateStructuredData} from './src/generate-common-seo';
+import { TextTags, getTitle } from "./src/text-tags.js";
+import { StaticTags } from "./src/static-tags.js";
+import { AuthorTags } from "./src/author-tags.js";
+import { ImageTags } from "./src/image-tags.js";
+import { StructuredDataTags } from "./src/structured-data/structured-data-tags.js";
+import { StoryAmpTags } from "./src/amp-tags.js";
+import {
+  generateStaticData,
+  generateStructuredData
+} from "./src/generate-common-seo";
 
-export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags, generateStaticData, generateStructuredData};
+export {
+  TextTags,
+  StaticTags,
+  AuthorTags,
+  ImageTags,
+  StructuredDataTags,
+  StoryAmpTags,
+  generateStaticData,
+  generateStructuredData
+};
 
 export class MetaTagList {
   constructor(tags) {
@@ -18,7 +30,11 @@ export class MetaTagList {
   }
 
   toString() {
-    return ReactDomServer.renderToStaticMarkup(this.tags.map(tag => React.createElement(tag.tag || "meta", omit(tag, "tag"))))
+    return ReactDomServer.renderToStaticMarkup(
+      this.tags.map(tag =>
+        React.createElement(tag.tag || "meta", omit(tag, "tag"))
+      )
+    );
   }
 
   addTag() {
@@ -29,15 +45,28 @@ export class MetaTagList {
 export class SEO {
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;
-    this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags, StoryAmpTags]).concat(seoConfig.extraGenerators || []);
+    this.generators = (
+      seoConfig.generators || [
+        TextTags,
+        ImageTags,
+        AuthorTags,
+        StaticTags,
+        StructuredDataTags,
+        StoryAmpTags
+      ]
+    ).concat(seoConfig.extraGenerators || []);
   }
 
   getMetaTags(config, pageType, data, params = {}) {
     pageType = get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
-    return new MetaTagList(flatMap(this.generators, generator => generator(this.seoConfig, config, pageType, data, params)));
+    return new MetaTagList(
+      flatMap(this.generators, generator =>
+        generator(this.seoConfig, config, pageType, data, params)
+      )
+    );
   }
 
   getTitle(config, pageType, data, params = {}) {
-    return getTitle(this.seoConfig, config, pageType, data, params)
+    return getTitle(this.seoConfig, config, pageType, data, params);
   }
 }

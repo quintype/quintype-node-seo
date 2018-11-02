@@ -1,7 +1,9 @@
-import {omitBy, isUndefined} from 'lodash';
+import { omitBy, isUndefined } from "lodash";
 
 export function getTitle(config) {
-  return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
+  return config["publisher-settings"]
+    ? config["publisher-settings"]["title"]
+    : config["publisher-name"];
 }
 
 export function generateStaticData(config) {
@@ -26,15 +28,15 @@ export function generateStaticData(config) {
 }
 
 export function generateImageObject(config = {}) {
-  const {"theme-attributes": themeConfig = {}} = config;
-  return ({
+  const { "theme-attributes": themeConfig = {} } = config;
+  return {
     "@context": "http://schema.org",
     "@type": "ImageObject",
-    "author": config['publisher-name'],
-    "contentUrl": themeConfig.logo,
-    "url": themeConfig.logo,
-    "name": "logo",
-  });
+    author: config["publisher-name"],
+    contentUrl: themeConfig.logo,
+    url: themeConfig.logo,
+    name: "logo"
+  };
 }
 
 export function generateStructuredData(config) {
@@ -42,7 +44,7 @@ export function generateStructuredData(config) {
   const themeConfig = config["theme-attributes"];
   const socialLinks = config["social-links"];
 
-  if(!themeConfig || !themeConfig.logo) {
+  if (!themeConfig || !themeConfig.logo) {
     return {};
   }
 
@@ -53,11 +55,11 @@ export function generateStructuredData(config) {
       logo: generateImageObject(config),
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
-    enableNewsArticle: !!themeConfig['structured_data_news_article'],
+    enableNewsArticle: !!themeConfig["structured_data_news_article"],
     website: {
       url: config["sketches-host"],
       searchpath: "search?q={query}",
       queryinput: "required name=query"
-    },
-  }
+    }
+  };
 }
