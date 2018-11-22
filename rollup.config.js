@@ -7,8 +7,7 @@ export default {
   ],
   plugins: [
     babel({
-      exclude: 'node_modules/**',
-      presets: ["react"]
+      exclude: 'node_modules/**'
     })
   ],
   external: ["react","react-dom/server","lodash","quintype-js"]
