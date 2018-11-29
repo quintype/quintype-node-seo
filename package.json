@@ -15,7 +15,7 @@
     "build": "rollup -c",
     "coverage": "nyc --all --reporter=html npm test",
     "prepack": "npm run build",
-    "prepublishOnly": "npm install && npm test && git diff --quiet && git tag -m '' -a v$(cat package.json | grep version | head -n1  | cut -d \\\" -f 4) && git push --follow-tags origin",
+    "prepublishOnly": "npm install && npm test && git diff --quiet && npx standard-version && git push --follow-tags origin",
     "test": "npm run build && mocha test"
   },
   "devDependencies": {
@@ -28,6 +28,7 @@
     "react-dom": "^16.2.0",
     "rollup": "^0.52.1",
     "rollup-plugin-babel": "^3.0.2",
+    "standard-version": "^4.4.0",
     "url": "^0.11.0"
   },
   "dependencies": {
