@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.3"></a>
+## [1.14.3](https://github.com/quintype/quintype-node-seo/compare/v1.14.2...v1.14.3) (2018-11-29)
+
+
+### Bug Fixes
+
+* **build:** Adding PRLint ([3b7d0f8](https://github.com/quintype/quintype-node-seo/commit/3b7d0f8))
+
+
+
 <a name="1.14.2"></a>
 ## [1.14.2](https://github.com/quintype/quintype-node-seo/compare/v1.14.1...v1.14.2) (2018-11-29)
 
