@@ -60,6 +60,25 @@ function buildTagsFromTopic(config, tag, url = {}) {
   return topicMetaData;
 }
 
+function buildTagsFromAuthor(config, author, url = {}) {
+  const authorUrl = `${config['sketches-host']}${url.path}`;
+  const publisherName = config['publisher-name'];
+  const description = author.bio || `View all articles written by ${author.name} on ${publisherName}`;
+
+  if(isEmpty(author)) return;
+
+  return {
+    title: author.name,
+    "page-title": author.name,
+    description: description,
+    keywords: `${author.name},${publisherName}`,
+    canonicalUrl: authorUrl,
+    ogUrl: authorUrl,
+    ogTitle: author.name,
+    ogDescription: description,
+  };
+}
+
 function buildCustomTags(customTags = {}, pageType = ''){
   const configObject = customTags[pageType];
   if(configObject) {
@@ -97,6 +116,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
     case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
     default: return getSeoData(config, 'home-page', data, url);
   }
 }
