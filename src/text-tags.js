@@ -61,20 +61,21 @@ function buildTagsFromTopic(config, tag, url = {}) {
 }
 
 function buildTagsFromAuthor(config, author, url = {}) {
-  const authorUrl = `${config['sketches-host']}${url.path}`;
+  const authorName = author.name;
+  const authorUrl = `${config['sketches-host']}/author/${author.id}`;
   const publisherName = config['publisher-name'];
   const description = author.bio || `View all articles written by ${author.name} on ${publisherName}`;
 
   if(isEmpty(author)) return;
 
   return {
-    title: author.name,
-    "page-title": author.name,
+    title: authorName,
+    "page-title": authorName,
     description: description,
-    keywords: `${author.name},${publisherName}`,
+    keywords: `${authorName},${publisherName}`,
     canonicalUrl: authorUrl,
     ogUrl: authorUrl,
-    ogTitle: author.name,
+    ogTitle: authorName,
     ogDescription: description,
   };
 }
