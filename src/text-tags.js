@@ -64,7 +64,7 @@ function buildTagsFromAuthor(config, author, url = {}) {
   if(isEmpty(author)) return;
 
   const authorName = author.name;
-  const authorUrl = `${config['sketches-host']}/author/${author.id}`;
+  const authorUrl = `${config['sketches-host']}${url.pathname}`;
   const publisherName = config['publisher-name'];
   const description = author.bio || `View all articles written by ${author.name} on ${publisherName}`;
 
