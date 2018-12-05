@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.15.0"></a>
+# [1.15.0](https://github.com/quintype/quintype-node-seo/compare/v1.12.0...v1.15.0) (2018-12-05)
+
+
+### Bug Fixes
+
+* **build:** Adding PRLint ([3b7d0f8](https://github.com/quintype/quintype-node-seo/commit/3b7d0f8))
+* **build:** Adding standard-version ([eb50d2d](https://github.com/quintype/quintype-node-seo/commit/eb50d2d))
+
+
+### Features
+
+* **author-page:** Add support for custom author-page seo data ([#25](https://github.com/quintype/quintype-node-seo/issues/25)) ([8693179](https://github.com/quintype/quintype-node-seo/commit/8693179))
+
+
+
 <a name="1.14.3"></a>
 ## [1.14.3](https://github.com/quintype/quintype-node-seo/compare/v1.14.2...v1.14.3) (2018-11-29)
 
