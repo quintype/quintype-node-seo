@@ -65,14 +65,13 @@ function buildTagsFromAuthor(config, author, url = {}) {
 
   const authorName = author.name;
   const authorUrl = `${config['sketches-host']}${url.pathname}`;
-  const publisherName = config['publisher-name'];
-  const description = author.bio || `View all articles written by ${author.name} on ${publisherName}`;
+  const description = author.bio || `View all articles written by ${authorName}`;
 
   return {
     title: authorName,
     "page-title": authorName,
     description: description,
-    keywords: `${authorName},${publisherName}`,
+    keywords: `${authorName},${config['publisher-name']}`,
     canonicalUrl: authorUrl,
     ogUrl: authorUrl,
     ogTitle: authorName,
