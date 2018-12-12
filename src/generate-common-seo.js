@@ -1,4 +1,6 @@
-import {omitBy, isUndefined} from 'lodash';
+import omitBy from 'lodash/omitBy';
+import isUndefined from 'lodash/isUndefined';
+import get from 'lodash/get';
 
 export function getTitle(config) {
   return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
@@ -7,6 +9,7 @@ export function getTitle(config) {
 export function generateStaticData(config) {
   const title = getTitle(config);
   const themeConfig = config["theme-attributes"] || {};
+  const publicIntegrations = get(config, ['public-integrations'], {});
   const staticData = {
     "twitter:site": title,
     "twitter:domain": config["sketches-host"],
@@ -17,7 +20,7 @@ export function generateStaticData(config) {
     "twitter:app:id:iphone": themeConfig["twitter_app_id_iphone"],
     "apple-itunes-app": themeConfig["apple_itunes_app"],
     "google-play-app": themeConfig["google_play_app"],
-    "fb:app_id": themeConfig["fb_app_id"],
+    "fb:app_id": get(publicIntegrations, ['facebook', 'app-id']),
     "fb:pages": themeConfig["fb_pages"],
     "og:site_name": title
   };

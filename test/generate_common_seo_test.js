@@ -5,6 +5,11 @@ describe('Seo Helpers', function() {
   describe('Static Data Generator', function() {
     it('generates static data', function() {
       const config = {
+        "public-integrations": {
+          "facebook": {
+            "app-id": "4"
+          }
+        },
         "publisher-settings": {
           "title": "abc"
         },
@@ -33,18 +38,18 @@ describe('Seo Helpers', function() {
         "twitter:app:id:iphone": "twitter-app-id-phone",
         "apple-itunes-app": "apple-itunes-app",
         "google-play-app": "google-play-app",
-        "fb:app_id": "fb-app-id",
+        "fb:app_id": "4",
         "fb:pages": "fb-pages",
         "og:site_name": "abc"
-      }
-      const actualStaticData = generateStaticData(config)
+      };
+      const actualStaticData = generateStaticData(config);
       assert.deepEqual(actualStaticData, expectedStaticData)
-    })
+    });
   
     it('does not crash when the config is empty', function() {
-      const actualStaticData = generateStaticData({})
-      assert.deepEqual(actualStaticData, {})
-    })
+      const actualStaticData = generateStaticData({});
+      assert.deepEqual(actualStaticData, {});
+    });
   
     it('does not crash when theme attributes is null', function() {
       const config = {
