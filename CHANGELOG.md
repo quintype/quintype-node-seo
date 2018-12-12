@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.15.2"></a>
+## [1.15.2](https://github.com/quintype/quintype-node-seo/compare/v1.15.1...v1.15.2) (2018-12-12)
+
+
+### Bug Fixes
+
+* **fb-app-id:** fb-app-id fetched from editor config ([#28](https://github.com/quintype/quintype-node-seo/issues/28)) ([58351cd](https://github.com/quintype/quintype-node-seo/commit/58351cd))
+
+
+
 <a name="1.15.1"></a>
 ## [1.15.1](https://github.com/quintype/quintype-node-seo/compare/v1.15.0...v1.15.1) (2018-12-06)
 
