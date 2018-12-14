@@ -202,6 +202,20 @@ describe('TextTags', function() {
     });
 
 
+    it("Generates SEO tags for visual story page", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome"}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'visual-story', {story: story}, {url: url.parse("/my-page")})
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="title" content="Foobar"/>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+    });
+
+
 
     it("Generates SEO tags for a card in story page", function () {
       const seoConfig = {
