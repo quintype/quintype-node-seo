@@ -25,8 +25,14 @@ function pickImage(pageType, data, url) {
   if(pageType === 'story-page' && url.query && url.query.cardId) {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
+  }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
+    const story = get(data, ['story']) || {};
+    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
   } else if(pageType === 'story-page') {
     const story = get(data, ['data', 'story']) || {};
+    return pickImageFromStory(story);
+  } else if(pageType === 'visual-story') {
+    const story = get(data, ['story']) || {};
     return pickImageFromStory(story);
   } else if(get(data, ['data', 'collection'])) {
     return pickImageFromCollection(get(data, ['data', 'collection']))
