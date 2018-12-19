@@ -23,6 +23,7 @@ export function getSchemaBlogPosting(card = {}, author = {}, headline = '', imag
     {
       "dateModified": new Date(card['card-updated-at']),
       "dateCreated": new Date(card['card-added-at']),
+      "datePublished": new Date(card['card-updated-at']),
       "author": author,
       "headline": headline,
       "image": image

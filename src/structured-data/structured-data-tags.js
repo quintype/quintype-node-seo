@@ -88,6 +88,20 @@ function generateLiveBlogPostingData (structuredData = {}, story = {}, publisher
   };
 }
 
+function generateVideoArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
+  const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
+    "author": authorData(story.authors),
+    "keywords": metaKeywords,
+    "dateCreated": new Date(story['created-at']),
+    "dateModified": new Date(story['updated-at']),
+    "description": story.summary,
+    "name": story.headline,
+    "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
+    "uploadDate": new Date(story['published-at'])
+  });
+}
+
 function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
   return getSchemaWebsite(structuredData.website);
 }
@@ -119,7 +133,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     }
 
     if(structuredData.enableVideo && story['story-template'] === 'video') {
-      return ldJson("VideoObject", articleData)
+      return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
 
     if(structuredData.enableNewsArticle) {
