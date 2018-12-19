@@ -119,7 +119,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     }
 
     if(structuredData.enableVideo && story['story-template'] === 'video') {
-      return ldJson("VideoObj", articleData)
+      return ldJson("VideoObject", articleData)
     }
 
     if(structuredData.enableNewsArticle) {
