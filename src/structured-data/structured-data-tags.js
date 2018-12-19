@@ -118,6 +118,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
       return ldJson("LiveBlogPosting", Object.assign({}, articleData, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
     }
 
+    if(structuredData.enableVideo && story['story-template'] === 'video') {
+      return ldJson("VideoObj", articleData)
+    }
+
     if(structuredData.enableNewsArticle) {
       return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig)))
     }
