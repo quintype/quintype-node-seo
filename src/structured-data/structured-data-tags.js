@@ -56,26 +56,35 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   });
 }
 
-function storyAccessLevel(accessLevelValue) {
-  if (accessLevelValue === null || accessLevelValue === 100) {
-    return "True";
-  } else if (accessLevelValue === 999) {
-    return "False";
+function storyAccess(access) {
+  if (access === null || access === "public") {
+    return true;
+  } else if (access === "subscription") {
+    return false;
+  }
+}
+
+function generateHasPartData(storyAccess) {
+  return storyAccess ?
+    {} :
+    {"hasPart": [
+      {
+        "@type": "WebPageElement",
+        "isAccessibleForFree": storyAccess,
+        "cssSelector": ".paywall"
+      }
+    ]
   }
 }
 
 function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
-  return {
+  const storyAccessType = storyAccess(story['access']);
+  return Object.assign({}, {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
-    "isAccessibleForFree": storyAccessLevel(story['access-level-value']),
-    "hasPart": {
-      "@type": "WebPageElement",
-      "isAccessibleForFree": storyAccessLevel(story['access-level-value']),
-      "cssSelector": ".paywall"
-    }
-  };
+    "isAccessibleForFree": storyAccessType
+  }, generateHasPartData(storyAccessType));
 }
 
 function findStoryElementField(card, type, field, defaultValue) {
