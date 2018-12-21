@@ -56,11 +56,25 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   });
 }
 
+function storyAccessLevel(accessLevelValue) {
+  if (accessLevelValue === null || accessLevelValue === 100) {
+    return "True";
+  } else if (accessLevelValue === 999) {
+    return "False";
+  }
+}
+
 function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
   return {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
+    "isAccessibleForFree": storyAccessLevel(story['access-level-value']),
+    "hasPart": {
+      "@type": "WebPageElement",
+      "isAccessibleForFree": storyAccessLevel(story['access-level-value']),
+      "cssSelector": ".paywall"
+    }
   };
 }
 
