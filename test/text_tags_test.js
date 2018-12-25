@@ -265,6 +265,8 @@ describe('TextTags', function() {
       assertContains('<meta name="keywords" content="Footag"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
       assertContains('<meta property="og:url" content="http://foo.com/politics/awesome?cardId=sample-card-id"/>', string);
+      assertContains('<meta property="og:title" content="share-card-title"/>', string);
+      assertContains('<meta property="og:description" content="share-card-description"/>', string);
     });
 
 
