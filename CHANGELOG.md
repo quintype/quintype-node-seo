@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.17.1"></a>
+## [1.17.1](https://github.com/quintype/quintype-node-seo/compare/v1.17.0...v1.17.1) (2018-12-25)
+
+
+### Bug Fixes
+
+* **card share:** card share not generate og:title & og:description from card seo ([#35](https://github.com/quintype/quintype-node-seo/issues/35)) ([466de86](https://github.com/quintype/quintype-node-seo/commit/466de86))
+
+
+
 <a name="1.17.0"></a>
 # [1.17.0](https://github.com/quintype/quintype-node-seo/compare/v1.16.1...v1.17.0) (2018-12-21)
 
