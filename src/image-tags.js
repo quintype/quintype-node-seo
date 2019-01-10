@@ -53,7 +53,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   }
 
   if(seoConfig.enableOgTags) {
-    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress"})}`});
+    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress", ogImage: true})}`});
     tags.push({property: "og:image:width", content: 1200});
     if(get(image, ["metadata", "focus-point"])) {
       tags.push({property: "og:image:height", content: 630})
