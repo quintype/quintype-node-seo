@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.18.0"></a>
+# [1.18.0](https://github.com/quintype/quintype-node-seo/compare/v1.15.1...v1.18.0) (2019-01-17)
+
+
+### Bug Fixes
+
+* **card share:** card share not generate og:title & og:description from card seo ([#35](https://github.com/quintype/quintype-node-seo/issues/35)) ([466de86](https://github.com/quintype/quintype-node-seo/commit/466de86))
+* **date:** Strip milliseconds from date to follow 8601 format ([#36](https://github.com/quintype/quintype-node-seo/issues/36)) ([e95b64c](https://github.com/quintype/quintype-node-seo/commit/e95b64c))
+* **fb-app-id:** fb-app-id fetched from editor config ([#28](https://github.com/quintype/quintype-node-seo/issues/28)) ([58351cd](https://github.com/quintype/quintype-node-seo/commit/58351cd))
+* **objData:** Video and live blog obj data ([#32](https://github.com/quintype/quintype-node-seo/issues/32)) ([d886368](https://github.com/quintype/quintype-node-seo/commit/d886368))
+* **text-tags:** add text-tags support for visual story ([#30](https://github.com/quintype/quintype-node-seo/issues/30)) ([5a5830f](https://github.com/quintype/quintype-node-seo/commit/5a5830f))
+
+
+### Features
+
+* **StructuredData:** Add isAccessibleFree structured data required for paywall ([#34](https://github.com/quintype/quintype-node-seo/issues/34)) ([e5b012a](https://github.com/quintype/quintype-node-seo/commit/e5b012a))
+* **videoObj:** Add videoobj option for structured data ([#31](https://github.com/quintype/quintype-node-seo/issues/31)) ([6e61489](https://github.com/quintype/quintype-node-seo/commit/6e61489))
+
+
+
 <a name="1.17.4"></a>
 ## [1.17.4](https://github.com/quintype/quintype-node-seo/compare/v1.17.3...v1.17.4) (2019-01-10)
 
