@@ -24,17 +24,23 @@ function ldJson(type, fields) {
   };
 }
 
+function stripMillisecondsFromTime(date) {
+  console.log(date)
+  return date.toISOString().split('.')[0]+"Z";
+}
+
 function imageUrl(publisherConfig, s3Key) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
   return `${imageSrc}/${s3Key}?w=480&auto=format%2Ccompress&fit=max`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
+  console.log(story['published-at'])
   return Object.assign({},
     {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
-    "datePublished": new Date(story['published-at'])},
+    "datePublished": stripMillisecondsFromTime(new Date(story['published-at']))},
     getSchemaMainEntityOfPage(structuredData.organization.url),
     getSchemaPublisher(structuredData.organization)
   )
@@ -51,8 +57,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
-    "dateCreated": new Date(story['created-at']),
-    "dateModified": new Date(story['updated-at']),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
   });
 }
 
@@ -97,8 +103,8 @@ function findStoryElementField(card, type, field, defaultValue) {
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
-    "coverageEndTime": new Date(story['last-published-at']),
-    "coverageStartTime": new Date(story['created-at']),
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['-lastpublished-at'])),
+    "coverageStartTime": stripMillisecondsFromTime(new Date(story['created-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,
         authorData(story.authors),
@@ -116,12 +122,12 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
     "keywords": metaKeywords,
-    "dateCreated": new Date(story['created-at']),
-    "dateModified": new Date(story['updated-at']),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
     "description": story.summary,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
-    "uploadDate": new Date(story['published-at'])
+    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at']))
   });
 }
 
