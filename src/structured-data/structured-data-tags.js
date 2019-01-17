@@ -25,8 +25,10 @@ function ldJson(type, fields) {
 }
 
 function stripMillisecondsFromTime(date) {
-  console.log(date)
-  return date.toISOString().split('.')[0]+"Z";
+  const toReturn = date.toJSON();
+  if(!toReturn)
+    return toReturn;
+  return toReturn.split('.')[0]+"Z";
 }
 
 function imageUrl(publisherConfig, s3Key) {
@@ -103,7 +105,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
-    "coverageEndTime": stripMillisecondsFromTime(new Date(story['-lastpublished-at'])),
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "coverageStartTime": stripMillisecondsFromTime(new Date(story['created-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,

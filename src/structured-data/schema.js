@@ -14,6 +14,13 @@ export function getSchemaPerson(name) {
   )
 }
 
+function stripMillisecondsFromTime(date) {
+  const toReturn = date.toJSON();
+  if(!toReturn)
+    return toReturn;
+  return toReturn.split('.')[0]+"Z";
+}
+
 export function getSchemaBlogPosting(card = {}, author = {}, headline = '', image = '', structuredData = {}, story = {}) {
   const {website : {url = ''} = {}} = structuredData;
   return Object.assign({},
@@ -21,9 +28,9 @@ export function getSchemaBlogPosting(card = {}, author = {}, headline = '', imag
     getSchemaMainEntityOfPage(`${url}/${story.slug}`),
     getSchemaPublisher(structuredData.organization),
     {
-      "dateModified": new Date(card['card-updated-at']),
-      "dateCreated": new Date(card['card-added-at']),
-      "datePublished": new Date(card['card-updated-at']),
+      "dateModified": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
+      "dateCreated": stripMillisecondsFromTime(new Date(card['card-added-at'])),
+      "datePublished": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
       "author": author,
       "headline": headline,
       "image": image
