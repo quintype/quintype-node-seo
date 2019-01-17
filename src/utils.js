@@ -9,3 +9,10 @@ export function objectToTags(object) {
 function getPropertyName(key) {
   return (key.startsWith('fb:') || key.startsWith('og:')) ? 'property' : 'name';
 }
+
+export function stripMillisecondsFromTime(date) {
+  const toReturn = date.toJSON();
+  if(!toReturn)
+    return toReturn;
+  return toReturn.split('.')[0]+"Z";
+}

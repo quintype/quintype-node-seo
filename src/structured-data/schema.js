@@ -1,3 +1,5 @@
+import { stripMillisecondsFromTime } from "../utils";
+
 export const getSchemaContext = { "@context": "http://schema.org" }
 
 export function getSchemaType(type) {
@@ -12,13 +14,6 @@ export function getSchemaPerson(name) {
       "name": name
     }
   )
-}
-
-function stripMillisecondsFromTime(date) {
-  const toReturn = date.toJSON();
-  if(!toReturn)
-    return toReturn;
-  return toReturn.split('.')[0]+"Z";
 }
 
 export function getSchemaBlogPosting(card = {}, author = {}, headline = '', image = '', structuredData = {}, story = {}) {

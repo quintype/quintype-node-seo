@@ -8,6 +8,8 @@ import {
   getSchemaWebsite
 } from './schema';
 
+import { stripMillisecondsFromTime } from "../utils";
+
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
 }
@@ -24,20 +26,12 @@ function ldJson(type, fields) {
   };
 }
 
-function stripMillisecondsFromTime(date) {
-  const toReturn = date.toJSON();
-  if(!toReturn)
-    return toReturn;
-  return toReturn.split('.')[0]+"Z";
-}
-
 function imageUrl(publisherConfig, s3Key) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
   return `${imageSrc}/${s3Key}?w=480&auto=format%2Ccompress&fit=max`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
-  console.log(story['published-at'])
   return Object.assign({},
     {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
