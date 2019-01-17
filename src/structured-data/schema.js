@@ -1,3 +1,5 @@
+import { stripMillisecondsFromTime } from "../utils";
+
 export const getSchemaContext = { "@context": "http://schema.org" }
 
 export function getSchemaType(type) {
@@ -21,9 +23,9 @@ export function getSchemaBlogPosting(card = {}, author = {}, headline = '', imag
     getSchemaMainEntityOfPage(`${url}/${story.slug}`),
     getSchemaPublisher(structuredData.organization),
     {
-      "dateModified": new Date(card['card-updated-at']),
-      "dateCreated": new Date(card['card-added-at']),
-      "datePublished": new Date(card['card-updated-at']),
+      "dateModified": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
+      "dateCreated": stripMillisecondsFromTime(new Date(card['card-added-at'])),
+      "datePublished": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
       "author": author,
       "headline": headline,
       "image": image

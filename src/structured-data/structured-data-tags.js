@@ -8,6 +8,8 @@ import {
   getSchemaWebsite
 } from './schema';
 
+import { stripMillisecondsFromTime } from "../utils";
+
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
 }
@@ -34,7 +36,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
     {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
-    "datePublished": new Date(story['published-at'])},
+    "datePublished": stripMillisecondsFromTime(new Date(story['published-at']))},
     getSchemaMainEntityOfPage(structuredData.organization.url),
     getSchemaPublisher(structuredData.organization)
   )
@@ -51,8 +53,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
-    "dateCreated": new Date(story['created-at']),
-    "dateModified": new Date(story['updated-at']),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
   });
 }
 
@@ -97,8 +99,8 @@ function findStoryElementField(card, type, field, defaultValue) {
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
-    "coverageEndTime": new Date(story['last-published-at']),
-    "coverageStartTime": new Date(story['created-at']),
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "coverageStartTime": stripMillisecondsFromTime(new Date(story['created-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,
         authorData(story.authors),
@@ -116,12 +118,12 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
     "keywords": metaKeywords,
-    "dateCreated": new Date(story['created-at']),
-    "dateModified": new Date(story['updated-at']),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
     "description": story.summary,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
-    "uploadDate": new Date(story['published-at'])
+    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at']))
   });
 }
 
