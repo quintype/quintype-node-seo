@@ -9,7 +9,7 @@ if [ "$BRANCH" == 'master' ]
 then
   npx standard-version
 else
-  npx standard-version --prerelease "$BRANCH" --skip.changelog=true
+  npx standard-version --prerelease beta --skip.changelog=true
 fi
 
 git push --follow-tags origin "$BRANCH"
