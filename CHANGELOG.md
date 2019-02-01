@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.18.2"></a>
+## [1.18.2](https://github.com/quintype/quintype-node-seo/compare/v1.18.1...v1.18.2) (2019-01-30)
+
+
+### Bug Fixes
+
+* **getTitle:** Pass seoConfig to getSeoData in getTitle ([#37](https://github.com/quintype/quintype-node-seo/issues/37)) ([6827f03](https://github.com/quintype/quintype-node-seo/commit/6827f03))
+
+
+
+<a name="1.18.1"></a>
+## [1.18.1](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.18.1) (2019-01-29)
+
+
+
 <a name="1.18.0"></a>
 # [1.18.0](https://github.com/quintype/quintype-node-seo/compare/v1.15.1...v1.18.0) (2019-01-17)
 

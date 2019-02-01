@@ -175,6 +175,6 @@ export function getTitle(seoConfig, config, pageType, data, params) {
   if(get(data, ["data", "title"]))
     return get(data, ["data", "title"]);
 
-  const seoData = getSeoData(config, pageType, data) || {};
+  const seoData = getSeoData(config, pageType, data, undefined, seoConfig) || {};
   return seoData['page-title'];
 }
