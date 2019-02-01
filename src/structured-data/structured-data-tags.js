@@ -32,12 +32,15 @@ function imageUrl(publisherConfig, s3Key) {
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
+  const storyUrl = `${publisherConfig['sketches-host']}/${story.slug}`;
+  const mainEntityUrl = (Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl) ? storyUrl : structuredData.organization.url;
+
   return Object.assign({},
     {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "datePublished": stripMillisecondsFromTime(new Date(story['published-at']))},
-    getSchemaMainEntityOfPage(structuredData.organization.url),
+    getSchemaMainEntityOfPage(mainEntityUrl),
     getSchemaPublisher(structuredData.organization)
   )
 }
@@ -75,6 +78,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "articleBody": (Object.keys(story).length > 0 && getCompleteText(story)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "name": (Object.keys(story).length > 0 && story.headline) || ''
   });
 }
 
