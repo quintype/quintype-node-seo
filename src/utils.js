@@ -16,3 +16,12 @@ export function stripMillisecondsFromTime(date) {
     return toReturn;
   return toReturn.split('.')[0]+"Z";
 }
+
+export function getQueryParams(url) {
+  const urlObj =  new URL(url)
+  const search_params = new URLSearchParams(urlObj.search); 
+  const getWidth = search_params.get('w') || '';
+  const getHeight = search_params.get('h') || '';
+  const dimensions = {width: getWidth, height: getHeight}
+  return dimensions;
+}
