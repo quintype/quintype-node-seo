@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<<<<<<< HEAD
+<a name="1.18.3"></a>
+## [1.18.3](https://github.com/quintype/quintype-node-seo/compare/v1.18.2...v1.18.3) (2019-02-01)
+
+
+### Bug Fixes
+
+* **seo:** PR Changes ([f805690](https://github.com/quintype/quintype-node-seo/commit/f805690))
+* **seo:** remove default value ([582cb75](https://github.com/quintype/quintype-node-seo/commit/582cb75))
+* **standard-version:** Add standard version ([16a89b5](https://github.com/quintype/quintype-node-seo/commit/16a89b5))
+
+
+
 <a name="1.18.1"></a>
 ## [1.18.1](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.18.1) (2019-02-01)
 =======
