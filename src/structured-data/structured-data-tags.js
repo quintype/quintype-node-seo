@@ -53,7 +53,7 @@ function authorData(authors) {
 
 function getTextElementsOfCards(story) {
   if(story && story.cards) {
-    return story.cards.reduce((acc=[], currentCard) => {
+    return story.cards.reduce((acc, currentCard) => {
       return acc.concat(currentCard['story-elements'].filter(element => element.type === 'text'));
     }, []);
   }
