@@ -8,6 +8,8 @@ import {
   getSchemaWebsite
 } from './schema';
 
+import get from "lodash/get";
+
 import { stripMillisecondsFromTime } from "../utils";
 
 function getLdJsonFields(type, fields) {
@@ -49,36 +51,37 @@ function authorData(authors) {
   return (authors || []).map(author => getSchemaPerson(author.name));
 }
 
-function getTextElementOfStory(story) {
+function getTextElementsOfCards(story) {
   if(story && story.cards) {
-    return story.cards.map((card) => {
-      return card['story-elements'].map((element) => {
-       return element.type === 'text' ? element.text : '';
-      })
-    })
+    return story.cards.reduce((acc=[], currentCard) => {
+      return acc.concat(currentCard['story-elements'].filter(element => element.type === 'text'));
+    }, []);
   }
 }
 
 function getCompleteText(story) {
-  const joinTextOfSingleCard = getTextElementOfStory(story).map((textElement) => {
-    return textElement.filter((element) => element !== '').join('.')
+  const textArray = []
+  getTextElementsOfCards(story).forEach((item) => {
+    textArray.push(item.text)
   })
-  const completeCardText = joinTextOfSingleCard.join('.');
+  const completeCardText = textArray.join('.');
   return completeCardText;
 }
 
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{name: story["author-name"] || ""}];
-  const articleSection = story.sections && story.sections[0]['display-name'];
+  const articleSection = get(story, ['sections', '0', 'display-name'], '');
+  const storyKeysPresence = Object.keys(story).length > 0;
+
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
     "articleSection": articleSection,
-    "articleBody": (Object.keys(story).length > 0 && getCompleteText(story)) || '',
+    "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
-    "name": (Object.keys(story).length > 0 && story.headline) || ''
+    "name": (storyKeysPresence && story.headline) || ''
   });
 }
 
@@ -139,7 +142,7 @@ function generateLiveBlogPostingData (structuredData = {}, story = {}, publisher
 
 function generateVideoArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
-  const articleSection = story.sections && story.sections[0]['display-name'];
+  const articleSection = get(story, ['sections', '0', 'display-name'], '');
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),

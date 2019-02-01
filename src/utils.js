@@ -18,7 +18,7 @@ export function stripMillisecondsFromTime(date) {
 }
 
 export function getQueryParams(url) {
-  const urlObj =  new URL(url)
+  const urlObj =  new URL(url);
   const search_params = new URLSearchParams(urlObj.search); 
   const getWidth = search_params.get('w') || '';
   const getHeight = search_params.get('h') || '';
