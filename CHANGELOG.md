@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.19.0"></a>
+# [1.19.0](https://github.com/quintype/quintype-node-seo/compare/v1.18.2...v1.19.0) (2019-02-04)
+
+
+### Bug Fixes
+
+* **standard-version:** Add standard version ([16a89b5](https://github.com/quintype/quintype-node-seo/commit/16a89b5))
+
+
+### Features
+
+* **seo:** Add news article data for all story types/add image dimens… ([#39](https://github.com/quintype/quintype-node-seo/issues/39)) ([946cc46](https://github.com/quintype/quintype-node-seo/commit/946cc46))
+* **seo:** Schema changes ([#38](https://github.com/quintype/quintype-node-seo/issues/38)) ([f4ba5d3](https://github.com/quintype/quintype-node-seo/commit/f4ba5d3))
+
+
+
 <a name="1.18.3"></a>
 ## [1.18.3](https://github.com/quintype/quintype-node-seo/compare/v1.18.2...v1.18.3) (2019-02-01)
 
