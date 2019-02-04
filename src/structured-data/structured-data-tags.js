@@ -193,7 +193,8 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
-    generateNewsArticleTags() ? tags.push(storyTags(), generateNewsArticleTags()) : tags.push(storyTags());
+    const newsArticleTags = generateNewsArticleTags();
+    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
   }
 
   function generateNewsArticleTags() {
