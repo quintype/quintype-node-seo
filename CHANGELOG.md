@@ -2,18 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="1.18.2"></a>
-## [1.18.2](https://github.com/quintype/quintype-node-seo/compare/v1.18.1...v1.18.2) (2019-01-30)
+<a name="1.18.3"></a>
+## [1.18.3](https://github.com/quintype/quintype-node-seo/compare/v1.18.2...v1.18.3) (2019-02-01)
 
 
 ### Bug Fixes
 
+* **seo:** PR Changes ([f805690](https://github.com/quintype/quintype-node-seo/commit/f805690))
+* **seo:** remove default value ([582cb75](https://github.com/quintype/quintype-node-seo/commit/582cb75))
+* **standard-version:** Add standard version ([16a89b5](https://github.com/quintype/quintype-node-seo/commit/16a89b5))
+
+
+
+<a name="1.18.1"></a>
+## [1.18.1](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.18.1) (2019-02-01)
+=======
+<a name="1.18.2"></a>
+## [1.18.2](https://github.com/quintype/quintype-node-seo/compare/v1.18.1...v1.18.2) (2019-01-30)
+>>>>>>> c71756e1eb356257cfe55b69f0d2529b958c35d1
+
+
+### Bug Fixes
+
+<<<<<<< HEAD
+* **seo:** PR Changes ([f805690](https://github.com/quintype/quintype-node-seo/commit/f805690))
+* **seo:** remove default value ([582cb75](https://github.com/quintype/quintype-node-seo/commit/582cb75))
+=======
 * **getTitle:** Pass seoConfig to getSeoData in getTitle ([#37](https://github.com/quintype/quintype-node-seo/issues/37)) ([6827f03](https://github.com/quintype/quintype-node-seo/commit/6827f03))
 
 
 
 <a name="1.18.1"></a>
 ## [1.18.1](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.18.1) (2019-01-29)
+>>>>>>> c71756e1eb356257cfe55b69f0d2529b958c35d1
 
 
 

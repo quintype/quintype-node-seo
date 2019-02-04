@@ -1,6 +1,7 @@
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 import get from 'lodash/get';
+import { getQueryParams } from "./utils";
 
 export function getTitle(config) {
   return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
@@ -37,6 +38,8 @@ export function generateImageObject(config = {}) {
     "contentUrl": themeConfig.logo,
     "url": themeConfig.logo,
     "name": "logo",
+    "width": themeConfig.logo && getQueryParams(themeConfig.logo).width,
+    "height": themeConfig.logo && getQueryParams(themeConfig.logo).height
   });
 }
 
