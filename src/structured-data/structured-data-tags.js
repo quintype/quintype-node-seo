@@ -10,7 +10,8 @@ import {
 
 import get from "lodash/get";
 
-import { stripMillisecondsFromTime } from "../utils";
+import { stripMillisecondsFromTime, getQueryParams } from "../utils";
+import { generateImageObject } from '../generate-common-seo';
 
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
@@ -30,7 +31,7 @@ function ldJson(type, fields) {
 
 function imageUrl(publisherConfig, s3Key) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
-  return `${imageSrc}/${s3Key}?w=480&auto=format%2Ccompress&fit=max`;
+  return `${imageSrc}/${s3Key}?w=480&h=270&auto=format%2Ccompress&fit=max`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
@@ -68,21 +69,35 @@ function getCompleteText(story) {
   return completeCardText;
 }
 
+function articleSectionObj(story) {
+  if(story['story-template'] !== 'video') {
+    return { 'articleSection': get(story, ['sections', '0', 'display-name'], '') }
+  }
+}
+
 function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}){
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{name: story["author-name"] || ""}];
-  const articleSection = get(story, ['sections', '0', 'display-name'], '');
   const storyKeysPresence = Object.keys(story).length > 0;
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
-    "articleSection": articleSection,
     "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
-    "name": (storyKeysPresence && story.headline) || ''
-  });
+    "name": (storyKeysPresence && story.headline) || '',
+    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
+  }, articleSectionObj(story));
+}
+
+function generateArticleImageData(image, publisherConfig) {
+  const articleImage = imageUrl(publisherConfig, image);
+
+  return Object.assign({}, {
+    "@type": "ImageObject",
+    "url": articleImage
+  }, getQueryParams(articleImage))
 }
 
 function storyAccess(access) {
@@ -147,7 +162,6 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
     "keywords": metaKeywords,
-    "articleSection": articleSection,
     "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
     "description": story.summary,
@@ -179,20 +193,22 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
-    tags.push(storyTags());
+    generateNewsArticleTags() ? tags.push(storyTags(), generateNewsArticleTags()) : tags.push(storyTags());
+  }
+
+  function generateNewsArticleTags() {
+    if(structuredData.enableNewsArticle) {
+      return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig)))
+    }
   }
 
   function storyTags() {
     if(structuredData.enableLiveBlog && story['story-template'] === 'live-blog') {
-      return ldJson("LiveBlogPosting", Object.assign({}, articleData, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
+      return ldJson("LiveBlogPosting", Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
     }
 
     if(structuredData.enableVideo && story['story-template'] === 'video') {
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
-    }
-
-    if(structuredData.enableNewsArticle) {
-      return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig)))
     }
 
     return ldJson("Article", articleData);
