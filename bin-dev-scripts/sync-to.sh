@@ -11,5 +11,5 @@ npm run build
 
 rsync -r \
   dist \
-  "$PATH_TO_APP/node_modules/@quintype/components/" \
+  "$PATH_TO_APP/node_modules/@quintype/seo/" \
   && touch "$PATH_TO_APP/app/isomorphic/pick-component.js"
