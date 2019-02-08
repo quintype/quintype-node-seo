@@ -1,5 +1,5 @@
 import {entries} from 'lodash';
-const { URL, URLSearchParams } = require('url');
+import { URL, URLSearchParams } from 'url';
 
 export function objectToTags(object) {
   return entries(object)
