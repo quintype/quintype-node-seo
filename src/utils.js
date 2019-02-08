@@ -1,4 +1,6 @@
 import {entries} from 'lodash';
+import {URL} from 'url';
+import 'url-search-params-polyfill';
 
 export function objectToTags(object) {
   return entries(object)
@@ -22,6 +24,5 @@ export function getQueryParams(url) {
   const search_params = new URLSearchParams(urlObj.search); 
   const getWidth = search_params.get('w') || '';
   const getHeight = search_params.get('h') || '';
-  const dimensions = {width: getWidth, height: getHeight}
-  return dimensions;
+  return {width: getWidth, height: getHeight};
 }

@@ -16,7 +16,8 @@
     "coverage": "nyc --all --reporter=html npm test",
     "prepack": "npm run build",
     "prepublishOnly": "npm install && npm test && git diff --quiet && npx standard-version && git push --follow-tags origin",
-    "test": "npm run build && mocha test"
+    "test": "npm run build && mocha test",
+    "sync-files-to": "npx onchange --verbose --wait --await-write-finish 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -32,6 +33,7 @@
     "lodash": "^4.17.11",
     "mocha": "^4.0.1",
     "nyc": "^11.4.1",
+    "onchange": "^4.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "rollup": "^0.52.1",
@@ -40,6 +42,7 @@
     "url": "^0.11.0"
   },
   "dependencies": {
-    "quintype-js": "^0.1.6"
+    "quintype-js": "^0.1.6",
+    "url-search-params-polyfill": "^5.0.0"
   }
 }
