@@ -1,6 +1,5 @@
 import {entries} from 'lodash';
-import {URL} from 'url';
-import 'url-search-params-polyfill';
+const { URL, URLSearchParams } = require('url');
 
 export function objectToTags(object) {
   return entries(object)

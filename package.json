@@ -42,7 +42,6 @@
     "url": "^0.11.0"
   },
   "dependencies": {
-    "quintype-js": "^0.1.6",
-    "url-search-params-polyfill": "^5.0.0"
+    "quintype-js": "^0.1.6"
   }
 }
