@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.19.3"></a>
+## [1.19.3](https://github.com/quintype/quintype-node-seo/compare/v1.19.2...v1.19.3) (2019-02-08)
+
+
+### Bug Fixes
+
+* **package-lock:** Update package lock ([56c6b45](https://github.com/quintype/quintype-node-seo/commit/56c6b45))
+
+
+
 <a name="1.19.2"></a>
 ## [1.19.2](https://github.com/quintype/quintype-node-seo/compare/v1.19.1...v1.19.2) (2019-02-08)
 
