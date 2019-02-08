@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.19.1"></a>
+## [1.19.1](https://github.com/quintype/quintype-node-seo/compare/v1.19.0...v1.19.1) (2019-02-08)
+
+
+### Bug Fixes
+
+* **URL:** URL support fix, add polfill for urlsearchparams ([#41](https://github.com/quintype/quintype-node-seo/issues/41)) ([5d31093](https://github.com/quintype/quintype-node-seo/commit/5d31093))
+
+
+
 <a name="1.19.0"></a>
 # [1.19.0](https://github.com/quintype/quintype-node-seo/compare/v1.18.2...v1.19.0) (2019-02-04)
 
