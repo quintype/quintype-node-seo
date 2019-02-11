@@ -167,8 +167,13 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
     "description": story.summary,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
-    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at']))
+    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at'])),
+    "embed-url":getEmbedURL(story)
   });
+}
+
+function getEmbedURL(story){
+  return story.cards.map(card => (card, findStoryElementField(card, "youtube-video", "embed-url"))).join()
 }
 
 function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
