@@ -13,7 +13,7 @@ function pickImageFromStory(story) {
 }
 
 function pickImageFromCollection(collection) {
-  const coverImage = get(collection, ["metadata", "cover-image"], {});
+  const coverImage = get(collection, ["metadata", "cover-image"]) || {};
   if(!coverImage["cover-image-s3-key"])
     return;
 
