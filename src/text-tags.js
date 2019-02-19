@@ -46,18 +46,22 @@ function buildTagsFromStory(config, story, url = {}) {
 }
 
 function buildTagsFromTopic(config, tag, url = {}) {
-
   if(isEmpty(tag))
     return;
 
+  const tagName = tag.name;
+  const tagDescription = tag['meta-description'];
+  const description = `Read stories listed under on ${tagName}`;
+  const tagUrl = `${config['sketches-host']}${url.pathname}`
   const topicMetaData = {
-    "page-title":tag.name,
-    description: tag.description || tag.name,
-    keywords: tag.name,
-    canonicalUrl: `${config['sketches-host']}${tag.path}`,
-    ogUrl: `${config['sketches-host']}${tag.path}`,
-    ogTitle: tag.name,
-    ogDescription: tag.tagDescription || tag.name
+    title: tagName,
+    "page-title": tagName,
+    description: tagDescription || description,
+    keywords: tagName,
+    canonicalUrl: tagUrl,
+    ogUrl: tagUrl,
+    ogTitle: tagName,
+    ogDescription: tagDescription || description
   };
 
   return topicMetaData;
