@@ -421,14 +421,14 @@ describe('TextTags', function() {
     it("Generates SEO tags for a tag page", function () {
       const seoConfig = {
         generators: [TextTags],
-      }
-      const tag = {slug: "Foobar", description: "Some Foobar", name: "Footag", path: "/Foopath"}
-      const config ={"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar", 'description': "Some Foobar", 'keywords': "keywords", 'canonicalUrl': "http://foo.com"}}]}
-      const string = getSeoMetadata(seoConfig, config, 'tag-page', {data: {tag: tag}}, {url:''})
+      };
+      const tag = {id: 123, name: "Footag", "meta-description": "Some Foobar", slug: "Foobar"};
+      const config ={"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar", 'description': "Some Foobar", 'keywords': "keywords", 'canonicalUrl': "http://foo.com"}}]};
+      const string = getSeoMetadata(seoConfig, config, 'tag-page', {data: {tag: tag}}, {url: url.parse("/topic/my-tag")});
       assertContains('<title>Footag</title>', string);
       assertContains('<meta name="description" content="Some Foobar"/>', string);
       assertContains('<meta name="keywords" content="Footag"/>', string);
-      assertContains('<link rel="canonical" href="http://foo.com/Foopath"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/topic/my-tag"/>', string);
     });
     it("Gets home data as fallback if the tag metadata is falsy", function () {
       const seoConfig = {
