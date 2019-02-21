@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.19.6"></a>
+## [1.19.6](https://github.com/quintype/quintype-node-seo/compare/v1.19.5...v1.19.6) (2019-02-21)
+
+
+### Bug Fixes
+
+* **twitterTitle:** Get twitter title to be the seo data title ([#45](https://github.com/quintype/quintype-node-seo/issues/45)) ([3280e10](https://github.com/quintype/quintype-node-seo/commit/3280e10))
+
+
+
 <a name="1.19.5"></a>
 ## [1.19.5](https://github.com/quintype/quintype-node-seo/compare/v1.19.3...v1.19.5) (2019-02-19)
 
