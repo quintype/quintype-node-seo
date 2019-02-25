@@ -49,7 +49,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   const tags = [];
 
   if(seoConfig.enableTwitterCards) {
-    tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress"})}`})
+    tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", ogImage: true})}`})
   }
 
   if(seoConfig.enableOgTags) {

@@ -17,7 +17,7 @@ describe('ImageTags', function() {
   it("gets the twitter tags", function() {
     const story = {"hero-image-s3-key": "my/image.png"}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
-    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress"/>', string);
+    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>', string);
   });
 
   it("has facebook tags resized correctly", function() {
@@ -62,7 +62,7 @@ describe('ImageTags', function() {
 
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, opts);
 
-    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress"/>', string);
+    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>', string);
   });
 
 
@@ -94,7 +94,7 @@ describe('ImageTags', function() {
 
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, opts);
 
-    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress"/>', string);
+    assertContains('<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>', string);
 
   });
 
