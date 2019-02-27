@@ -70,3 +70,7 @@ function generateSeo(config) {
   })
 }
 ```
+
+### Note
+
+If the ```URL``` is undefined, please bump up the node version > 8.
