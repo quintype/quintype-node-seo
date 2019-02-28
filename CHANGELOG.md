@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.20.0"></a>
+# [1.20.0](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.20.0) (2019-02-28)
+
+
+### Bug Fixes
+
+* **getTitle:** Pass seoConfig to getSeoData in getTitle ([#37](https://github.com/quintype/quintype-node-seo/issues/37)) ([6827f03](https://github.com/quintype/quintype-node-seo/commit/6827f03))
+* **package-lock:** Update package lock ([56c6b45](https://github.com/quintype/quintype-node-seo/commit/56c6b45))
+* **standard-version:** Add standard version ([16a89b5](https://github.com/quintype/quintype-node-seo/commit/16a89b5))
+* **tag-page seo:** Update values of seo-data for tag-pages ([#44](https://github.com/quintype/quintype-node-seo/issues/44)) ([a6fec3d](https://github.com/quintype/quintype-node-seo/commit/a6fec3d))
+* **twitter:image:** Add ogImage=true param in twitter image ([#46](https://github.com/quintype/quintype-node-seo/issues/46)) ([8a9619a](https://github.com/quintype/quintype-node-seo/commit/8a9619a))
+* **twitterTitle:** Get twitter title to be the seo data title ([#45](https://github.com/quintype/quintype-node-seo/issues/45)) ([3280e10](https://github.com/quintype/quintype-node-seo/commit/3280e10))
+* **URL:** URL support fix, add polfill for urlsearchparams ([#41](https://github.com/quintype/quintype-node-seo/issues/41)) ([5d31093](https://github.com/quintype/quintype-node-seo/commit/5d31093))
+
+
+### Features
+
+* **seo:** Add news article data for all story types/add image dimens… ([#39](https://github.com/quintype/quintype-node-seo/issues/39)) ([946cc46](https://github.com/quintype/quintype-node-seo/commit/946cc46))
+* **seo:** Schema changes ([#38](https://github.com/quintype/quintype-node-seo/issues/38)) ([f4ba5d3](https://github.com/quintype/quintype-node-seo/commit/f4ba5d3))
+
+
+
 <a name="1.19.7"></a>
 ## [1.19.7](https://github.com/quintype/quintype-node-seo/compare/v1.19.6...v1.19.7) (2019-02-25)
 
