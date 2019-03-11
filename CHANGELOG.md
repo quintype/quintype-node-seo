@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.20.1"></a>
+## [1.20.1](https://github.com/quintype/quintype-node-seo/compare/v1.19.7...v1.20.1) (2019-03-11)
+
+
+### Bug Fixes
+
+* **generateCommonData:** Fix chain access of object ([72e20e0](https://github.com/quintype/quintype-node-seo/commit/72e20e0))
+* **package-lock:** Implement package lock ([09b1473](https://github.com/quintype/quintype-node-seo/commit/09b1473))
+* **tag-page seo:** Update values of seo-data for tag-pages ([#44](https://github.com/quintype/quintype-node-seo/issues/44)) ([a6fec3d](https://github.com/quintype/quintype-node-seo/commit/a6fec3d))
+
+
+
 <a name="1.20.0"></a>
 # [1.20.0](https://github.com/quintype/quintype-node-seo/compare/v1.18.0...v1.20.0) (2019-02-28)
 
