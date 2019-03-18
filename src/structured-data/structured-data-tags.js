@@ -84,8 +84,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "author": authorData(authors),
     "keywords": metaKeywords,
     "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
-    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
   }, articleSectionObj(story));
