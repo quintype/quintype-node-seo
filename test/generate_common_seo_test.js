@@ -110,7 +110,8 @@ describe('Seo Helpers', function() {
           sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
         },
         enableNewsArticle: false,
-        enableVideo: false,
+        enableVideo: true,
+        enableLiveBlog: true,
         website: {
           url: "abc.com",
           searchpath: "search?q={query}",
@@ -148,7 +149,8 @@ describe('Seo Helpers', function() {
           sameAs: []
         },
         enableNewsArticle: false,
-        enableVideo: false,
+        enableVideo: true,
+        enableLiveBlog: true,
         website: {
           url: "abc.com",
           searchpath: "search?q={query}",
