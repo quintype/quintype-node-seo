@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.20.3"></a>
+## [1.20.3](https://github.com/quintype/quintype-node-seo/compare/v1.20.2...v1.20.3) (2019-03-20)
+
+
+### Bug Fixes
+
+* **live-blog:** enable live blog, video generation by default and configurable via secret mode ([#48](https://github.com/quintype/quintype-node-seo/issues/48)) ([924c078](https://github.com/quintype/quintype-node-seo/commit/924c078))
+* **tests:** Update generateCommonSeo tests ([9ddd6e2](https://github.com/quintype/quintype-node-seo/commit/9ddd6e2))
+
+
+
 <a name="1.20.2"></a>
 ## [1.20.2](https://github.com/quintype/quintype-node-seo/compare/v1.19.7...v1.20.2) (2019-03-11)
 
