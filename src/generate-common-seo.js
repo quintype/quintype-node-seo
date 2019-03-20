@@ -60,7 +60,8 @@ export function generateStructuredData(config) {
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
     enableNewsArticle: !!themeConfig['structured_data_news_article'],
-    enableVideo: !!themeConfig['structured_data_news_article'],
+    enableVideo: !themeConfig['structured_data_enable_video'],
+    enableLiveBlog: !themeConfig['structured_data_enable_live_blog'],
     website: {
       url: config["sketches-host"],
       searchpath: "search?q={query}",
