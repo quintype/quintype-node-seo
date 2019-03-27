@@ -84,7 +84,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "author": authorData(authors),
     "keywords": metaKeywords,
     "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
-    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
     "name": (storyKeysPresence && story.headline) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
@@ -115,7 +115,7 @@ function generateHasPartData(storyAccess) {
       {
         "@type": "WebPageElement",
         "isAccessibleForFree": storyAccess,
-        "cssSelector": ".paywall"
+          "cssSelector": ".paywall"
       }
     ]
   }
@@ -141,8 +141,8 @@ function findStoryElementField(card, type, field, defaultValue) {
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
-    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "coverageStartTime": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,
         authorData(story.authors),
