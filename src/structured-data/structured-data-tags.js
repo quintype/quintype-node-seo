@@ -85,7 +85,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "keywords": metaKeywords,
     "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
   }, articleSectionObj(story));
@@ -164,11 +164,11 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
     "author": authorData(story.authors),
     "keywords": metaKeywords,
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": story.summary,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
-    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at'])),
+    "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "embedUrl": embedUrl
   });
 }
