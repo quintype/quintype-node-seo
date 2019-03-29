@@ -42,7 +42,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
     {'headline' : story.headline,
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
-    "datePublished": stripMillisecondsFromTime(new Date(story['published-at']))},
+    "datePublished": stripMillisecondsFromTime(new Date(story['first-published-at']))},
     getSchemaMainEntityOfPage(mainEntityUrl),
     getSchemaPublisher(structuredData.organization)
   )
@@ -84,8 +84,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "author": authorData(authors),
     "keywords": metaKeywords,
     "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
-    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
   }, articleSectionObj(story));
@@ -115,7 +115,7 @@ function generateHasPartData(storyAccess) {
       {
         "@type": "WebPageElement",
         "isAccessibleForFree": storyAccess,
-        "cssSelector": ".paywall"
+          "cssSelector": ".paywall"
       }
     ]
   }
@@ -142,7 +142,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
     "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "coverageStartTime": stripMillisecondsFromTime(new Date(story['created-at'])),
+    "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,
         authorData(story.authors),
@@ -158,16 +158,18 @@ function generateLiveBlogPostingData (structuredData = {}, story = {}, publisher
 function generateVideoArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const articleSection = get(story, ['sections', '0', 'display-name'], '');
+  const embedUrl = get(story, ['cards', '0', 'story-elements', '0', 'embed-url'], '');
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
     "keywords": metaKeywords,
-    "dateCreated": stripMillisecondsFromTime(new Date(story['created-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": story.summary,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
-    "uploadDate": stripMillisecondsFromTime(new Date(story['published-at']))
+    "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "embedUrl": embedUrl
   });
 }
 
