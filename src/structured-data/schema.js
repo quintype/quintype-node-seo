@@ -73,24 +73,20 @@ export function getSchemaMainEntityOfPage(id) {
 }
 
 export function getSchemaMovieReview(movieObject={}) {
+  const movieCreatedAt = get(movieObject, ["created-at"], null);
+  const actors = get(movieObject,["actors"], []).map((actor) => getSchemaPerson(actor.name));
+  const directors = get(movieObject,["directors"], []).map((director) => getSchemaPerson(director.name));
+  const producers = get(movieObject,["producers"], []).map((producer) => getSchemaPerson(producer.name));
+  
   return  {
-      "actor":{
-        "@type": "Person",
-        "name": get(movieObject,["actors"], null)
-      },
-      "director":{
-        "@type": "Person",
-        "name": get(movieObject, ["directors"], null),
-      },
-      "name": get(movieObject, ["name"], null),
-      "sameAs": get(movieObject, ["sameAs"], null),
-      "description": get(movieObject, ["meta-description"], null),
-      "producer":{
-        "@type":"Person",
-        "name": get(movieObject, ["producers"], null)
-      },
-      "image": get(movieObject, ["photo", "0", "url"], null),
-      "dateCreated": (new Date(get(movieObject, ["created-at"], null))).toISOString()
+      "actors": actors,
+      "directors": directors,
+      "name": get(movieObject, ["name"], ''),
+      "sameAs": get(movieObject, ["sameAs"], ''),
+      "description": get(movieObject, ["meta-description"], ''),
+      "producer": producers,
+      "image": get(movieObject, ["photo", "0", "url"], ''),
+      "dateCreated": movieCreatedAt?(new Date(movieCreatedAt)).toISOString(): ''
     };
 }
 
