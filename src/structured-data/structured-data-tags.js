@@ -141,7 +141,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}){
   return {
-    "coverageEndTime": stripMillisecondsFromTime(new Date(story['updated-at'])),
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "liveBlogUpdate": story.cards.map(card =>
       getSchemaBlogPosting(card,
