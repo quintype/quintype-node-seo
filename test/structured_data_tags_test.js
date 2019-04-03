@@ -23,11 +23,11 @@ const website = {
 }
 
 const header = {
-  cssSelector: 'bq-header'
+  cssSelector: '#header'
 }
 
 const footer = {
-  cssSelector: 'bq-footer'
+  cssSelector: '#footer'
 }
 function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, headerConfig, footerConfig} = {}  ) {
   return {
@@ -147,8 +147,8 @@ function sampleStoryData(template, cards, authors, access) {
 
 const sampleOrganisationTag = '<script type="application/ld+json">{"name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],"@type":"Organization","@context":"http://schema.org"}</script>';
 const sampleWebsiteTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","url":"https://madrid.quintype.io","potentialAction":{"@type":"SearchAction","target":"https://madrid.quintype.io/search?q={query}","query-input":"required name=query"}}</script>'
-const sampleHeaderTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPHeader","cssSelector":"bq-header"}</script>';
-const sampleFooterTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPFooter","cssSelector":"bq-footer"}</script>';
+const sampleHeaderTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPHeader","cssSelector":"#header"}</script>';
+const sampleFooterTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPFooter","cssSelector":"#footer"}</script>';
 
 describe('StructuredDataTags', function() {
   it("puts the organization & website tag", function() {
