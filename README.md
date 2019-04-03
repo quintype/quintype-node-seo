@@ -55,6 +55,58 @@ new SEO({
 })
 ```
 
+### Structured data
+
+The `structuredData` option to SEO class expects a config like:
+```
+structuredData: {
+    organization: <orgObject>,
+    website: <websiteObject},
+    footer: <footerObj>
+    header: <headerObj>,
+    enableLiveBlog: true,
+    enableNewsArticle: true
+  },
+ ```
+ and `node-seo` will inject appropriate structured data in LD-JSON format in the `<head>`. Following are some sample config values for `structuredData` values.
+
+#### Organization
+
+Sample object: 
+```
+organization: {
+    name: 'Bloomberg Quint',
+    url: 'https://www.bloombergquint.com/',
+    logo: 'https://www.bloombergquint.com/bq-logo.png',
+    sameAs: [
+      'https://www.facebook.com/bloombergquint',
+      'https://twitter.com/BloombergQuint',
+      'https://www.linkedin.com/company/bloombergquint',
+      'https://www.youtube.com/c/BloombergQuintNews',
+      'https://www.instagram.com/bloombergquint'
+    ]
+  }
+```
+#### website
+Sample object: 
+```
+website: {
+    url: 'https://www.bloombergquint.com/',
+    searchpath: 'search?q={q}',
+    queryinput: 'required name=q'
+  }
+  ```
+
+#### WPHeader and WPFooter
+
+```footer: {
+    cssSelector: '#bq-footer'
+  },
+  header: {
+    cssSelector: '#bq-header'
+  }
+ ```
+
 ### Example Usage (v1.5.0 and above)
 
 ```javascript
