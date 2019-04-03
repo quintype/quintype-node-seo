@@ -99,7 +99,8 @@ website: {
 
 #### WPHeader and WPFooter
 
-```footer: {
+```
+footer: {
     cssSelector: '#bq-footer'
   },
   header: {
