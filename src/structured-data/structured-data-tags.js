@@ -2,6 +2,8 @@ import {
   getSchemaContext,
   getSchemaType,
   getSchemaPerson,
+  getSchemaFooter,
+  getSchemaHeader,
   getSchemaBlogPosting,
   getSchemaPublisher,
   getSchemaMainEntityOfPage,
@@ -197,6 +199,14 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   if(!isStructuredDataEmpty && pageType === 'story-page') {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+  }
+
+  if(!isStructuredDataEmpty && structuredData.header) {
+    tags.push(ldJson("WPHeader", getSchemaHeader(structuredData.header)));
+  }
+
+  if(!isStructuredDataEmpty && structuredData.footer) {
+    tags.push(ldJson("WPFooter",getSchemaFooter(structuredData.footer)));
   }
 
   function generateNewsArticleTags() {

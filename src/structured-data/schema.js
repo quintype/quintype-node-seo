@@ -16,6 +16,26 @@ export function getSchemaPerson(name) {
   )
 }
 
+export function getSchemaFooter({cssSelector}) {
+  return cssSelector ? Object.assign({},
+    getSchemaContext,
+    getSchemaType("WPFooter"),
+    {
+      "cssSelector": cssSelector
+    }
+  ) : {}
+}
+
+export function getSchemaHeader({cssSelector}) {
+  return cssSelector ? Object.assign({},
+    getSchemaContext,
+    getSchemaType("WPHeader"),
+    {
+      "cssSelector": cssSelector
+    }
+  ) : {};
+}
+
 export function getSchemaBlogPosting(card = {}, author = {}, headline = '', image = '', structuredData = {}, story = {}) {
   const {website : {url = ''} = {}} = structuredData;
   return Object.assign({},

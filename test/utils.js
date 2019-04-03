@@ -10,3 +10,7 @@ exports.getSeoMetadata = function getSeoMetadata(seoConfig, config, pageType, da
 exports.assertContains = function assertContains(expected, actual) {
   assert(actual.includes(expected), `Expected ${actual} to contain ${expected}`);
 }
+
+exports.assertDoesNotContains = function assertDoesNotContains(expected, actual) {
+  assert.notEqual(actual, expected, `Expected ${actual} does not to contain ${expected}`);
+}

@@ -1,5 +1,5 @@
 const { StructuredDataTags } = require("..");
-const { getSeoMetadata, assertContains } = require("./utils");
+const { getSeoMetadata, assertContains, assertDoesNotContains } = require("./utils");
 
 const assert = require('assert');
 const url = require("url");
@@ -22,12 +22,21 @@ const website = {
   queryinput: "required name=query"
 }
 
-function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false} = {}) {
+const header = {
+  cssSelector: 'bq-header'
+}
+
+const footer = {
+  cssSelector: 'bq-footer'
+}
+function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, headerConfig, footerConfig} = {}  ) {
   return {
     generators: [StructuredDataTags],
     structuredData: {
       organization,
       website,
+      header: headerConfig,
+      footer: footerConfig,
       "enableNewsArticle": newsArticle,
       "enableLiveBlog": liveBlog,
       "enableVideo": video,
@@ -138,11 +147,22 @@ function sampleStoryData(template, cards, authors, access) {
 
 const sampleOrganisationTag = '<script type="application/ld+json">{"name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],"@type":"Organization","@context":"http://schema.org"}</script>';
 const sampleWebsiteTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","url":"https://madrid.quintype.io","potentialAction":{"@type":"SearchAction","target":"https://madrid.quintype.io/search?q={query}","query-input":"required name=query"}}</script>'
+const sampleHeaderTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPHeader","cssSelector":"bq-header"}</script>';
+const sampleFooterTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPFooter","cssSelector":"bq-footer"}</script>';
 
 describe('StructuredDataTags', function() {
   it("puts the organization & website tag", function() {
     const string = getSeoMetadata(getSeoConfig({}), {}, 'home-page', {}, {url: url.parse("/")});
     assertContains(sampleOrganisationTag + sampleWebsiteTag, string);
+  });
+
+  it("should not break and don't show structured data if header & footer config is not present", function() {
+    const string = getSeoMetadata(getSeoConfig(), {}, 'home-page', {}, {url: url.parse("/")});
+    assertDoesNotContains(sampleHeaderTag + sampleFooterTag, string);
+  });
+  it("shoult put the header & footer tag", function() {
+    const string = getSeoMetadata(getSeoConfig({headerConfig: header, footerConfig: footer}), {}, 'home-page', {}, {url: url.parse("/")});
+    assertContains(sampleHeaderTag + sampleFooterTag, string);
   });
 
   describe('with news article data ', function() {
