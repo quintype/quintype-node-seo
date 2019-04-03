@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.21.0"></a>
+# [1.21.0](https://github.com/quintype/quintype-node-seo/compare/v1.20.4...v1.21.0) (2019-04-03)
+
+
+### Bug Fixes
+
+* **structured data:** Write good test. ([214c6ca](https://github.com/quintype/quintype-node-seo/commit/214c6ca))
+
+
+### Features
+
+* **structured data:** Support for WPFooter and WPHeader. ([425331d](https://github.com/quintype/quintype-node-seo/commit/425331d))
+
+
+
 <a name="1.20.4"></a>
 ## [1.20.4](https://github.com/quintype/quintype-node-seo/compare/v1.20.3...v1.20.4) (2019-03-29)
 
