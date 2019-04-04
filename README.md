@@ -30,8 +30,7 @@ new SEO({
       sameAs: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],
     },
     enableNewsArticle: true
-  },
-  ampStoryPages: true
+  }
 });
 ```
 

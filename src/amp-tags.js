@@ -9,7 +9,7 @@ function storyPageAmpTags(story) {
 }
 
 export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
-  if(pageType == 'story-page' && seoConfig.ampStoryPages && get(data, ["data", "story", "is-amp-supported"]))
+  if(pageType == 'story-page' && get(data, ["data", "story", "is-amp-supported"]))
     return storyPageAmpTags(get(data, ["data", "story"]))
   else
     return []
