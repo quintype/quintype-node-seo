@@ -5,8 +5,7 @@ const assert = require('assert');
 
 describe('ImageTags', function() {
   const seoConfig = {
-    generators: [StoryAmpTags],
-    ampStoryPages: true
+    generators: [StoryAmpTags]
   }
 
   const config = {
