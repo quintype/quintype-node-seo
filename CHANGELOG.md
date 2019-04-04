@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.22.0"></a>
+# [1.22.0](https://github.com/quintype/quintype-node-seo/compare/v1.20.0...v1.22.0) (2019-04-04)
+
+
+### Bug Fixes
+
+* **generateCommonData:** Fix chain access of object ([72e20e0](https://github.com/quintype/quintype-node-seo/commit/72e20e0))
+* **live-blog:** enable live blog, video generation by default and configurable via secret mode ([#48](https://github.com/quintype/quintype-node-seo/issues/48)) ([924c078](https://github.com/quintype/quintype-node-seo/commit/924c078))
+* **package-lock:** Implement package lock ([09b1473](https://github.com/quintype/quintype-node-seo/commit/09b1473))
+* **structured data:** Write good test. ([214c6ca](https://github.com/quintype/quintype-node-seo/commit/214c6ca))
+* **tests:** Update generateCommonSeo tests ([9ddd6e2](https://github.com/quintype/quintype-node-seo/commit/9ddd6e2))
+
+
+### Features
+
+* **structured data:** Support for WPFooter and WPHeader. ([425331d](https://github.com/quintype/quintype-node-seo/commit/425331d))
+
+
+
 <a name="1.21.0"></a>
 # [1.21.0](https://github.com/quintype/quintype-node-seo/compare/v1.20.4...v1.21.0) (2019-04-03)
 
