@@ -286,4 +286,87 @@ describe('StructuredDataTags', function() {
       assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"coverageEndTime":"2018-04-20T06:03:25Z","coverageStartTime":"2018-02-28T11:11:04Z","liveBlogUpdate":[{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"dateModified":"2018-04-20T06:03:25Z","dateCreated":"2018-02-28T11:11:04Z","datePublished":"2018-04-20T06:03:25Z","author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"headline":"Personalise or perish - Why publishers need to use personalised content","image":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max"}],"@type":"LiveBlogPosting","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","hasPart":[{"@type":"WebPageElement","cssSelector":".paywall"}],"@type":"NewsArticle","@context":"http://schema.org"}</script>', string);
     });
   });
+
+  context('Structured DataTags for Entity' , function() {
+    it("generate Structured DataTags for Movie Entities" , function() {
+      const movieEntity = {
+        "description": "ABCD",
+        "updated-at": 1553600304437,
+        "slug": "sarkar-movie-2",
+        "content": "ABCD",
+        "publisher-id": 928,
+        "name": "sarkar",
+        "type": "movie",
+        "meta-description": "ABCD",
+        "entity-type-id": 85,
+        "deleted-at": null,
+        "meta-title": "ABCD",
+        "actors": [
+          {
+            "id": 128875,
+            "name": "Aishwarya Dutta"
+          },
+          {
+            "id": 128874,
+            "name": "Shariq Hassan"
+          },
+          {
+            "id": 128880,
+            "name": "Nithya"
+          },
+          {
+            "id": 128872,
+            "name": "Ramya (NSK)"
+          }
+        ],
+        "created-by": 307186,
+        "photo": [
+          {
+            "key": "vikatandry2/2019-03/97ff1197-f723-4745-8394-442c0f1b1dfa/0.jpg",
+            "url": "http://thumbor-stg.assettype.com/vikatandry2/2019-03/97ff1197-f723-4745-8394-442c0f1b1dfa/0.jpg",
+            "caption": "ABCD",
+            "metadata": {
+              "mime-type": "image/jpeg"
+            },
+            "attribution": "ABCD"
+          }
+        ],
+        "id": 128930,
+        "directors": [
+          {
+            "id": 128873,
+            "name": "Ritvika"
+          },
+          {
+            "id": 128880,
+            "name": "Nithya"
+          }
+        ],
+        "producers": [
+          {
+            "id": 128883,
+            "name": "Vajpayee"
+          },
+          {
+            "id": 128873,
+            "name": "Ritvika"
+          },
+          {
+            "id": 128879,
+            "name": "Mumtaj"
+          }
+        ],
+        "tamil-name": "சர்கார்",
+        "last-updated-by": 307186,
+        "created-at": 1553600077425
+      };
+
+      const storyData = sampleStoryData();
+      storyData.data.story.cards = [];
+      storyData.data["linkedEntities"] = [movieEntity];
+      const tags = getSeoMetadata(getSeoConfig(),{},'story-page', storyData, {url: url.parse("/")});
+      const articleTag = '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-04-20T06:03:25Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"","dateCreated":"2018-04-20T06:03:20Z","dateModified":"2018-04-20T06:03:20Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","@type":"Article","@context":"http://schema.org"}</script>';
+      assertContains(sampleOrganisationTag + articleTag+ '<script type="application/ld+json">{"actors":[{"@type":"Person","givenName":"Aishwarya Dutta","name":"Aishwarya Dutta"},{"@type":"Person","givenName":"Shariq Hassan","name":"Shariq Hassan"},{"@type":"Person","givenName":"Nithya","name":"Nithya"},{"@type":"Person","givenName":"Ramya (NSK)","name":"Ramya (NSK)"}],"directors":[{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Nithya","name":"Nithya"}],"name":"sarkar","sameAs":"","description":"ABCD","producer":[{"@type":"Person","givenName":"Vajpayee","name":"Vajpayee"},{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Mumtaj","name":"Mumtaj"}],"image":"http://thumbor-stg.assettype.com/vikatandry2/2019-03/97ff1197-f723-4745-8394-442c0f1b1dfa/0.jpg","dateCreated":"2019-03-26T11:34:37.425Z","@type":"Movie","@context":"http://schema.org"}</script>', tags);
+    });
+  });
 });

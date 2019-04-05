@@ -9,8 +9,8 @@ import {
   getSchemaMainEntityOfPage,
   getSchemaWebsite
 } from './schema';
-
 import get from "lodash/get";
+import { generateTagsForEntity } from './entity';
 
 import { stripMillisecondsFromTime, getQueryParams } from "../utils";
 import { generateImageObject } from '../generate-common-seo';
@@ -182,6 +182,7 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
   const {story = {}} = response.data || {};
+  const entities = get (response, ["data", "linkedEntities"], null) || [];
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
@@ -207,6 +208,13 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty && structuredData.footer) {
     tags.push(ldJson("WPFooter",getSchemaFooter(structuredData.footer)));
+  }
+
+  if (entities.length> 0 ) {
+    for ( let entity of entities) {
+      const entityTags = generateTagsForEntity(entity, ldJson);
+      entityTags && tags.push(entityTags);
+    }
   }
 
   function generateNewsArticleTags() {

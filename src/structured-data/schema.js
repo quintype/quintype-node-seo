@@ -1,5 +1,5 @@
 import { stripMillisecondsFromTime } from "../utils";
-
+import { get } from 'lodash';
 export const getSchemaContext = { "@context": "http://schema.org" }
 
 export function getSchemaType(type) {
@@ -70,6 +70,24 @@ export function getSchemaMainEntityOfPage(id) {
       {"@id": id }
     )
   }
+}
+
+export function getSchemaMovieReview(movieObject={}) {
+  const movieCreatedAt = get(movieObject, ["created-at"], null);
+  const actors = get(movieObject,["actors"], []).map((actor) => getSchemaPerson(actor.name));
+  const directors = get(movieObject,["directors"], []).map((director) => getSchemaPerson(director.name));
+  const producers = get(movieObject,["producers"], []).map((producer) => getSchemaPerson(producer.name));
+  
+  return  {
+      "actors": actors,
+      "directors": directors,
+      "name": get(movieObject, ["name"], ''),
+      "sameAs": get(movieObject, ["sameAs"], ''),
+      "description": get(movieObject, ["meta-description"], ''),
+      "producer": producers,
+      "image": get(movieObject, ["photo", "0", "url"], ''),
+      "dateCreated": movieCreatedAt?(new Date(movieCreatedAt)).toISOString(): ''
+    };
 }
 
 export function getSchemaWebsite(website = {}) {
