@@ -5,7 +5,7 @@ function getMovieEntityTags(movieJson) {
 }
 
 export function generateTagsForEntity(entity, ldJson) {
-    if (entity.type === "movie") {
+    if (entity.type && entity.type.toLowerCase() === "movie") {
         return ldJson("Movie", getMovieEntityTags(entity));
     }
 }
