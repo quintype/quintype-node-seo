@@ -30,7 +30,8 @@ new SEO({
       sameAs: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],
     },
     enableNewsArticle: true
-  }
+  },
+  ampStoryPages: true
 });
 ```
 
@@ -65,8 +66,8 @@ To generate the Entity Tags, while executing getMetaTags on the SEO instance, th
     ]
   }
 ```
-data Object should have a key called "linkedEntities" and the value should be an array of all Entities. 
-Please also refer to the test case "Structured DataTags for Entity" in structured_data_tags_test 
+data Object should have a key called "linkedEntities" and the value should be an array of all Entities.
+Please also refer to the test case "Structured DataTags for Entity" in structured_data_tags_test
 
 ### Structured data
 
@@ -85,7 +86,7 @@ structuredData: {
 
 #### Organization
 
-Sample object: 
+Sample object:
 ```
 organization: {
     name: 'Bloomberg Quint',
@@ -101,7 +102,7 @@ organization: {
   }
 ```
 #### website
-Sample object: 
+Sample object:
 ```
 website: {
     url: 'https://www.bloombergquint.com/',
