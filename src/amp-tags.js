@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import get from 'lodash/get';
 
 function storyPageAmpTags(story) {
   return [{
@@ -9,7 +9,9 @@ function storyPageAmpTags(story) {
 }
 
 export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
-  if(pageType == 'story-page' && seoConfig.ampStoryPages && get(data, ["data", "story", "is-amp-supported"]))
+  const ampStoryPages = get(seoConfig, ["ampStoryPages"], true);
+
+  if(pageType == 'story-page' && ampStoryPages && get(data, ["data", "story", "is-amp-supported"]))
     return storyPageAmpTags(get(data, ["data", "story"]))
   else
     return []
