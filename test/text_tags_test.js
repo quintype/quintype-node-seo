@@ -98,6 +98,7 @@ describe('TextTags', function() {
           {
           "id": 42,
           "name": "Current Affairs",
+          "section-url": "http://foo.com/",
           }
         ],
         "seo-metadata": [
@@ -109,6 +110,7 @@ describe('TextTags', function() {
       assertContains('<meta name="description" content="Section Description"/>', string);
       assertContains('<meta name="title" content="Current Affairs"/>', string);
       assertContains('<meta name="keywords" content="quintype, demo"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/"/>', string);
     });
 
     it("fallback to section name when page-title attribute in section metadata is unavailable", function() {
@@ -201,6 +203,14 @@ describe('TextTags', function() {
       assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
     });
 
+    it("takes the story url over the story slug if present", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome", url: "http://domain.com/politics/awesome" }
+      const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
+      assertContains('<link rel="canonical" href="http://domain.com/politics/awesome"/>', string);
+    });
 
     it("Generates SEO tags for visual story page", function () {
       const seoConfig = {
