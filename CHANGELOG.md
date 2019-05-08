@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.25.0"></a>
+# [1.25.0](https://github.com/quintype/quintype-node-seo/compare/v1.24.0...v1.25.0) (2019-05-08)
+
+
+### Features
+
+* **Multi Domain:** Multi domain support for story and section pages ([#58](https://github.com/quintype/quintype-node-seo/issues/58)) ([d841501](https://github.com/quintype/quintype-node-seo/commit/d841501))
+
+
+
 <a name="1.24.0"></a>
 # [1.24.0](https://github.com/quintype/quintype-node-seo/compare/v1.22.0...v1.24.0) (2019-04-16)
 
