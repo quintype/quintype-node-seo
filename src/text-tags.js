@@ -23,7 +23,7 @@ function buildTagsFromStory(config, story, url = {}) {
 
   const seo = story.seo || {};
 
-  const storyUrl = `${config['sketches-host']}/${story.slug}`;
+  const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
@@ -95,23 +95,27 @@ function buildCustomTags(customTags = {}, pageType = ''){
 }
 
 function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
-  function findRelevantConfig(pred) {
-    const seoMetadata = config['seo-metadata'].find(pred) || {};
-    const {sections = []} = config;
-    if(seoMetadata.data && (!seoMetadata.data['page-title'] || !seoMetadata.data['title'])) {
-      const sectionData = sections.find(section => section.id === seoMetadata['owner-id']) || {};
-      seoMetadata.data['page-title'] = seoMetadata.data['page-title'] || sectionData.name;
-      seoMetadata.data['title'] = seoMetadata.data['title'] || sectionData.name;
+  function findRelevantConfig(ownerType, ownerId) {
+    const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
+    const { sections = [] } = config;
+    const section = sections.find(section => ownerType == 'section' && section.id === ownerId) || {};
+
+    if(seoMetadata.data || section.id) {
+      const result = Object.assign({}, {
+        'page-title': section.name,
+        title: section.name,
+        canonicalUrl: section['section-url'] || undefined,
+      }, seoMetadata.data);
+
+      if(!result.description) {
+        const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {data: {description: ""}};
+        result.description = homeSeoData.data.description;
+      }
+
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+      return result;
     }
-    if(seoMetadata.data && !seoMetadata.data['description']) {
-      const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {};
-      seoMetadata.data['description'] = (homeSeoData.data && homeSeoData.data.description) ? homeSeoData.data.description : '';
-    }
-    if(seoMetadata.data) {
-      seoMetadata.data['ogTitle'] = seoMetadata.data['title'];
-      seoMetadata.data['ogDescription'] = seoMetadata.data['description'];
-    }
-    return seoMetadata.data;
   }
 
   if(seoConfig.customTags && seoConfig.customTags[pageType]){
@@ -119,8 +123,8 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   }
 
   switch(pageType) {
-    case 'home-page': return findRelevantConfig(page => page['owner-type'] === 'home')
-    case 'section-page': return findRelevantConfig(page => page['owner-type'] === 'section' && page['owner-id'] === get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
+    case 'home-page': return findRelevantConfig('home')
+    case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
     case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
     case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
