@@ -9,7 +9,12 @@ function pickImageFromCard(story, cardId) {
 }
 
 function pickImageFromStory(story) {
-  return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
+  if (story["hero-image-s3-key"]) {
+    return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
+  }
+  const alternateHeroImageS3Key = get(story, ["alternative", "home", "default", "hero-image", "hero-image-s3-key"]);
+  const alternateHeroImageS3Metadata = get(story, ["alternative", "home", "default", "hero-image", "hero-image-metadata"]);
+  return new FocusedImage(alternateHeroImageS3Key, alternateHeroImageS3Metadata || {})
 }
 
 function pickImageFromCollection(collection) {
