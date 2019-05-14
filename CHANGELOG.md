@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.26.0"></a>
+# [1.26.0](https://github.com/quintype/quintype-node-seo/compare/v1.25.0...v1.26.0) (2019-05-14)
+
+
+### Features
+
+* fallback to alternate hero image for og image ([056e613](https://github.com/quintype/quintype-node-seo/commit/056e613))
+* Upgrading ResponsiveImage ([56d203a](https://github.com/quintype/quintype-node-seo/commit/56d203a))
+
+
+
 <a name="1.25.0"></a>
 # [1.25.0](https://github.com/quintype/quintype-node-seo/compare/v1.24.0...v1.25.0) (2019-05-08)
 
