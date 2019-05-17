@@ -203,6 +203,22 @@ describe('TextTags', function() {
       assertDoesNotContains('canonical', string);
       assertDoesNotContains('og:url', string);
     });
+
+    it("picks up the home page description if the collection is missing the description", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+      const config = {
+        'sketches-host': "http://foo.com",
+        "sections": [],
+        "seo-metadata": [{ "owner-type": 'home', data: { 'description': 'Home Description' } }]
+      };
+      const collection = { name: "Collection Title" };
+      const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
+      assertContains('<title>Collection Title</title>', string);
+      assertContains('<meta name="description" content="Home Description"/>', string);
+      assertContains('<meta name="title" content="Collection Title"/>', string);
+    });
   });
 
 
