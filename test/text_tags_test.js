@@ -201,6 +201,7 @@ describe('TextTags', function() {
       assertContains('<meta name="description" content="Collection Description"/>', string);
       assertContains('<meta name="title" content="Collection Title"/>', string);
       assertDoesNotContains('canonical', string);
+      assertDoesNotContains('og:url', string);
     });
   });
 

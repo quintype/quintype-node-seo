@@ -163,9 +163,10 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
     'keywords': seoData.keywords,
   };
 
+  const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
   const ogTags = seoConfig.enableOgTags ? {
     'og:type': pageType === 'story-page' ? 'article' : 'website',
-    'og:url': seoData.ogUrl || currentUrl,
+    'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
     'og:title': seoData.ogTitle,
     'og:description': seoData.ogDescription
   } : undefined;
