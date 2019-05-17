@@ -28,5 +28,5 @@ describe('ImageTags', function() {
     const story = {"slug": "section/slug", "is-amp-supported": false}
     const string = getSeoMetadata(seoConfig, config, 'home-page', {data: {story: story}}, {})
     assert.equal('', string);
-  })
+  });
 });
