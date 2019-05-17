@@ -37,7 +37,7 @@ function imageUrl(publisherConfig, s3Key) {
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
-  const storyUrl = `${publisherConfig['sketches-host']}/${story.slug}`;
+  const storyUrl = story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
   const mainEntityUrl = (Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl) ? storyUrl : get(structuredData, ['organization', 'url'], '');
 
   return Object.assign({},
