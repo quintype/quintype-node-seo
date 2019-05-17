@@ -12,5 +12,5 @@ exports.assertContains = function assertContains(expected, actual) {
 }
 
 exports.assertDoesNotContains = function assertDoesNotContains(expected, actual) {
-  assert.notEqual(actual, expected, `Expected ${actual} does not to contain ${expected}`);
+  assert(!actual.includes(expected), `Expected ${actual} not to contain ${expected}`);
 }

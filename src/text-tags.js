@@ -124,12 +124,28 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
 
   switch(pageType) {
     case 'home-page': return findRelevantConfig('home')
-    case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoData(config, 'home-page', data, url);
+    case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(data) || getSeoData(config, 'home-page', data, url);
     case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
     case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
     case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
     default: return getSeoData(config, 'home-page', data, url);
+  }
+}
+
+const SKIP_CANONICAL = '__SKIP__CANONICAL__'
+
+function getSeoDataFromCollection(data) {
+  if (get(data, ["data", "collection", "name"])) {
+    const { name, summary } = get(data, ["data", "collection"])
+    return {
+      'page-title': name,
+      title: name,
+      ogTitle: name,
+      description: summary,
+      ogDescription: summary,
+      canonicalUrl: SKIP_CANONICAL
+    }
   }
 }
 
@@ -164,8 +180,12 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   const commonTags = [
     {tag: "title", children: data.title || seoData['page-title']},
-    {tag: "link", rel: "canonical", href: seoData.canonicalUrl || currentUrl}
   ];
+
+  const canonical = seoData.canonicalUrl || currentUrl;
+  if(canonical != SKIP_CANONICAL) {
+    commonTags.push({ tag: "link", rel: "canonical", href: canonical});
+  }
 
   if(pageType === 'story-page' && seoConfig.enableNews) {
     commonTags.push({name: "news_keywords", content: seoData.keywords});
