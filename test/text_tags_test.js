@@ -186,39 +186,56 @@ describe('TextTags', function() {
       assertContains('<link rel="canonical" href="http://foo.com/story-slug"/>', string);
     });
 
-    it("fallback to collection name with no canonical url if someone passes a section-page with no section", function () {
-      const seoConfig = {
-        generators: [TextTags],
-      };
-      const config = {
-        'sketches-host': "http://foo.com",
-        "sections": [],
-        "seo-metadata": []
-      };
-      const collection = { name: "Collection Title", summary: "Collection Description" };
-      const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
-      assertContains('<title>Collection Title</title>', string);
-      assertContains('<meta name="description" content="Collection Description"/>', string);
-      assertContains('<meta name="title" content="Collection Title"/>', string);
-      assertDoesNotContains('canonical', string);
-      assertDoesNotContains('og:url', string);
-    });
+    describe("falling back to the collection if section is missing", function(){
+      it("fallback to collection name with no canonical url if someone passes a section-page with no section", function () {
+        const seoConfig = {
+          generators: [TextTags],
+        };
+        const config = {
+          'sketches-host': "http://foo.com",
+          "sections": [],
+          "seo-metadata": []
+        };
+        const collection = { name: "Collection Title", summary: "Collection Description" };
+        const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
+        assertContains('<title>Collection Title</title>', string);
+        assertContains('<meta name="description" content="Collection Description"/>', string);
+        assertContains('<meta name="title" content="Collection Title"/>', string);
+        assertDoesNotContains('canonical', string);
+        assertDoesNotContains('og:url', string);
+      });
 
-    it("picks up the home page description if the collection is missing the description", function () {
-      const seoConfig = {
-        generators: [TextTags],
-      };
-      const config = {
-        'sketches-host': "http://foo.com",
-        "sections": [],
-        "seo-metadata": [{ "owner-type": 'home', data: { 'description': 'Home Description' } }]
-      };
-      const collection = { name: "Collection Title" };
-      const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
-      assertContains('<title>Collection Title</title>', string);
-      assertContains('<meta name="description" content="Home Description"/>', string);
-      assertContains('<meta name="title" content="Collection Title"/>', string);
-    });
+      it("picks up the home page description if the collection is missing the description", function () {
+        const seoConfig = {
+          generators: [TextTags],
+        };
+        const config = {
+          'sketches-host': "http://foo.com",
+          "sections": [],
+          "seo-metadata": [{ "owner-type": 'home', data: { 'description': 'Home Description' } }]
+        };
+        const collection = { name: "Collection Title" };
+        const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
+        assertContains('<title>Collection Title</title>', string);
+        assertContains('<meta name="description" content="Home Description"/>', string);
+        assertContains('<meta name="title" content="Collection Title"/>', string);
+      });
+
+      it("does not crash if the description is missing", function () {
+        const seoConfig = {
+          generators: [TextTags],
+        };
+        const config = {
+          'sketches-host': "http://foo.com",
+          "sections": [],
+          "seo-metadata": []
+        };
+        const collection = { name: "Collection Title" };
+        const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
+        assertContains('<title>Collection Title</title>', string);
+        assertDoesNotContains('description', string);
+      });
+    })
   });
 
 

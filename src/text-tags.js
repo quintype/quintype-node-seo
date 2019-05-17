@@ -138,7 +138,7 @@ function getSeoDataFromCollection(config, data) {
     let { name, summary } = get(data, ["data", "collection"]);
 
     if (!summary) {
-      summary = getSeoData(config, 'home-page', data).description
+      summary = (getSeoData(config, 'home-page', data) || {}).description
     }
 
     return {
