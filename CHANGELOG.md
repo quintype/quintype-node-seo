@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.27.0"></a>
+# [1.27.0](https://github.com/quintype/quintype-node-seo/compare/v1.26.0...v1.27.0) (2019-05-17)
+
+
+### Bug Fixes
+
+* Add multi domain support for structured data ([#60](https://github.com/quintype/quintype-node-seo/issues/60)) ([1c8dd74](https://github.com/quintype/quintype-node-seo/commit/1c8dd74))
+
+
+### Features
+
+* Section Pages without a Section are treated as collections ([#61](https://github.com/quintype/quintype-node-seo/issues/61)) ([6161832](https://github.com/quintype/quintype-node-seo/commit/6161832))
+
+
+
 <a name="1.26.0"></a>
 # [1.26.0](https://github.com/quintype/quintype-node-seo/compare/v1.25.0...v1.26.0) (2019-05-14)
 
