@@ -94,6 +94,11 @@ function buildCustomTags(customTags = {}, pageType = ''){
   return {};
 }
 
+
+// The findRelevantConfig method call has no ownerId for home page.
+// This causes the seoMetadata to be undefined.
+// So the default value for the ownerId is set to null.
+
 function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   function findRelevantConfig(ownerType, ownerId = null) {
     const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
