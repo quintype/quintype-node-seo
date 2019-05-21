@@ -95,7 +95,7 @@ function buildCustomTags(customTags = {}, pageType = ''){
 }
 
 function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
-  function findRelevantConfig(ownerType, ownerId) {
+  function findRelevantConfig(ownerType, ownerId = null) {
     const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
     const { sections = [] } = config;
     const section = sections.find(section => ownerType == 'section' && section.id === ownerId) || {};
