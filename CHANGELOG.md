@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.28.2"></a>
+## [1.28.2](https://github.com/quintype/quintype-node-seo/compare/v1.28.1...v1.28.2) (2019-05-21)
+
+
+### Bug Fixes
+
+* **test:** Update tests for test tags generation - homepage ([#63](https://github.com/quintype/quintype-node-seo/issues/63)) ([ed17a11](https://github.com/quintype/quintype-node-seo/commit/ed17a11))
+* **textTags:** default the owner id to null for generating home page tags ([#62](https://github.com/quintype/quintype-node-seo/issues/62)) ([53370d5](https://github.com/quintype/quintype-node-seo/commit/53370d5))
+
+
+
 <a name="1.28.1"></a>
 ## [1.28.1](https://github.com/quintype/quintype-node-seo/compare/v1.28.0...v1.28.1) (2019-05-17)
 
