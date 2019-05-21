@@ -10,8 +10,8 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
-      const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")})
+      const config = {"seo-metadata": [{"owner-type": "home", "owner-id": null, "data": {'page-title': "Foobar"}}]};
+      const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")});
       assertContains('<title>Foobar</title>', string);
     });
 
@@ -144,7 +144,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const config = {"seo-metadata": [{"owner-type": 'home', data: {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, data: {'page-title': "Foobar"}}]};
       const string = getSeoMetadata(seoConfig, config, 'section-page', {data: {section: {id: 42}}}, {url: url.parse("/")})
       assertContains('<title>Foobar</title>', string);
     });
@@ -153,7 +153,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar"}}]};
       const string = getSeoMetadata(seoConfig, config, 'home-page', {title: "The Title"}, {url: url.parse("/")})
       assertContains('<title>The Title</title>', string);
     });
@@ -164,7 +164,7 @@ describe('TextTags', function() {
         enableOgTags: true,
         enableTwitterCards: true
       };
-      const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'title': "Foobar"}}]};
+      const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'title': "Foobar"}}]};
       const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")})
       assertContains('<meta name="title" content="Foobar"/>', string);
       assertContains('<meta name="twitter:title" content="Foobar"/>', string);
@@ -212,7 +212,7 @@ describe('TextTags', function() {
         const config = {
           'sketches-host': "http://foo.com",
           "sections": [],
-          "seo-metadata": [{ "owner-type": 'home', data: { 'description': 'Home Description' } }]
+          "seo-metadata": [{ "owner-type": 'home', "owner-id": null, data: { 'description': 'Home Description' } }]
         };
         const collection = { name: "Collection Title" };
         const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
@@ -465,13 +465,13 @@ describe('TextTags', function() {
   describe("Getting the title", function() {
     it("can also get the title only", function() {
       const seo = new SEO({generators: []});
-      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar"}}]};
       assert.equal("Foobar", seo.getTitle(config, 'home-page', {}, {}));
     });
 
     it("can also get the title if passed in from data", function() {
       const seo = new SEO({generators: []});
-      const config = {"seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar"}}]};
       assert.equal("My Title", seo.getTitle(config, 'home-page', {title: "My Title"}, {}));
       assert.equal("My Title", seo.getTitle(config, 'home-page', {data: {title: "My Title"}}, {}));
     });
@@ -495,7 +495,7 @@ describe('TextTags', function() {
         generators: [TextTags],
       }
       const tag = {}
-      const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'page-title': "Foobar", 'description': "Some Foobar", 'keywords': "keywords", 'canonicalUrl': "http://foo.com"}}]};
+      const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar", 'description': "Some Foobar", 'keywords': "keywords", 'canonicalUrl': "http://foo.com"}}]};
       const string = getSeoMetadata(seoConfig, config, 'tag-page', {}, {url: ''});
       assertContains('<title>Foobar</title>', string);
       assertContains('<meta name="description" content="Some Foobar"/>', string);
