@@ -17,6 +17,19 @@ function pickImageFromStory(story) {
   return new FocusedImage(alternateHeroImageS3Key, alternateHeroImageS3Metadata || {})
 }
 
+function pickAlternativeImageFromStory(story) {
+  const alternaveImg = get(story, ["alternative", "home", "default", "hero-image"])
+  if(alternaveImg["hero-image-s3-key"]){
+    return new FocusedImage(alternaveImg["hero-image-s3-key"], alternaveImg["hero-image-metadata"] || {})
+  }
+  if (story["hero-image-s3-key"]) {
+    return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
+  }
+  const alternateHeroImageS3Key = get(story, ["alternative", "home", "default", "hero-image", "hero-image-s3-key"]);
+  const alternateHeroImageS3Metadata = get(story, ["alternative", "home", "default", "hero-image", "hero-image-metadata"]);
+  return new FocusedImage(alternateHeroImageS3Key, alternateHeroImageS3Metadata || {})
+}
+
 function pickImageFromCollection(collection) {
   const coverImage = get(collection, ["metadata", "cover-image"]) || {};
   if(!coverImage["cover-image-s3-key"])
@@ -26,8 +39,11 @@ function pickImageFromCollection(collection) {
 }
 
 // The image is grabbed from the story, else from from the collection
-function pickImage(pageType, data, url) {
-  if(pageType === 'story-page' && url.query && url.query.cardId) {
+function pickImage(pageType, data, url, seoConfig) {
+  if(seoConfig.toggleAlternative) {
+    const story = get(data, ['data', 'story']) || {};
+    return pickAlternativeImageFromStory(story);
+  }else if(pageType === 'story-page' && url.query && url.query.cardId) {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
   }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
@@ -45,7 +61,7 @@ function pickImage(pageType, data, url) {
 }
 
 export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
-  const image = pickImage(pageType, data, url);
+  const image = pickImage(pageType, data, url, seoConfig);
 
   if(!image) {
     return [];
