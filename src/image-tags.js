@@ -18,10 +18,11 @@ function pickImageFromStory(story) {
 }
 
 function pickAlternativeImageFromStory(story) {
-  const alternaveImg = get(story, ["alternative", "home", "default", "hero-image"])
-  if(alternaveImg["hero-image-s3-key"]){
-    return new FocusedImage(alternaveImg["hero-image-s3-key"], alternaveImg["hero-image-metadata"] || {})
-  }
+  const alternativeImage = get(story, ["alternative", "home", "default", "hero-image"], {})
+  if(alternativeImage) {
+      return new FocusedImage(alternativeImage["hero-image-s3-key"], alternativeImage["hero-image-metadata"] || {})
+    }
+
   if (story["hero-image-s3-key"]) {
     return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
   }
