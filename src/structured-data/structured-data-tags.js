@@ -195,11 +195,11 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
+    tags.push(ldJson("Organization", structuredData.organization));
   }
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
-    tags.push(ldJson("Organization", structuredData.organization));
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
