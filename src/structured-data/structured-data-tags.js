@@ -62,7 +62,7 @@ function getTextElementsOfCards(story) {
   }
 }
 
-function getPlainText(text) {
+function getPlainText(text = '') {
   return text.replace(/<[^>]+>/g, '');
 }
 
