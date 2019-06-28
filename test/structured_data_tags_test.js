@@ -247,7 +247,7 @@ describe('StructuredDataTags', function() {
     });
   });
 
-  describe('with authors value an empty array in article data', function() {
+  describe('articleBody content', function() {
     const cards = [{
       "card-added-at": 1519816264773,
       "card-updated-at": 1524204205102,
