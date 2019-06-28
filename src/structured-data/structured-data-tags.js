@@ -203,7 +203,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
     const newsArticleTags = generateNewsArticleTags();
-    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    newsArticleTags ? tags.push(storyTags('newsArticle'), newsArticleTags) : tags.push(storyTags('newsArticle'));
   }
 
   if(!isStructuredDataEmpty && structuredData.header) {
@@ -227,7 +227,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     }
   }
 
-  function storyTags() {
+  function storyTags(type = '') {
     if(structuredData.enableLiveBlog && story['story-template'] === 'live-blog') {
       return ldJson("LiveBlogPosting", Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
     }
@@ -236,7 +236,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
 
-    return ldJson("Article", articleData);
+    if(type !== 'newsArticle') {
+      return ldJson("Article", articleData);
+    }
+
   }
 
   // All Pages have: Publisher, Site
