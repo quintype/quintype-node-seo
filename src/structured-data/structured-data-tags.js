@@ -66,10 +66,11 @@ function getPlainText(text) {
   return text.replace(/<[^>]+>/g, '');
 }
 
-function getCompleteText(story) {
+function getCompleteText(story, stripHtmlFromArticleBody) {
   const textArray = []
   getTextElementsOfCards(story).forEach((item) => {
-    textArray.push(getPlainText(item.text))
+    const textContent = stripHtmlFromArticleBody ? getPlainText(item.text) : item.text;
+    textArray.push(textContent)
   })
   const completeCardText = textArray.join('.');
   return completeCardText;
@@ -89,7 +90,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
-    "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
+    "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
@@ -203,7 +204,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
     const newsArticleTags = generateNewsArticleTags();
-    newsArticleTags ? tags.push(storyTags('newsArticle'), newsArticleTags) : tags.push(storyTags('newsArticle'));
+    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
   }
 
   if(!isStructuredDataEmpty && structuredData.header) {
@@ -227,7 +228,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     }
   }
 
-  function storyTags(type = '') {
+  function storyTags() {
     if(structuredData.enableLiveBlog && story['story-template'] === 'live-blog') {
       return ldJson("LiveBlogPosting", Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig)))
     }
@@ -236,10 +237,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
 
-    if(type !== 'newsArticle') {
+    if(!structuredData.enableNewsArticle) {
       return ldJson("Article", articleData);
     }
-
+    return {}
   }
 
   // All Pages have: Publisher, Site
