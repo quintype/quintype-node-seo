@@ -62,10 +62,14 @@ function getTextElementsOfCards(story) {
   }
 }
 
+function getPlainText(text) {
+  return text.replace(/<[^>]+>/g, '');
+}
+
 function getCompleteText(story) {
   const textArray = []
   getTextElementsOfCards(story).forEach((item) => {
-    textArray.push(item.text)
+    textArray.push(getPlainText(item.text))
   })
   const completeCardText = textArray.join('.');
   return completeCardText;
