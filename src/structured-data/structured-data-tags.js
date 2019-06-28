@@ -236,6 +236,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     if(structuredData.enableVideo && story['story-template'] === 'video') {
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
+
     return ldJson("Article", articleData);
   }
 
