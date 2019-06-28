@@ -236,11 +236,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     if(structuredData.enableVideo && story['story-template'] === 'video') {
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
-
-    if(!structuredData.enableNewsArticle) {
-      return ldJson("Article", articleData);
-    }
-    return {}
+    return ldJson("Article", articleData);
   }
 
   // All Pages have: Publisher, Site
