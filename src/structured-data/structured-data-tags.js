@@ -62,10 +62,15 @@ function getTextElementsOfCards(story) {
   }
 }
 
-function getCompleteText(story) {
+function getPlainText(text = '') {
+  return text.replace(/<[^>]+>/g, '');
+}
+
+function getCompleteText(story, stripHtmlFromArticleBody) {
   const textArray = []
   getTextElementsOfCards(story).forEach((item) => {
-    textArray.push(item.text)
+    const textContent = stripHtmlFromArticleBody ? getPlainText(item.text) : item.text;
+    textArray.push(textContent)
   })
   const completeCardText = textArray.join('.');
   return completeCardText;
@@ -85,7 +90,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
     "keywords": metaKeywords,
-    "articleBody": (storyKeysPresence && getCompleteText(story)) || '',
+    "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',

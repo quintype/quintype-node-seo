@@ -29,7 +29,7 @@ const header = {
 const footer = {
   cssSelector: '#footer'
 }
-function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, headerConfig, footerConfig} = {}  ) {
+function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, stripHtmlFromArticleBody = false, headerConfig, footerConfig} = {}  ) {
   return {
     generators: [StructuredDataTags],
     structuredData: {
@@ -40,6 +40,7 @@ function getSeoConfig({newsArticle = false, liveBlog = false, video = false, sto
       "enableNewsArticle": newsArticle,
       "enableLiveBlog": liveBlog,
       "enableVideo": video,
+      "stripHtmlFromArticleBody": stripHtmlFromArticleBody,
       "storyUrlAsMainEntityUrl": storyUrlAsMainEntityUrl
     }
   }
@@ -161,6 +162,7 @@ describe('StructuredDataTags', function() {
     const string = getSeoMetadata(getSeoConfig(), {}, 'home-page', {}, {url: url.parse("/")});
     assertDoesNotContains(sampleHeaderTag + sampleFooterTag, string);
   });
+
   it("shoult put the header & footer tag", function() {
     const string = getSeoMetadata(getSeoConfig({headerConfig: header, footerConfig: footer}), {}, 'home-page', {}, {url: url.parse("/")});
     assertContains(sampleHeaderTag + sampleFooterTag, string);
@@ -245,6 +247,50 @@ describe('StructuredDataTags', function() {
     });
   });
 
+  describe('articleBody content', function() {
+    const cards = [{
+      "card-added-at": 1519816264773,
+      "card-updated-at": 1524204205102,
+      "story-elements": [{
+        "type": "title",
+        "text": "BQ Live: Hot Money"
+      }, {
+        "type": "jsembed",
+        "metadata": {
+          "vidible-video-id": "59bb646192fdde488f02624e"
+        },
+        "subtype": "vidible-video"
+      }, {
+        "image-s3-key": "bloombergquint/2018-07/99423a77-d39a-4803-94c9-1bdc33f95cc6/OI_July_4.PNG",
+        "type": "image",
+      }, {
+        "type": "text",
+        "text": "<p>BQ Live: Hot Money and stocks</p>"
+      },{
+        "type": "text",
+        "text": "<p>BQ Live: Hot Money and stocks body</p>"
+      }]
+    },
+    {
+      "card-added-at": 1519816264773,
+      "card-updated-at": 1524204205102,
+      "story-elements": [{
+        "type": "title",
+        "text": "BQ Live: Hot Money"
+      },{
+        "type": "text",
+        "text": "<p>BQ Live: Hot Money and stocks body-2</p>"
+      }]
+    }]
+    it("should strip down html tags from articleBody if the stripHtmlFromArticleBody is true", function() {
+      const string = getSeoMetadata(getSeoConfig({newsArticle: true, storyUrlAsMainEntityUrl: true, stripHtmlFromArticleBody: true}), {}, 'story-page', sampleStoryData(null, cards, sampleAuthorsData(), null));
+      assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"BQ Live: Hot Money and stocks.BQ Live: Hot Money and stocks body.BQ Live: Hot Money and stocks body-2","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","@type":"Article","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"BQ Live: Hot Money and stocks.BQ Live: Hot Money and stocks body.BQ Live: Hot Money and stocks body-2","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","isAccessibleForFree":true,"@type":"NewsArticle","@context":"http://schema.org"}</script>', string);
+    });
+    it("should not strip down html tags from articleBody if the stripHtmlFromArticleBody is false", function() {
+      const string = getSeoMetadata(getSeoConfig({newsArticle: true, storyUrlAsMainEntityUrl: true, stripHtmlFromArticleBody: false}), {}, 'story-page', sampleStoryData(null, cards, sampleAuthorsData(), null));
+      assertContains(sampleOrganisationTag + '<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"&lt;p&gt;BQ Live: Hot Money and stocks&lt;/p&gt;.&lt;p&gt;BQ Live: Hot Money and stocks body&lt;/p&gt;.&lt;p&gt;BQ Live: Hot Money and stocks body-2&lt;/p&gt;","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","@type":"Article","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"&lt;p&gt;BQ Live: Hot Money and stocks&lt;/p&gt;.&lt;p&gt;BQ Live: Hot Money and stocks body&lt;/p&gt;.&lt;p&gt;BQ Live: Hot Money and stocks body-2&lt;/p&gt;","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","isAccessibleForFree":true,"@type":"NewsArticle","@context":"http://schema.org"}</script>', string);
+    });
+  });
   describe('with given authors array in article data', function() {
     it("should read from the authors array", function() {
       const string = getSeoMetadata(getSeoConfig({}), {}, 'story-page', sampleStoryData(null, [], sampleAuthorsData()));
