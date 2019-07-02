@@ -215,6 +215,30 @@ describe('StructuredDataTags', function() {
       const string = getSeoMetadata(getSeoConfig({newsArticle: true, storyUrlAsMainEntityUrl: true}), {}, 'story-page', sampleStoryData(null, cards, sampleAuthorsData(), null), {url: url.parse("/")}, null);
       assertContains('<script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"BQ Live: Hot Money and stocks.BQ Live: Hot Money and stocks body.BQ Live: Hot Money and stocks body-2","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","@type":"Article","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"BQ Live: Hot Money and stocks.BQ Live: Hot Money and stocks body.BQ Live: Hot Money and stocks body-2","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","isAccessibleForFree":true,"@type":"NewsArticle","@context":"http://schema.org"}</script>', string);
     });
+    it("puts the`NewsArticle` and removes `Article` when enableNewsArticle value is `withoutArticleSchema` in theme-attributes config", function() {
+      const cards = [{
+        "card-added-at": 1519816264773,
+        "card-updated-at": 1524204205102,
+        "story-elements": [{
+          "type": "title",
+          "text": "BQ Live: Hot Money"
+        }]
+      },
+      {
+        "card-added-at": 1519816264773,
+        "card-updated-at": 1524204205102,
+        "story-elements": [{
+          "type": "text",
+          "text": "Content of the story"
+        },{
+          "type": "text",
+          "text": "Hot Money and stocks body-2"
+        }]
+      }]
+      const string = getSeoMetadata(getSeoConfig({newsArticle: 'withoutArticleSchema', storyUrlAsMainEntityUrl: true}), {}, 'story-page', sampleStoryData(null, cards, sampleAuthorsData(), null), {url: url.parse("/")}, null);
+      const expectedString = '"@type":"Article","@context":"http://schema.org"}';
+      assertDoesNotContains(expectedString, string);
+    });
     describe("with isAccessibleForFree", function() {
       it("has true when access is 'null' or 'public'", function(){
         const string1 = getSeoMetadata(getSeoConfig({newsArticle: true}), {}, 'story-page', sampleStoryData(null, [], sampleAuthorsData(), null), {url: url.parse("/")}, null);
