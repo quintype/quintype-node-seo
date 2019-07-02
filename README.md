@@ -86,6 +86,8 @@ structuredData: {
 
 #### Organization
 
+`Organization` schema will only available in home page.
+
 Sample object:
 ```
 organization: {
@@ -121,6 +123,25 @@ footer: {
     cssSelector: '#bq-header'
   }
  ```
+
+#### NewsArticle and Article schema
+
+Pass the `<value>` to enableNewsArticle to enable `NewsArticle`.
+
+```
+structuredData: {
+    ...
+    enableNewsArticle: <value>
+  },
+ ```
+Possible values and outcome:
+
+| value                  | type   | result                                         |   |   |
+|------------------------|--------|------------------------------------------------|---|---|
+| false                  | bool   | Only Article will be available                 |   |   |
+| true                   | bool   | Both Article and NewsArticle will be available |   |   |
+| "withoutArticleSchema" | string | Only NewsArticle will be available             |   |   |
+
 
 ### Example Usage (v1.5.0 and above)
 

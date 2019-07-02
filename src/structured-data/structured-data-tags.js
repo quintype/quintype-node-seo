@@ -195,10 +195,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
-    tags.push(ldJson("Organization", structuredData.organization));
   }
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
+    tags.push(ldJson("Organization", structuredData.organization));
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
   }
 
@@ -237,7 +237,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig))
     }
 
-    return ldJson("Article", articleData);
+    if(structuredData.enableNewsArticle !== 'withoutArticleSchema') {
+      return ldJson("Article", articleData);
+    }
+    return {}
   }
 
   // All Pages have: Publisher, Site
