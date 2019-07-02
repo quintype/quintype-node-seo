@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.29.0"></a>
+# [1.29.0](https://github.com/quintype/quintype-node-seo/compare/v1.28.3...v1.29.0) (2019-07-02)
+
+
+### Features
+
+* Move `Organization` to home page & toggle `Article` schema ([#67](https://github.com/quintype/quintype-node-seo/issues/67)) ([1f5f6a3](https://github.com/quintype/quintype-node-seo/commit/1f5f6a3))
+
+
+
 <a name="1.28.3"></a>
 ## [1.28.3](https://github.com/quintype/quintype-node-seo/compare/v1.28.2...v1.28.3) (2019-06-28)
 
