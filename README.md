@@ -31,7 +31,7 @@ new SEO({
     },
     enableNewsArticle: true
   },
-  ampStoryPages: true
+  ampStoryPages: true  // Valid options are true (default), false, and "public"
 });
 ```
 
