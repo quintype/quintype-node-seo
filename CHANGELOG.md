@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.30.0"></a>
+# [1.30.0](https://github.com/quintype/quintype-node-seo/compare/v1.29.0...v1.30.0) (2019-07-08)
+
+
+### Features
+
+* Allowing you to skip AMP pages on paid stories ([#68](https://github.com/quintype/quintype-node-seo/issues/68)) ([4ab2dd2](https://github.com/quintype/quintype-node-seo/commit/4ab2dd2))
+
+
+
 <a name="1.29.0"></a>
 # [1.29.0](https://github.com/quintype/quintype-node-seo/compare/v1.28.3...v1.29.0) (2019-07-02)
 
