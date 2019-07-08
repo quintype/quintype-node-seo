@@ -20,8 +20,12 @@ export function stripMillisecondsFromTime(date) {
 
 export function getQueryParams(url) {
   const urlObj =  new URL(url);
-  const search_params = new URLSearchParams(urlObj.search); 
+  const search_params = new URLSearchParams(urlObj.search);
   const getWidth = search_params.get('w') || '';
   const getHeight = search_params.get('h') || '';
   return {width: getWidth, height: getHeight};
+}
+
+export function isStoryPublic(story) {
+  return story.access === undefined || story.access === null || story.access === 'public';
 }

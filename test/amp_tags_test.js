@@ -25,8 +25,15 @@ describe('ImageTags', function() {
   });
 
   it("does not ampify other pages", function() {
-    const story = {"slug": "section/slug", "is-amp-supported": false}
-    const string = getSeoMetadata(seoConfig, config, 'home-page', {data: {story: story}}, {})
+    const string = getSeoMetadata(seoConfig, config, 'home-page', {data: {}}, {})
     assert.equal('', string);
   });
+
+  it("does allows you to only ampify free story pages", function () {
+    const story = { "slug": "section/slug", "is-amp-supported": true }
+    const publicStoryResults = getSeoMetadata({...seoConfig, ampStoryPages: "public"}, config, 'story-page', { data: { story: story } }, {})
+    assert.equal('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', publicStoryResults);
+    const privateStoryResults = getSeoMetadata({ ...seoConfig, ampStoryPages: "public" }, config, 'story-page', { data: { story: {...story, access: "subscription"} } }, {})
+    assert.equal('', privateStoryResults);
+  })
 });

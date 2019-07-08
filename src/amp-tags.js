@@ -1,6 +1,11 @@
 import get from 'lodash/get';
+import { isStoryPublic } from './utils';
 
-function storyPageAmpTags(story) {
+function storyPageAmpTags(story, ampStoryConfig) {
+  if(ampStoryConfig === 'public' && !isStoryPublic(story)) {
+    return [];
+  }
+
   return [{
     tag: 'link',
     rel: 'amphtml',
@@ -11,8 +16,8 @@ function storyPageAmpTags(story) {
 export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
   const ampStoryPages = get(seoConfig, ["ampStoryPages"], true);
 
-  if(pageType == 'story-page' && ampStoryPages && get(data, ["data", "story", "is-amp-supported"]))
-    return storyPageAmpTags(get(data, ["data", "story"]))
+  if (ampStoryPages && pageType == 'story-page' && get(data, ["data", "story", "is-amp-supported"]))
+    return storyPageAmpTags(get(data, ["data", "story"]), ampStoryPages)
   else
     return []
 }
