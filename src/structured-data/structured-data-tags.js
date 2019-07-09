@@ -89,7 +89,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
-    "keywords": metaKeywords,
+    "keywords": metaKeywords.join(','),
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
