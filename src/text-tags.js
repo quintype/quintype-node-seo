@@ -178,8 +178,8 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   const twitterTags = seoConfig.enableTwitterCards ? {
     'twitter:card': "summary_large_image",
-    'twitter:title': seoData.title,
-    'twitter:description': seoData.description,
+    'twitter:title': seoData.ogTitle,
+    'twitter:description': seoData.ogDescription
   } : undefined;
 
   const allTags = Object.assign(basicTags, ogTags, twitterTags);
