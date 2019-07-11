@@ -171,7 +171,7 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
-    "keywords": metaKeywords,
+    "keywords": metaKeywords.join(','),
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": story.summary,
