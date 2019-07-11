@@ -191,20 +191,21 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   const breadcrumbList = getSchemaBreadcrumbList();
   breadcrumbList.itemListElement.push(getSchemaListItem(1, "Home", domain));
 
-  function addCrumb(crumbsList, currentSection, itemListOrder) {
+  function addCrumb(crumbsDataList, currentSection) {
     const parentSection = sections.filter(section => section.id === currentSection["parent-id"])[0];
 
-    if(!parentSection) return crumbsList;
+    if(!parentSection) return crumbsDataList.reverse();
 
     const { "section-url":sectionUrl = "", name = "" } = parentSection;
-    crumbsList.push(getSchemaListItem(itemListOrder, name, sectionUrl));
-    return addCrumb(crumbsList, parentSection, ++itemListOrder);
+    crumbsDataList.push({ sectionUrl, name });
+    return addCrumb(crumbsDataList, parentSection);
   }
 
   function getSectionPageCrumbs({ "section-url":sectionUrl = "", slug = "", name = "" } = {}) {
-    const crumbsList = [getSchemaListItem(2, name, sectionUrl)];
+    const crumbsDataList = [{ sectionUrl, name }];
     const currentSection = sections.filter(section => section.slug === slug)[0];
-    return addCrumb(crumbsList, currentSection, 3);
+    addCrumb(crumbsDataList, currentSection);
+    return crumbsDataList.map(({sectionUrl = "", name = ""}, index) => getSchemaListItem(index + 2, name, sectionUrl));
   }
 
   function getStoryPageCrumbs({ headline = "", url = "", sections: storySections = [] } = {}) {

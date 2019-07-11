@@ -105,7 +105,7 @@ export function getSchemaWebsite(website = {}) {
   )
 }
 
-export function getSchemaListItem(position, name, url) {
+export function getSchemaListItem(position = 0, name = "", url = "") {
   return Object.assign({},
     getSchemaType("ListItem"),
     {
