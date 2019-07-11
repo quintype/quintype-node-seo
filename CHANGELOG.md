@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.30.1"></a>
+## [1.30.1](https://github.com/quintype/quintype-node-seo/compare/v1.30.0...v1.30.1) (2019-07-11)
+
+
+### Bug Fixes
+
+* **keywords:** fix keywords in schema to be a string ([5fb6ebf](https://github.com/quintype/quintype-node-seo/commit/5fb6ebf))
+
+
+
 <a name="1.30.0"></a>
 # [1.30.0](https://github.com/quintype/quintype-node-seo/compare/v1.29.0...v1.30.0) (2019-07-08)
 
