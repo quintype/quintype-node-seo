@@ -7,7 +7,9 @@ import {
   getSchemaBlogPosting,
   getSchemaPublisher,
   getSchemaMainEntityOfPage,
-  getSchemaWebsite
+  getSchemaWebsite,
+  getSchemaBreadcrumbList,
+  getSchemaListItem
 } from './schema';
 import get from "lodash/get";
 import { generateTagsForEntity } from './entity';
@@ -184,6 +186,51 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
   return getSchemaWebsite(structuredData.website);
 }
 
+function generateBreadcrumbListData(pageType = "", config = {}, data = {}) {
+  const { "sketches-host": domain, sections } = config;
+  const breadcrumbList = getSchemaBreadcrumbList();
+  breadcrumbList.itemListElement.push(getSchemaListItem(1, "Home", domain));
+
+  function addCrumb(crumbsList, currentSection, itemListOrder) {
+    const parentSection = sections.filter(section => section.id === currentSection["parent-id"])[0];
+
+    if(!parentSection) return crumbsList;
+
+    const { name, slug } = parentSection;
+    const url = `${domain}/${slug}`;
+    crumbsList.push(getSchemaListItem(itemListOrder, name, url));
+    return addCrumb(crumbsList, parentSection, ++itemListOrder);
+  }
+
+  function getSectionPageCrumbs({ slug = "", name = "" }) {
+    const url = `${domain}/${slug}`;
+    const crumbsList = [getSchemaListItem(2, name, url)];
+    const currentSection = sections.filter(section => section.slug === slug)[0];
+    return addCrumb(crumbsList, currentSection, 3);
+  }
+
+  function getCollectionPageCrumbs({ slug = "", name = "" }) {
+    const url = `${domain}/collection/${slug}`;
+    return getSchemaListItem(2, name, url);
+  }
+
+  function getStoryPageCrumbs({ slug = "", headline = "", sections: storySections = [] }) {
+    const currentSection = sections.filter(section => section.slug === storySections[0]["slug"])[0];
+    const sectionCrumbsList = getSectionPageSchema(currentSection);
+    const position = sectionCrumbsList.length + 2;
+    const url = `${domain}/${slug}`;
+    sectionCrumbsList.push(getSchemaListItem(position, headline, url));
+    return sectionCrumbsList;
+  }
+
+  switch (pageType) {
+    case "section-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getSectionPageCrumbs(data.section)); break;
+    case "collection-page": breadcrumbList.itemListElement.push(getCollectionPageCrumbs(data.collection)); break;
+    case "story-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getStoryPageCrumbs(data.story)); break;
+  }
+  return breadcrumbList;
+}
+
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
   const {story = {}} = response.data || {};
@@ -200,6 +247,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Organization", structuredData.organization));
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+  }
+
+  if(!isStructuredDataEmpty && structuredData.enableBreadcrumbList) {
+    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, config.config, response.data)));
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {

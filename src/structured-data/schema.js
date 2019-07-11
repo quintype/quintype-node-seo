@@ -104,3 +104,24 @@ export function getSchemaWebsite(website = {}) {
     }
   )
 }
+
+export function getSchemaListItem(position, name, url) {
+  return Object.assign({},
+    getSchemaType("ListItem"),
+    {
+      position,
+      name,
+      item: url
+    }
+  );
+}
+
+export function getSchemaBreadcrumbList() {
+  return Object.assign({},
+    getSchemaContext,
+    getSchemaType("BreadcrumbList"),
+    {
+      itemListElement: []
+    }
+  );
+}
