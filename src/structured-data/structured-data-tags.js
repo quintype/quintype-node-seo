@@ -188,8 +188,7 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
 
 function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
   const { "sketches-host": domain = "", sections = [] } = publisherConfig;
-  const breadcrumbList = getSchemaBreadcrumbList();
-  breadcrumbList.itemListElement.push(getSchemaListItem(1, "Home", domain));
+  const breadcrumbsDataList = [{ name: "Home", url: domain }];
 
   function addCrumb(crumbsDataList = [], currentSection = {}) {
     const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
@@ -201,27 +200,23 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return addCrumb(crumbsDataList, parentSection);
   }
 
-  function getSectionPageCrumbs({ "section-url":sectionUrl = "", slug = "", name = "" } = {}) {
+  function getSectionPageCrumbs(section = {}) {
+    const { "section-url":sectionUrl = "", name = "" } = section;
     const crumbsDataList = [{ sectionUrl, name }];
-    const currentSection = sections.find(section => section.slug === slug);
-    addCrumb(crumbsDataList, currentSection);
-    return crumbsDataList.map(({sectionUrl = "", name = ""}, index) => getSchemaListItem(index + 2, name, sectionUrl));
+    return addCrumb(crumbsDataList, section);
   }
 
-  function getStoryPageCrumbs({ headline = "", url = "", sections: storySections = [] } = {}) {
-    const storySectionSlug = get(storySections, [0, "slug"], "");
-    const currentSection = sections.find(section => section.slug === storySectionSlug);
-    const sectionCrumbsList = getSectionPageCrumbs(currentSection);
-    const position = sectionCrumbsList.length + 2;
-    sectionCrumbsList.push(getSchemaListItem(position, headline, url));
-    return sectionCrumbsList;
+  function getStoryPageCrumbs({ headline = "", url = "", sections = [storySection = {}] } = {}) {
+    const sectionCrumbsDataList = getSectionPageCrumbs(storySection);
+    sectionCrumbsDataList.push({ name:headline, url});
+    return sectionCrumbsDataList;
   }
 
   switch (pageType) {
-    case "section-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getSectionPageCrumbs(data.section)); break;
-    case "story-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getStoryPageCrumbs(data.story)); break;
+    case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
+    case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
   }
-  return breadcrumbList;
+  return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
 
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
