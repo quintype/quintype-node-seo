@@ -188,25 +188,25 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
 
 function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
   const { "sketches-host": domain = "", sections = [] } = publisherConfig;
-  const breadcrumbsDataList = [{ name: "Home", url: domain }];
+  let breadcrumbsDataList = [{ name: "Home", url: domain }];
 
   function addCrumb(crumbsDataList = [], currentSection = {}) {
     const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
 
     if(!parentSection) return crumbsDataList;
 
-    const { "section-url":sectionUrl = "", name = "" } = parentSection;
-    crumbsDataList.unshift({ sectionUrl, name });
+    const { "section-url":url = "", name = "" } = parentSection;
+    crumbsDataList.unshift({ url, name });
     return addCrumb(crumbsDataList, parentSection);
   }
 
   function getSectionPageCrumbs(section = {}) {
-    const { "section-url":sectionUrl = "", name = "" } = section;
-    const crumbsDataList = [{ sectionUrl, name }];
+    const { "section-url":url = "", name = "" } = section;
+    const crumbsDataList = [{ url, name }];
     return addCrumb(crumbsDataList, section);
   }
 
-  function getStoryPageCrumbs({ headline = "", url = "", sections = [storySection = {}] } = {}) {
+  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection = {}] } = {}) {
     const sectionCrumbsDataList = getSectionPageCrumbs(storySection);
     sectionCrumbsDataList.push({ name:headline, url});
     return sectionCrumbsDataList;
