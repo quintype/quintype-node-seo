@@ -91,7 +91,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
-    "keywords": metaKeywords.join(','),
+    "keywords": metaKeywords,
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
@@ -186,8 +186,8 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
   return getSchemaWebsite(structuredData.website);
 }
 
-function generateBreadcrumbListData(pageType = "", config = {}, data = {}) {
-  const { "sketches-host": domain, sections } = config;
+function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
+  const { "sketches-host": domain = "", sections = [] } = publisherConfig;
   const breadcrumbList = getSchemaBreadcrumbList();
   breadcrumbList.itemListElement.push(getSchemaListItem(1, "Home", domain));
 
@@ -202,19 +202,19 @@ function generateBreadcrumbListData(pageType = "", config = {}, data = {}) {
     return addCrumb(crumbsList, parentSection, ++itemListOrder);
   }
 
-  function getSectionPageCrumbs({ slug = "", name = "" }) {
+  function getSectionPageCrumbs({ slug = "", name = "" } = {}) {
     const url = `${domain}/${slug}`;
     const crumbsList = [getSchemaListItem(2, name, url)];
     const currentSection = sections.filter(section => section.slug === slug)[0];
     return addCrumb(crumbsList, currentSection, 3);
   }
 
-  function getCollectionPageCrumbs({ slug = "", name = "" }) {
+  function getCollectionPageCrumbs({ slug = "", name = "" } = {}) {
     const url = `${domain}/collection/${slug}`;
     return getSchemaListItem(2, name, url);
   }
 
-  function getStoryPageCrumbs({ slug = "", headline = "", sections: storySections = [] }) {
+  function getStoryPageCrumbs({ slug = "", headline = "", sections: storySections = [] } = {}) {
     const currentSection = sections.filter(section => section.slug === storySections[0]["slug"])[0];
     const sectionCrumbsList = getSectionPageSchema(currentSection);
     const position = sectionCrumbsList.length + 2;
@@ -250,7 +250,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   }
 
   if(!isStructuredDataEmpty && structuredData.enableBreadcrumbList) {
-    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, config.config, response.data)));
+    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {

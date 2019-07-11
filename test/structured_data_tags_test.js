@@ -374,8 +374,8 @@ describe('StructuredDataTags', function() {
   });
 
   describe('with BreadcrumbList schema', function() {
-    it("puts BreadcrumbList schema when enableBreadcrumbList truthy in theme-attributes config", function() {
-      const string = getSeoMetadata(getSeoConfig({breadcrumbList: true}), {}, 'section-page', {"section": { "slug": "film", "name": "Film" }}, {url: url.parse("/")});
+    it("puts BreadcrumbList schema when enableBreadcrumbList truthy in seo config", function() {
+      const string = getSeoMetadata(getSeoConfig({breadcrumbList: true}), {}, 'section-page', {"data": {"section": { "slug": "film", "name": "Film" }}, config: {"sketches-host": "https://madrid.quintype.io", "sections": [{"slug": "film", "name": "Film", "parent-id": null}]}}, {url: url.parse("/")});
       assertContains(sampleBreadcrumbListTag, string);
     })
   });
