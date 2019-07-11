@@ -91,7 +91,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
-    "keywords": metaKeywords,
+    "keywords": metaKeywords.join(','),
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
@@ -196,36 +196,27 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
 
     if(!parentSection) return crumbsList;
 
-    const { name, slug } = parentSection;
-    const url = `${domain}/${slug}`;
-    crumbsList.push(getSchemaListItem(itemListOrder, name, url));
+    const { "section-url":sectionUrl = "", name = "" } = parentSection;
+    crumbsList.push(getSchemaListItem(itemListOrder, name, sectionUrl));
     return addCrumb(crumbsList, parentSection, ++itemListOrder);
   }
 
-  function getSectionPageCrumbs({ slug = "", name = "" } = {}) {
-    const url = `${domain}/${slug}`;
-    const crumbsList = [getSchemaListItem(2, name, url)];
+  function getSectionPageCrumbs({ "section-url":sectionUrl = "", slug = "", name = "" } = {}) {
+    const crumbsList = [getSchemaListItem(2, name, sectionUrl)];
     const currentSection = sections.filter(section => section.slug === slug)[0];
     return addCrumb(crumbsList, currentSection, 3);
   }
 
-  function getCollectionPageCrumbs({ slug = "", name = "" } = {}) {
-    const url = `${domain}/collection/${slug}`;
-    return getSchemaListItem(2, name, url);
-  }
-
-  function getStoryPageCrumbs({ slug = "", headline = "", sections: storySections = [] } = {}) {
+  function getStoryPageCrumbs({ headline = "", url = "", sections: storySections = [] } = {}) {
     const currentSection = sections.filter(section => section.slug === storySections[0]["slug"])[0];
-    const sectionCrumbsList = getSectionPageSchema(currentSection);
+    const sectionCrumbsList = getSectionPageCrumbs(currentSection);
     const position = sectionCrumbsList.length + 2;
-    const url = `${domain}/${slug}`;
     sectionCrumbsList.push(getSchemaListItem(position, headline, url));
     return sectionCrumbsList;
   }
 
   switch (pageType) {
     case "section-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getSectionPageCrumbs(data.section)); break;
-    case "collection-page": breadcrumbList.itemListElement.push(getCollectionPageCrumbs(data.collection)); break;
     case "story-page": breadcrumbList.itemListElement = breadcrumbList.itemListElement.concat(getStoryPageCrumbs(data.story)); break;
   }
   return breadcrumbList;
@@ -238,6 +229,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
+  const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   let articleData = {};
 
   if(!isStructuredDataEmpty) {
@@ -249,7 +241,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
   }
 
-  if(!isStructuredDataEmpty && structuredData.enableBreadcrumbList) {
+  if(!isStructuredDataEmpty && enableBreadcrumbList) {
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 

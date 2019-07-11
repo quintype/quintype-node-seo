@@ -145,7 +145,7 @@ Possible values and outcome:
 
 #### BreadcrumbList
 
-Pass the `<value>` to enableBreadcrumbList to enable `BreadcrumbList`.
+`BreadcrumbList` is enabled by default. Pass the `<value>` as `false` explicitly to enableBreadcrumbList to disable it.
 
 ```
 structuredData: {
