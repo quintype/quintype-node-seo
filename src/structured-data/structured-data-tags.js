@@ -191,8 +191,10 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   let breadcrumbsDataList = [{ name: "Home", url: domain }];
 
   function addCrumb(crumbsDataList = [], currentSection = {}) {
-    const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
+    if(!currentSection["parent-id"]) return crumbsDataList;
 
+    const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
+    
     if(!parentSection) return crumbsDataList;
 
     const { "section-url":url = "", name = "" } = parentSection;
