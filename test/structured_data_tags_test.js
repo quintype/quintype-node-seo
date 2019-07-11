@@ -29,7 +29,7 @@ const header = {
 const footer = {
   cssSelector: '#footer'
 }
-function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, stripHtmlFromArticleBody = false, headerConfig, footerConfig} = {}  ) {
+function getSeoConfig({newsArticle = false, liveBlog = false, video = false, storyUrlAsMainEntityUrl = false, stripHtmlFromArticleBody = false, headerConfig, footerConfig, breadcrumbList = false} = {} ) {
   return {
     generators: [StructuredDataTags],
     structuredData: {
@@ -40,6 +40,7 @@ function getSeoConfig({newsArticle = false, liveBlog = false, video = false, sto
       "enableNewsArticle": newsArticle,
       "enableLiveBlog": liveBlog,
       "enableVideo": video,
+      "enableBreadcrumbList": breadcrumbList,
       "stripHtmlFromArticleBody": stripHtmlFromArticleBody,
       "storyUrlAsMainEntityUrl": storyUrlAsMainEntityUrl
     }
@@ -151,6 +152,7 @@ const sampleOrganisationTag = '<script type="application/ld+json">{"name":"Quint
 const sampleWebsiteTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","url":"https://madrid.quintype.io","potentialAction":{"@type":"SearchAction","target":"https://madrid.quintype.io/search?q={query}","query-input":"required name=query"}}</script>'
 const sampleHeaderTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPHeader","cssSelector":"#header"}</script>';
 const sampleFooterTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"WPFooter","cssSelector":"#footer"}</script>';
+const sampleBreadcrumbListTag = '<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madrid.quintype.io"},{"@type":"ListItem","position":2,"name":"Film","item":"https://madrid.quintype.io/film"}]}</script>';
 
 describe('StructuredDataTags', function() {
   it("puts the organization & website tag", function() {
@@ -369,6 +371,13 @@ describe('StructuredDataTags', function() {
       const string = getSeoMetadata(getSeoConfig({newsArticle: true, liveBlog: true}), {}, 'story-page', sampleStoryData('live-blog', cards, sampleAuthorsData()), {url: url.parse("/")});
       assertContains('<script type="application/ld+json">{"coverageEndTime":"2018-04-20T06:03:25Z","coverageStartTime":"2018-02-28T11:11:04Z","liveBlogUpdate":[{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"dateModified":"2018-04-20T06:03:25Z","dateCreated":"2018-02-28T11:11:04Z","datePublished":"2018-04-20T06:03:25Z","author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"headline":"Personalise or perish - Why publishers need to use personalised content","image":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max"}],"@type":"LiveBlogPosting","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":[],"articleBody":"","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","hasPart":[{"@type":"WebPageElement","cssSelector":".paywall"}],"@type":"NewsArticle","@context":"http://schema.org"}</script>', string);
     });
+  });
+
+  describe('with BreadcrumbList schema', function() {
+    it("puts BreadcrumbList schema when enableBreadcrumbList truthy in theme-attributes config", function() {
+      const string = getSeoMetadata(getSeoConfig({breadcrumbList: true}), {}, 'section-page', {"section": { "slug": "film", "name": "Film" }}, {url: url.parse("/")});
+      assertContains(sampleBreadcrumbListTag, string);
+    })
   });
 
   context('Structured DataTags for Entity' , function() {
