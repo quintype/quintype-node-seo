@@ -194,7 +194,7 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     if(!currentSection["parent-id"]) return crumbsDataList;
 
     const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
-    
+
     if(!parentSection) return crumbsDataList;
 
     const { "section-url":url = "", name = "" } = parentSection;
@@ -208,8 +208,11 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return addCrumb(crumbsDataList, section);
   }
 
-  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection = {}] } = {}) {
-    const sectionCrumbsDataList = getSectionPageCrumbs(storySection);
+  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection] } = {}) {
+    let sectionCrumbsDataList = [];
+    if(storySection) {
+      sectionCrumbsDataList = getSectionPageCrumbs(storySection);
+    }
     sectionCrumbsDataList.push({ name:headline, url});
     return sectionCrumbsDataList;
   }
