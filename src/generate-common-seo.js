@@ -45,8 +45,8 @@ export function generateImageObject(config = {}) {
 
 export function generateStructuredData(config = {}) {
   const title = getTitle(config);
-  const { "theme-attributes":themeConfig, "social-links":socialLinks, "publisher-settings":publisherSettings } = config;
-  const { "page-title":pageTitle, description, keywords } = config["seo-metadata"].find(page => page["owner-type"] === "home").data || {};
+  const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
+  const { "page-title":pageTitle, description, keywords } = seoMetadata.find(page => page["owner-type"] === "home").data || {};
 
   if(!themeConfig || !themeConfig.logo) {
     return {};
