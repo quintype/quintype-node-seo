@@ -7,7 +7,9 @@ import {
   getSchemaBlogPosting,
   getSchemaPublisher,
   getSchemaMainEntityOfPage,
-  getSchemaWebsite
+  getSchemaWebsite,
+  getSchemaBreadcrumbList,
+  getSchemaListItem
 } from './schema';
 import get from "lodash/get";
 import { generateTagsForEntity } from './entity';
@@ -89,7 +91,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(authors),
-    "keywords": metaKeywords,
+    "keywords": metaKeywords.join(','),
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
@@ -169,7 +171,7 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
 
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
-    "keywords": metaKeywords,
+    "keywords": metaKeywords.join(','),
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": story.summary,
@@ -184,6 +186,44 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
   return getSchemaWebsite(structuredData.website);
 }
 
+function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
+  const { "sketches-host": domain = "", sections = [] } = publisherConfig;
+  let breadcrumbsDataList = [{ name: "Home", url: domain }];
+
+  function addCrumb(crumbsDataList = [], currentSection = {}) {
+    if(!currentSection["parent-id"]) return crumbsDataList;
+
+    const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
+
+    if(!parentSection) return crumbsDataList;
+
+    const { "section-url":url = "", name = "" } = parentSection;
+    crumbsDataList.unshift({ url, name });
+    return addCrumb(crumbsDataList, parentSection);
+  }
+
+  function getSectionPageCrumbs(section = {}) {
+    const { "section-url":url = "", name = "" } = section;
+    const crumbsDataList = [{ url, name }];
+    return addCrumb(crumbsDataList, section);
+  }
+
+  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection] } = {}) {
+    let sectionCrumbsDataList = [];
+    if(storySection) {
+      sectionCrumbsDataList = getSectionPageCrumbs(storySection);
+    }
+    sectionCrumbsDataList.push({ name:headline, url});
+    return sectionCrumbsDataList;
+  }
+
+  switch (pageType) {
+    case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
+    case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
+  }
+  return getSchemaBreadcrumbList(breadcrumbsDataList);
+}
+
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
   const {story = {}} = response.data || {};
@@ -191,6 +231,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
+  const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   let articleData = {};
 
   if(!isStructuredDataEmpty) {
@@ -200,6 +241,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Organization", structuredData.organization));
     tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+  }
+
+  if(!isStructuredDataEmpty && enableBreadcrumbList) {
+    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 
   if(!isStructuredDataEmpty && pageType === 'story-page') {
