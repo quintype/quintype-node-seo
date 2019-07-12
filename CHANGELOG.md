@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.31.0"></a>
+# [1.31.0](https://github.com/quintype/quintype-node-seo/compare/v1.30.0...v1.31.0) (2019-07-12)
+
+
+### Features
+
+* **BreadcrumbList schema:** Add support for BreadcrumbList schema ([#70](https://github.com/quintype/quintype-node-seo/issues/70)) ([72c6865](https://github.com/quintype/quintype-node-seo/commit/72c6865))
+
+
+
 <a name="1.30.2"></a>
 ## [1.30.2](https://github.com/quintype/quintype-node-seo/compare/v1.30.0...v1.30.2) (2019-07-11)
 
