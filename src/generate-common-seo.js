@@ -43,10 +43,10 @@ export function generateImageObject(config = {}) {
   });
 }
 
-export function generateStructuredData(config) {
+export function generateStructuredData(config = {}) {
   const title = getTitle(config);
   const { "theme-attributes":themeConfig, "social-links":socialLinks, "publisher-settings":publisherSettings } = config;
-  const { "page-title":pageTitle, title, description, keywords } = config["seo-metadata"].find(page => page["owner-type"] === "home").data;
+  const { "page-title":pageTitle, title, description, keywords } = config["seo-metadata"].find(page => page["owner-type"] === "home").data || {};
 
   if(!themeConfig || !themeConfig.logo) {
     return {};
