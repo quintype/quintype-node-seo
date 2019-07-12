@@ -45,8 +45,8 @@ export function generateImageObject(config = {}) {
 
 export function generateStructuredData(config) {
   const title = getTitle(config);
-  const themeConfig = config["theme-attributes"];
-  const socialLinks = config["social-links"];
+  const { "theme-attributes":themeConfig, "social-links":socialLinks, "publisher-settings":publisherSettings } = config;
+  const { "page-title":pageTitle, title, description, keywords } = config["seo-metadata"].find(page => page["owner-type"] === "home").data;
 
   if(!themeConfig || !themeConfig.logo) {
     return {};
@@ -65,7 +65,10 @@ export function generateStructuredData(config) {
     website: {
       url: config["sketches-host"],
       searchpath: "search?q={query}",
-      queryinput: "required name=query"
+      queryinput: "required name=query",
+      name: title || pageTitle,
+      headline: publisherSettings["description"] || description || title,
+      keywords
     },
   }
 }

@@ -91,16 +91,27 @@ export function getSchemaMovieReview(movieObject={}) {
 }
 
 export function getSchemaWebsite(website = {}) {
+  const { url, searchpath, name, headline, keywords, queryinput } = website;
+
   return Object.assign({},
     getSchemaContext,
     getSchemaType("WebSite"),
     {
-      "url": website.url,
+      "url": url,
+      "interactivityType": "mixed",
+      "name": name,
+      "headline": headline,
+      "keywords": keywords,
+      copyrightHolder: Object.assign({},
+        getSchemaType("Organization"),
+        { "name": name }
+      ),
       "potentialAction": {
         "@type": "SearchAction",
-        "target": `${website.url}/${website.searchpath}`,
-        "query-input": website.queryinput
-      }
-    }
+        "target": `${url}/${searchpath}`,
+        "query-input": queryinput
+      }, 
+    },
+    getSchemaMainEntityOfPage(url)
   )
 }
