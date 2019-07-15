@@ -79,7 +79,8 @@ structuredData: {
     footer: <footerObj>
     header: <headerObj>,
     enableLiveBlog: true,
-    enableNewsArticle: true
+    enableNewsArticle: true,
+    enableBreadcrumbList: false
   },
  ```
  and `node-seo` will inject appropriate structured data in LD-JSON format in the `<head>`. Following are some sample config values for `structuredData` values.
@@ -145,6 +146,23 @@ Possible values and outcome:
 | true                   | bool   | Both Article and NewsArticle will be available |   |   |
 | "withoutArticleSchema" | string | Only NewsArticle will be available             |   |   |
 
+#### BreadcrumbList
+
+`BreadcrumbList` is enabled by default. Pass the `<value>` as `false` explicitly to disable it.
+
+```
+structuredData: {
+    ...
+    enableBreadcrumbList: <value>
+  },
+ ```
+
+ Possible values and outcome:
+
+| value                  | type   | result                                         |   |   |
+|------------------------|--------|------------------------------------------------|---|---|
+| false                  | bool   | BreadcrumbList Schema will not be available    |   |   |
+| true                   | bool   | BreadcrumbList Schema will be available        |   |   |
 
 ### Example Usage (v1.5.0 and above)
 

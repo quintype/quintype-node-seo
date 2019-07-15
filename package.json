@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.30.4",
+  "version": "1.31.0",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
@@ -15,7 +15,7 @@
     "build": "rollup -c",
     "coverage": "nyc --all --reporter=html npm test",
     "prepack": "npm run build",
-    "prepublishOnly": "npm install && npm test && git diff --quiet && npx standard-version && git push --follow-tags origin",
+    "prepublishOnly": "npm install && npm test && ./bin-dev-scripts/standard-version-release.sh",
     "test": "npm run build && mocha test",
     "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },

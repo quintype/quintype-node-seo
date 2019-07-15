@@ -115,3 +115,23 @@ export function getSchemaWebsite(website = {}) {
     getSchemaMainEntityOfPage(url)
   )
 }
+
+export function getSchemaListItem(position = 0, name = "", url = "") {
+  return Object.assign({},
+    getSchemaType("ListItem"),
+    {
+      position,
+      name,
+      item: url
+    }
+  );
+}
+
+export function getSchemaBreadcrumbList(breadcrumbsDataList) {
+  const itemListElement = breadcrumbsDataList.map(({ name = "", url = "" }, index) => getSchemaListItem(index + 1, name, url));
+  return Object.assign({},
+    getSchemaContext,
+    getSchemaType("BreadcrumbList"),
+    { itemListElement }
+  );
+}
