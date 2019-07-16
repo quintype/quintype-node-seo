@@ -100,7 +100,15 @@ describe('Seo Helpers', function() {
           "google-plus-url": "",
           "instagram-url": "https://www.instagram.com/abc",
           "twitter-url": "https://twitter.com/abc"
-        }
+        },
+        "seo-metadata": [{
+          "owner-type": "home",
+          "data": {
+            "page-title": "Abc",
+            "description": "News platform",
+            "keywords": "abc,news,quintype"
+          }
+        }]
       };
       const expectedStructuredData = {
         organization: {
@@ -115,7 +123,10 @@ describe('Seo Helpers', function() {
         website: {
           url: "abc.com",
           searchpath: "search?q={query}",
-          queryinput: "required name=query"
+          queryinput: "required name=query",
+          name: "Abc",
+          headline: "News platform",
+          keywords: "abc,news,quintype"
         },
       };
       const actualStructuredData = generateStructuredData(config)
@@ -138,7 +149,15 @@ describe('Seo Helpers', function() {
         "theme-attributes": {
           "logo": "https://quintype.com/abc.png"
         },
-        "social-links": null
+        "social-links": null,
+        "seo-metadata": [{
+          "owner-type": "home",
+          "data": {
+            "page-title": "Abc",
+            "description": "News platform",
+            "keywords": "abc,news,quintype"
+          }
+        }]
       };
   
       const expectedStructuredData = {
@@ -154,7 +173,10 @@ describe('Seo Helpers', function() {
         website: {
           url: "abc.com",
           searchpath: "search?q={query}",
-          queryinput: "required name=query"
+          queryinput: "required name=query",
+          name: "Abc",
+          headline: "News platform",
+          keywords: "abc,news,quintype"
         },
       };
   
@@ -175,7 +197,15 @@ describe('Seo Helpers', function() {
           "google-plus-url": "",
           "instagram-url": "https://www.instagram.com/abc",
           "twitter-url": "https://twitter.com/abc"
-        }
+        },
+        "seo-metadata": [{
+          "owner-type": "home",
+          "data": {
+            "page-title": "Abc",
+            "description": "News platform",
+            "keywords": "abc,news,quintype"
+          }
+        }]
       };
       const actualStructuredData = generateStructuredData(config);
       assert.deepEqual(actualStructuredData, {});

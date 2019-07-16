@@ -110,7 +110,10 @@ Sample object:
 website: {
     url: 'https://www.bloombergquint.com/',
     searchpath: 'search?q={q}',
-    queryinput: 'required name=q'
+    queryinput: 'required name=q',
+    name: 'Bloomberg Quint',
+    headline: 'Bloomberg Quint - Discover news',
+    keywords: 'bloombergquint,news,quintype'
   }
   ```
 
