@@ -53,12 +53,14 @@ function buildTagsFromTopic(config, tag, url = {}) {
   const tagDescription = tag['meta-description'];
   const description = `Read stories listed under on ${tagName}`;
   const tagUrl = `${config['sketches-host']}${url.pathname}`
+  let canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const canonicalUrl = `${config['sketches-host']}${canonicalSlug}`;
   const topicMetaData = {
     title: tagName,
     "page-title": tagName,
     description: tagDescription || description,
     keywords: tagName,
-    canonicalUrl: tagUrl,
+    canonicalUrl: canonicalUrl,
     ogUrl: tagUrl,
     ogTitle: tagName,
     ogDescription: tagDescription || description
