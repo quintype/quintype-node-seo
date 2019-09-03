@@ -14,7 +14,7 @@ import {
 import get from "lodash/get";
 import { generateTagsForEntity } from './entity';
 
-import { stripMillisecondsFromTime, getQueryParams } from "../utils";
+import { stripMillisecondsFromTime, getQueryParams, escapeDoubleQuotes } from "../utils";
 import { generateImageObject } from '../generate-common-seo';
 
 function getLdJsonFields(type, fields) {
@@ -43,7 +43,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   const mainEntityUrl = (Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl) ? storyUrl : get(structuredData, ['organization', 'url'], '');
 
   return Object.assign({},
-    {'headline' : story.headline,
+    {'headline' : escapeDoubleQuotes(story.headline),
     "image": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "datePublished": stripMillisecondsFromTime(new Date(story['first-published-at']))},
@@ -95,7 +95,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "name": (storyKeysPresence && story.headline) || '',
+    "name": (storyKeysPresence && escapeDoubleQuotes(story.headline)) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
   }, articleSectionObj(story));
 }
@@ -134,8 +134,8 @@ function generateNewsArticleData (structuredData = {}, story = {}, publisherConf
   const {alternative = {}} = story.alternative || {};
   const storyAccessType = storyAccess(story['access']);
   return Object.assign({}, {
-    "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
-    "description": story.summary,
+    "alternativeHeadline": (alternative.home && alternative.home.default) ? escapeDoubleQuotes(alternative.home.default.headline) : "",
+    "description": escapeDoubleQuotes(story.summary),
     "isAccessibleForFree": storyAccessType
   }, generateHasPartData(storyAccessType));
 }
@@ -175,7 +175,7 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": story.summary,
-    "name": story.headline,
+    "name": escapeDoubleQuotes(story.headline),
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "embedUrl": embedUrl

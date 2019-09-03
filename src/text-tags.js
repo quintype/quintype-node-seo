@@ -1,5 +1,5 @@
-import {get, isEmpty} from 'lodash';
-import {objectToTags} from './utils';
+import { get, isEmpty } from 'lodash';
+import { objectToTags, escapeDoubleQuotes } from './utils';
 
 function buildTagsFromStory(config, story, url = {}) {
   if(!story)
@@ -11,11 +11,11 @@ function buildTagsFromStory(config, story, url = {}) {
 
     if(metadata && !isEmpty(metadata) &&  metadata['social-share']){
       return {
-        title: metadata['social-share'].title || story.headline,
-        description: metadata['social-share'].message || story.summary,
+        title: escapeDoubleQuotes(metadata['social-share'].title || story.headline),
+        description: escapeDoubleQuotes(metadata['social-share'].message || story.summary),
         ogUrl: urlWithCardId,
-        ogTitle: metadata['social-share'].title || story.headline,
-        ogDescription: metadata['social-share'].message || story.summary
+        ogTitle: escapeDoubleQuotes(metadata['social-share'].title || story.headline),
+        ogDescription: escapeDoubleQuotes(metadata['social-share'].message || story.summary)
       };
     }
     return metadata;
@@ -26,14 +26,14 @@ function buildTagsFromStory(config, story, url = {}) {
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
   const storyMetaData = {
-    title: seo["meta-title"] || story.headline,
-    "page-title": seo["meta-title"] || story.headline,
-    description: seo["meta-description"] || story.summary,
+    title: escapeDoubleQuotes(seo["meta-title"] || story.headline),
+    "page-title": escapeDoubleQuotes(seo["meta-title"] || story.headline),
+    description: escapeDoubleQuotes(seo["meta-description"] || story.summary),
     keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
-    ogTitle: story.headline,
-    ogDescription: story.summary,
+    ogTitle: escapeDoubleQuotes(story.headline),
+    ogDescription: escapeDoubleQuotes(story.summary),
     storyUrl: storyUrl
   };
 
@@ -79,12 +79,12 @@ function buildTagsFromAuthor(config, author, url = {}) {
   return {
     title: authorName,
     "page-title": authorName,
-    description: description,
+    description: escapeDoubleQuotes(description),
     keywords: `${authorName},${config['publisher-name']}`,
     canonicalUrl: authorUrl,
     ogUrl: authorUrl,
     ogTitle: authorName,
-    ogDescription: description,
+    ogDescription: escapeDoubleQuotes(description),
   };
 }
 

@@ -1,4 +1,4 @@
-import { stripMillisecondsFromTime } from "../utils";
+import { stripMillisecondsFromTime, escapeDoubleQuotes } from "../utils";
 import { get } from 'lodash';
 export const getSchemaContext = { "@context": "http://schema.org" }
 
@@ -47,7 +47,7 @@ export function getSchemaBlogPosting(card = {}, author = {}, headline = '', imag
       "dateCreated": stripMillisecondsFromTime(new Date(card['card-added-at'])),
       "datePublished": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
       "author": author,
-      "headline": headline,
+      "headline": escapeDoubleQuotes(headline),
       "image": image
     }
   );
@@ -100,7 +100,7 @@ export function getSchemaWebsite(website = {}) {
       "url": url,
       "interactivityType": "mixed",
       "name": name,
-      "headline": headline,
+      "headline": escapeDoubleQuotes(headline),
       "keywords": keywords,
       copyrightHolder: Object.assign({},
         getSchemaType("Organization"),

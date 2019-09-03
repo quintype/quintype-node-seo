@@ -29,3 +29,7 @@ export function getQueryParams(url) {
 export function isStoryPublic(story) {
   return story.access === undefined || story.access === null || story.access === 'public';
 }
+
+export function escapeDoubleQuotes(text) {
+  return text.replace(/"/g, '/"');
+}

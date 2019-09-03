@@ -1,7 +1,7 @@
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 import get from 'lodash/get';
-import { getQueryParams } from "./utils";
+import { getQueryParams, escapeDoubleQuotes } from "./utils";
 
 export function getTitle(config) {
   return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
@@ -68,7 +68,7 @@ export function generateStructuredData(config = {}) {
       searchpath: "search?q={query}",
       queryinput: "required name=query",
       name: pageTitle || title,
-      headline: description,
+      headline: escapeDoubleQuotes(description),
       keywords
     },
   }
