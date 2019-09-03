@@ -31,5 +31,5 @@ export function isStoryPublic(story) {
 }
 
 export function escapeDoubleQuotes(text) {
-  return text.replace(/"/g, '/"');
+  return text.replace(/"/g, '\\"');
 }
