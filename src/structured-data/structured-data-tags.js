@@ -224,6 +224,26 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
 
+/**
+ * @typedef StructuredDataConfig Options to {@link StructuredDataTags}
+ * @property {boolean} enableBreadcrumbList Should breadcrumbs be enabled (default true)
+ * @property {boolean} enableLiveBlog Should LiveBlog schema be implemented for live blogs (default false)
+ * @property {boolean} enableVideo Should VideoObject be enabled for video stories (default false)
+ * @property {(boolean | "withoutArticleSchema")} enableNewsArticle If set to true, then both Article and NewsArticle schema are implemented. If set to *"withoutArticleSchema"*, then only NewsArticle is implemented
+ * @property {Object} organization The organization to put on the homepage. ex: `{name: "Quintype",url: "http://www.quintype.com/", logo: "https://quintype.com/logo.png", same*As: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]}` NewsArticle is implemented
+ * @property {Object} website The website and search urls. ex: `{url:'https://www.quintype.com/',searchpath:'search?q={q}',queryinput:'required name=q'}`
+ * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
+ * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
+ */
+
+/**
+ * StructuredData adds tags for schema.org's structured data
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {StructuredDataConfig} seoConfig.structuredData Please see {@link StructuredDataConfig} for a full list of supported options
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
 export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
   const tags = [];
   const {story = {}} = response.data || {};
@@ -240,7 +260,9 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Organization", structuredData.organization));
-    tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+    if(structuredData.website)  {
+      tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+    }
   }
 
   if(!isStructuredDataEmpty && enableBreadcrumbList) {

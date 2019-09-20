@@ -161,6 +161,22 @@ function getSeoDataFromCollection(config, data) {
 
 const SKIP_CANONICAL = '__SKIP__CANONICAL__'
 
+/**
+ * TextTags adds the majority of basic tags, such as
+ * * Canonical URLs
+ * * Title and Description
+ * * Keywords
+ *
+ * If the current URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
+ * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
 export function TextTags(seoConfig, config, pageType, data, {url}) {
   const seoData = getSeoData(config, pageType, data, url, seoConfig);
 

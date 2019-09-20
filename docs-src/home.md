@@ -3,4 +3,6 @@ The Quintype seo plugin handles most of the SEO tags that Quintype publishers us
 * Ensuring Article / NewsArticle schemas are present if enabled
 * Ensuring og images and other social sharing tags are present
 
-This documentation is still WIP. However, many topics might be covered in the [Malibu Documentation](https://developers.quintype.com/malibu) and [tutorial](https://developers.quintype.com/malibu/tutorial)
+The *@quintype/seo* library works by passing the page related data to a series of functions of type {@link Generator}. Each one will return some tags, which is finally converted to HTML tags.
+
+This should already be implemented for you in the malibu app. However, each generators accepts parameters which can configure which tags are generated. Please see the {@link SEO} class and each individual {@link Generator} for a list of parameters that are accepted.

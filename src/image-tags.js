@@ -44,6 +44,19 @@ function pickImage(pageType, data, url) {
   }
 }
 
+/**
+ * ImageTags adds the og and twitter images
+ *
+ * For a story page, this comes from the hero image. For a collection page (including home and section pages), the image will come from the collection hero image.
+ *
+ * If the current story URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
 export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   const image = pickImage(pageType, data, url);
 
