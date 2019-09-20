@@ -79,6 +79,7 @@ export class SEO {
    * @param {Object} seoConfig Configuration that is passed as the first argument to each {@link Generator}
    * @param {Array<Generator>} seoConfig.generators List of generators to run (optional)
    * @param {Array<Generator>} seoConfig.extraGenerators List of generators to run after the main generators run
+   * @param {Object} seoConfig.pageTypeAliases A map of aliases to their original page type. This is a convenience if you want to have a different page type for some sections. ex: `{"budget-page":"section-page"}`
    */
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;

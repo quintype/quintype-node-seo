@@ -225,13 +225,45 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
 }
 
 /**
- * @typedef StructuredDataConfig Options to {@link StructuredDataTags}
+ * Options for a schema.org Organization
+ * Example
+ * ```javascript
+ * {
+ *   name: "Quintype",
+ *   url: "http://www.quintype.com/",
+ *   logo: "https://quintype.com/logo.png",
+ *   sameAs: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]
+ * }
+ * ```
+ * @typedef Organization
+ */
+
+/**
+* Options for a schema.org Website
+* Example
+* ```javascript
+* {
+*   url: 'https://www.quintype.com/',
+*   searchpath: 'search?q={q}',
+*   queryinput: 'required name=q',
+*   name: 'Quintype',
+*   headline: 'Quintype - Discover news',
+*   keywords: 'news,quintype'
+* }
+* ```
+* @typedef Website
+*/
+
+/**
+ * Options to {@link StructuredDataTags}
+ *
+ * @typedef StructuredDataConfig
  * @property {boolean} enableBreadcrumbList Should breadcrumbs be enabled (default true)
  * @property {boolean} enableLiveBlog Should LiveBlog schema be implemented for live blogs (default false)
  * @property {boolean} enableVideo Should VideoObject be enabled for video stories (default false)
  * @property {(boolean | "withoutArticleSchema")} enableNewsArticle If set to true, then both Article and NewsArticle schema are implemented. If set to *"withoutArticleSchema"*, then only NewsArticle is implemented
- * @property {Object} organization The organization to put on the homepage. ex: `{name: "Quintype",url: "http://www.quintype.com/", logo: "https://quintype.com/logo.png", same*As: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]}` NewsArticle is implemented
- * @property {Object} website The website and search urls. ex: `{url:'https://www.quintype.com/',searchpath:'search?q={q}',queryinput:'required name=q'}`
+ * @property {Organization} organization The organization to put on the homepage. See {@link Organization} for an example
+ * @property {Website} website The website and search urls. See {@link Website} for an example
  * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
  * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
  */
