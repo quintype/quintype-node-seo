@@ -12,6 +12,7 @@ import {
   getSchemaListItem
 } from './schema';
 import get from "lodash/get";
+import kebabCase from "lodash/kebabCase";
 import { generateTagsForEntity } from './entity';
 
 import { stripMillisecondsFromTime, getQueryParams } from "../utils";
@@ -217,9 +218,17 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return sectionCrumbsDataList;
   }
 
+  function getStaticPageCrumbs({ title }) {
+    // although we are getting static-page-urls as an array in pubConfig,
+    // Couldn't think of a way to map the name to the url. Hence came up with the below hack.
+    const url =  domain + "/" + kebabCase(title);
+    return [{ name: title, url }];
+  }
+
   switch (pageType) {
     case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
     case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
+    case "static-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStaticPageCrumbs(data["static-page"])); break;
   }
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
