@@ -112,7 +112,7 @@ function generateArticleImageData(image, publisherConfig) {
 function storyAccess(access) {
   if (access === null || access === "public") {
     return true;
-  } else if (access === "subscription") {
+  } else if (access === "subscription" || access === "login") {
     return false;
   }
 }
