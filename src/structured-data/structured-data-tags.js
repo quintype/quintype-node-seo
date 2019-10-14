@@ -110,9 +110,9 @@ function generateArticleImageData(image, publisherConfig) {
 }
 
 function storyAccess(access) {
-  if (access === null || access === "public") {
+  if (access === null || access === "public" || access === "login") {
     return true;
-  } else if (access === "subscription" || access === "login") {
+  } else if (access === "subscription" ) {
     return false;
   }
 }
