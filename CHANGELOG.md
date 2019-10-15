@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.33.1"></a>
+## [1.33.1](https://github.com/quintype/quintype-node-seo/compare/v1.32.0...v1.33.1) (2019-10-15)
+
+
+### Bug Fixes
+
+* **isAccessibleForFree:** add access condition to check login ([#74](https://github.com/quintype/quintype-node-seo/issues/74)) ([e617e71](https://github.com/quintype/quintype-node-seo/commit/e617e71))
+
+
+
 <a name="1.33.0"></a>
 # [1.33.0](https://github.com/quintype/quintype-node-seo/compare/v1.20.3...v1.33.0) (2019-08-23)
 
