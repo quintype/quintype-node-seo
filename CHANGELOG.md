@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.34.0"></a>
+# [1.34.0](https://github.com/quintype/quintype-node-seo/compare/v1.33.3...v1.34.0) (2019-10-16)
+
+
+### Features
+
+* In the case of duplicate tags, the last one wins ([#75](https://github.com/quintype/quintype-node-seo/issues/75)) ([2ebfde7](https://github.com/quintype/quintype-node-seo/commit/2ebfde7))
+
+
+
 <a name="1.33.3"></a>
 ## [1.33.3](https://github.com/quintype/quintype-node-seo/compare/v1.33.2...v1.33.3) (2019-10-15)
 
