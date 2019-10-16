@@ -1,3 +1,5 @@
+*This library is part of the [Malibu Framework](https://developers.quintype.com/malibu)*.
+
 The Quintype seo plugin handles most of the SEO tags that Quintype publishers usually add as a best practice. This includes
 * Adding the AMP tags for story pages if enabled
 * Ensuring Article / NewsArticle schemas are present if enabled
