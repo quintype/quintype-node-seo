@@ -9,12 +9,22 @@ function pickImageFromCard(story, cardId) {
 }
 
 function pickImageFromStory(story) {
-  if (story["hero-image-s3-key"]) {
-    return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
-  }
-  const alternateHeroImageS3Key = get(story, ["alternative", "home", "default", "hero-image", "hero-image-s3-key"]);
-  const alternateHeroImageS3Metadata = get(story, ["alternative", "home", "default", "hero-image", "hero-image-metadata"]);
-  return new FocusedImage(alternateHeroImageS3Key, alternateHeroImageS3Metadata || {})
+  
+  function getAlternateProperties (type, key) {
+    return lodash.get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
+   }
+ 
+   const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
+   const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
+   const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
+   const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
+ 
+ 
+   const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
+ 
+   const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
+ 
+   return new quintypeJs.FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
 }
 
 function pickImageFromCollection(collection) {
