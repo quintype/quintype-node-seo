@@ -25,7 +25,7 @@ function buildTagsFromStory(config, story, url = {}) {
 
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
-  const getOgTitle = lodash.get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
+  const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,

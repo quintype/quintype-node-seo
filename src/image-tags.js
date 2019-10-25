@@ -9,9 +9,9 @@ function pickImageFromCard(story, cardId) {
 }
 
 function pickImageFromStory(story) {
-  
+
   function getAlternateProperties (type, key) {
-    return lodash.get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
+    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
    }
  
    const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
@@ -24,7 +24,7 @@ function pickImageFromStory(story) {
  
    const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
  
-   return new quintypeJs.FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
+   return new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
 }
 
 function pickImageFromCollection(collection) {
