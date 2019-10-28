@@ -25,6 +25,8 @@ function buildTagsFromStory(config, story, url = {}) {
 
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
+  const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
+
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
     "page-title": seo["meta-title"] || story.headline,
@@ -32,8 +34,8 @@ function buildTagsFromStory(config, story, url = {}) {
     keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
-    ogTitle: story.headline,
-    ogDescription: story.summary,
+    ogTitle: getOgTitle,
+    ogDescription: story.summary || story.subheadline || story.headline,
     storyUrl: storyUrl
   };
 
