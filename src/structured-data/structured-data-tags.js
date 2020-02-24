@@ -96,18 +96,27 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
-    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig),
-    "primaryImageOfPage": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
+    "image": generateArticleImageData(story['hero-image-s3-key'], story, publisherConfig),
+    "isPartOf": generateIsPartOfData(story, publisherConfig)
   }, articleSectionObj(story));
 }
 
-function generateArticleImageData(image, publisherConfig) {
+function generateArticleImageData(image, structuredData = {}, story = {}, publisherConfig) {
   const articleImage = imageUrl(publisherConfig, image);
 
   return Object.assign({}, {
     "@type": "ImageObject",
-    "url": articleImage
+    "url": articleImage,
+    "image": get(story['hero-image-s3-key'], '')
   }, getQueryParams(articleImage))
+}
+
+function generateIsPartOfData(story = {}, publisherConfig){
+  return Object.assign({}, {
+    "@type": "WebPage",
+    "url": `${publisherConfig['sketches-host']}/${story.slug}`,
+    "primaryImageOfPage": generateArticleImageData(story['hero-image-s3-key'], story,  publisherConfig),
+  })
 }
 
 function storyAccess(access) {
@@ -138,7 +147,7 @@ function generateNewsArticleData (structuredData = {}, story = {}, publisherConf
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
     "isAccessibleForFree": storyAccessType,
-    "primaryImageOfPage": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
+    "isPartOf": generateIsPartOfData(story, publisherConfig)
   }, generateHasPartData(storyAccessType));
 }
 
@@ -340,6 +349,10 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
 
     if(structuredData.enableNewsArticle !== 'withoutArticleSchema') {
       return ldJson("Article", articleData);
+    }
+
+    if(pageType === 'story-page' && story['story-template'] !== 'video') {
+      return ldJson("ImageObject", generateArticleImageData(structuredData, image, story, publisherConfig))
     }
     return {}
   }
