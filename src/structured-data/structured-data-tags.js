@@ -284,10 +284,20 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
+  const WebOrgTagsArray = get$1(structuredData, ["WebOrgTagsArray"], []);
+
   let articleData = {};
 
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
+    WebOrgTagsArray.map((type)=> {
+      if(pageType === type) {
+        tags.push(ldJson("Organization", structuredData.organization));
+        if (structuredData.website) {
+          tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+        }
+      }
+    })
   }
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
