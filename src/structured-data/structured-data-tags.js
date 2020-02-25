@@ -286,7 +286,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
-  const structuredDataTags = get$1(structuredData, ["structuredDataTags"], []);
+  const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
 
   let articleData = {};
 
@@ -301,6 +301,8 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
       }
     })
   }
+
+  
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
     tags.push(ldJson("Organization", structuredData.organization));
