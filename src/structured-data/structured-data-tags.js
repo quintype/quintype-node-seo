@@ -266,6 +266,8 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Website} website The website and search urls. See {@link Website} for an example
  * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
  * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
+ * @property {Array} structuredDataTags Should Organization and Website schema be enabled for specific pages. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
+ * 
  */
 
 /**
@@ -284,13 +286,13 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
-  const WebOrgTagsArray = get$1(structuredData, ["WebOrgTagsArray"], []);
+  const structuredDataTags = get$1(structuredData, ["structuredDataTags"], []);
 
   let articleData = {};
 
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
-    WebOrgTagsArray.map((type)=> {
+    structuredDataTags.map((type)=> {
       if(pageType === type) {
         tags.push(ldJson("Organization", structuredData.organization));
         if (structuredData.website) {
