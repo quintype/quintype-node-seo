@@ -463,6 +463,12 @@ describe('TextTags', function() {
   });
 
   describe("Getting the title", function() {
+    it("can get the custom title if overridePageTitle flag is present", function() {
+      const seo = new SEO({generators: [], overridePageTitle: true});
+      const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar", "custom-page-title": "Custom Page title to be shown"}}]};
+      assert.equal("Custom Page title to be shown", seo.getTitle(config, 'home-page', {title: "Default Page title", "custom-page-title": "Custom Page title to be shown"}, {}));
+    });
+
     it("can also get the title only", function() {
       const seo = new SEO({generators: []});
       const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar"}}]};

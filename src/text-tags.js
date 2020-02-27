@@ -228,6 +228,10 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 }
 
 export function getTitle(seoConfig, config, pageType, data, params) {
+  if(seoConfig.overridePageTitle && data['custom-page-title']) {
+    return get(data, ['custom-page-title'])
+  }
+
   if(get(data, ["title"]))
     return get(data, ["title"]);
 
