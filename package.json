@@ -14,7 +14,7 @@
   "scripts": {
     "build": "rollup -c",
     "coverage": "nyc --all --reporter=html npm test",
-    "docs": "rimraf docs && jsdoc -c jsdoc.json",
+    "docs": "npx rimraf docs && npx jsdoc -c jsdoc.json",
     "prepack": "npm run build",
     "prepublishOnly": "npm install && npm test && ./bin-dev-scripts/standard-version-release.sh",
     "test": "npm run build && mocha test",
