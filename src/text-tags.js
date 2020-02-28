@@ -177,6 +177,7 @@ const SKIP_CANONICAL = '__SKIP__CANONICAL__'
  * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
  * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
  * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
+ * @param {boolean} seoConfig.overridePageTitle This is to enable custom title for the page when the data includes `{"custom-page-title": "Custom Title"}` consumed by `getTitle` function.
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function TextTags(seoConfig, config, pageType, data, {url}) {
