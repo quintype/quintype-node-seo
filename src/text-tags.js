@@ -26,7 +26,7 @@ function buildTagsFromStory(config, story, url = {}) {
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
   const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
-  const authors = (story.authors).map(authorName => authorName.name) || []
+  const authors = get(story, ['authors'], []).map(author => author.name) || [];
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
@@ -38,7 +38,7 @@ function buildTagsFromStory(config, story, url = {}) {
     ogTitle: getOgTitle,
     ogDescription: story.summary || story.subheadline || story.headline,
     storyUrl: storyUrl,
-    author: seo["meta-name"] || authors
+    author: authors
   };
 
   if(url.query && url.query.cardId){
