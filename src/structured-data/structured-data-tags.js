@@ -101,7 +101,7 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   }, articleSectionObj(story));
 }
 
-function generateArticleImageData(image, structuredData = {}, story = {}, publisherConfig) {
+function generateArticleImageData(image, story = {}, publisherConfig = {}) {
   const articleImage = imageUrl(publisherConfig, image);
 
   return Object.assign({}, {
