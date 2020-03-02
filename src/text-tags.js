@@ -26,7 +26,7 @@ function buildTagsFromStory(config, story, url = {}) {
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
   const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
-  const authors = get(story, ['authors'], []).map(author => author.name) || [];
+  const authors = get(story, ['authors'], []).map(author => author.name);
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
