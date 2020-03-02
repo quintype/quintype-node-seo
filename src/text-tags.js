@@ -26,6 +26,7 @@ function buildTagsFromStory(config, story, url = {}) {
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
 
   const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
+  const authors = get(story, ['authors'], []).map(author => author.name);
 
   const storyMetaData = {
     title: seo["meta-title"] || story.headline,
@@ -36,7 +37,8 @@ function buildTagsFromStory(config, story, url = {}) {
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
     ogTitle: getOgTitle,
     ogDescription: story.summary || story.subheadline || story.headline,
-    storyUrl: storyUrl
+    storyUrl: storyUrl,
+    author: authors
   };
 
   if(url.query && url.query.cardId){
@@ -216,6 +218,10 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
   const canonical = seoData.canonicalUrl || currentUrl;
   if(canonical != SKIP_CANONICAL) {
     commonTags.push({ tag: "link", rel: "canonical", href: canonical});
+  }
+
+  if(pageType === 'story-page') {
+    commonTags.push({name: "author", content: seoData.author});
   }
 
   if(pageType === 'story-page' && seoConfig.enableNews) {

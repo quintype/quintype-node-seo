@@ -10,7 +10,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const config = {"seo-metadata": [{"owner-type": "home", "owner-id": null, "data": {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": "home", "owner-id": null, "data": {'page-title': "Foobar"}, authors: [{'name': "foo"}]}]};
       const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")});
       assertContains('<title>Foobar</title>', string);
     });
@@ -244,7 +244,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome"}
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<title>Foobar</title>', string);
       assertContains('<meta name="title" content="Foobar"/>', string);
@@ -257,7 +257,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome", url: "http://domain.com/politics/awesome" }
+      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome",authors: [{'name': "foo"}], url: "http://domain.com/politics/awesome" }
       const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
       assertContains('<link rel="canonical" href="http://domain.com/politics/awesome"/>', string);
     });
@@ -266,7 +266,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       };
-      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome"}
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'visual-story', {story: story}, {url: url.parse("/my-page")})
       assertContains('<title>Foobar</title>', string);
       assertContains('<meta name="title" content="Foobar"/>', string);
@@ -306,6 +306,18 @@ describe('TextTags', function() {
                 }
               }
             }
+          }
+        ],
+        "authors":[
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
           }
         ]
       };
@@ -359,6 +371,18 @@ describe('TextTags', function() {
               }
             }
           }
+        ],
+        "authors" : [
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
+          }
         ]
       };
 
@@ -389,6 +413,16 @@ describe('TextTags', function() {
         summary: "Some Foobar",
         tags: [{name: "Footag"}],
         slug: "politics/awesome",
+        authors: [{
+          id: 712440,
+          name: 'FooBar',
+          slug: 'foobar',
+          'avatar-url': null,
+          'avatar-s3-key': null,
+          'twitter-handle': null,
+          bio: null,
+          'contributor-role': null
+        }],
         "hero-image-s3-key": "my/image.png",
         "cards" : [
           {
@@ -434,7 +468,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {'canonical-url': "http://foobar.com/mystory"}
+      const story = {'canonical-url': "http://foobar.com/mystory", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<link rel="canonical" href="http://foobar.com/mystory"/>', string);
     });
@@ -443,7 +477,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {seo: {"meta-title": "Foobar", "meta-description": "Some Foobar", "meta-keywords": ["Footag"]}, tags: []}
+      const story = {seo: {"meta-title": "Foobar", "meta-description": "Some Foobar", "meta-keywords": ["Footag"]}, tags: [], authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<meta name="title" content="Foobar"/>', string);
       assertContains('<meta name="description" content="Some Foobar"/>', string);
@@ -455,7 +489,7 @@ describe('TextTags', function() {
         generators: [TextTags],
         enableNews: true
       }
-      const story = {slug: "politics/awesome", seo: {"meta-google-news-standout": true}, tags: [{name: "Footag"}]}
+      const story = {slug: "politics/awesome", seo: {"meta-google-news-standout": true}, tags: [{name: "Footag"}],  authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<meta name="news_keywords" content="Footag"/>', string);
       assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);

@@ -277,6 +277,8 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Website} website The website and search urls. See {@link Website} for an example
  * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
  * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
+ * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
+ * 
  */
 
 /**
@@ -295,10 +297,20 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
+  const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
+
   let articleData = {};
 
   if(!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig);
+    structuredDataTags.map((type)=> {
+      if(pageType === type) {
+        tags.push(ldJson("Organization", structuredData.organization));
+        if (structuredData.website) {
+          tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+        }
+      }
+    })
   }
 
   if(!isStructuredDataEmpty && pageType === 'home-page') {
