@@ -10,6 +10,7 @@ describe('ImageTags', function() {
   }
 
   const config = {
+    'sketches-host': 'https://madrid.quintype.io'
   }
 
   it("gets amp tags for supported stories", function() {
@@ -35,5 +36,17 @@ describe('ImageTags', function() {
     assert.equal('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', publicStoryResults);
     const privateStoryResults = getSeoMetadata({ ...seoConfig, ampStoryPages: "public" }, config, 'story-page', { data: { story: {...story, access: "subscription"} } }, {})
     assert.equal('', privateStoryResults);
+  })
+  
+  it("does not append domain to amp stories if appendHostToAmpUrl not present", function () {
+    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
+    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
+  })
+
+  it("does append domain to amp stories if appendHostToAmpUrl present", function () {
+    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {data: {story: story}}, {})
+    assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
   })
 });
