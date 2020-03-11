@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 npm install
-git diff --quiet
+# git diff --quiet
 npm run docs
 
 BRANCH=$(git symbolic-ref --short HEAD)
