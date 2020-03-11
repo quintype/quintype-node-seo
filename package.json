@@ -16,6 +16,7 @@
     "coverage": "nyc --all --reporter=html npm test",
     "docs": "rimraf docs && jsdoc -c jsdoc.json",
     "prepack": "npm run build",
+    "prepublishOnly": "npm install && npm test && ./bin-dev-scripts/standard-version-release.sh",
     "test": "npm run build && mocha test",
     "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
