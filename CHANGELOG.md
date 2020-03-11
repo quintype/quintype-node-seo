@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.36.0](https://github.com/quintype/quintype-node-seo/compare/v1.35.1...v1.36.0) (2020-03-11)
+
+
+### Features
+
+* add `appendHostToAmpUrl` to make AMPUrl (`rel="amphtml"`) absolute. ([9814d7b](https://github.com/quintype/quintype-node-seo/commit/9814d7b6c90d39aa75f974cb8d3418360badd31e))
+
+### [1.35.1](https://github.com/quintype/quintype-node-seo/compare/v1.35.1-amp-absolute.0...v1.35.1) (2020-03-11)
+
 ## [1.35.0](https://github.com/quintype/quintype-node-seo/compare/v1.35.0-thumbnail.2...v1.35.0) (2020-03-10)
 
 ### [1.34.3](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.34.3) (2020-03-09)
