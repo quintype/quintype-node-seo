@@ -31,7 +31,7 @@ export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
     return [{
       tag: 'link',
       rel: 'amphtml',
-      href: `/amp/story/${encodeURIComponent(story.slug)}`
+      href: `${config['sketches-host']}/amp/story/${encodeURIComponent(story.slug)}`
     }];
   } else {
     return [];
