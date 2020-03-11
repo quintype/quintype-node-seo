@@ -27,11 +27,15 @@ function showAmpTag({ampStoryPages = true}, pageType, story) {
  */
 export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
   const story = get(data, ["data", "story"], {});
+  console.log(seoConfig, config);
+  
+  // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? config['sketches-host'] : ''
   if(showAmpTag(seoConfig, pageType, story)) {
     return [{
       tag: 'link',
       rel: 'amphtml',
-      href: `${config['sketches-host']}/amp/story/${encodeURIComponent(story.slug)}`
+      href: `${ampUrlAppend}/amp/story/${encodeURIComponent(story.slug)}`
     }];
   } else {
     return [];
