@@ -118,6 +118,57 @@ describe('Seo Helpers', function() {
           sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
         },
         enableNewsArticle: false,
+        storyUrlAsMainEntityUrl: false,
+        enableVideo: true,
+        enableLiveBlog: true,
+        website: {
+          url: "abc.com",
+          searchpath: "search?q={query}",
+          queryinput: "required name=query",
+          name: "Abc",
+          headline: "News platform",
+          keywords: "abc,news,quintype"
+        },
+      };
+      const actualStructuredData = generateStructuredData(config)
+      assert.deepEqual(actualStructuredData, expectedStructuredData)
+    });
+
+    it('generate mainEntityStructured & NewsArticle data with theme-attributes', function() {
+      const config = {
+        "publisher-settings": {
+          "title": "abc"
+        },
+        'publisher-name': 'abc',
+        "sketches-host": "abc.com",
+        "theme-attributes": {
+          "logo": "https://quintype.com/abc.png?w=300&h=300",
+          "structured_data_news_article": true
+        },
+        "social-links": {
+          "facebook-url": "https://www.facebook.com/abc/",
+          "google-plus-url": "",
+          "instagram-url": "https://www.instagram.com/abc",
+          "twitter-url": "https://twitter.com/abc"
+        },
+        "seo-metadata": [{
+          "owner-type": "home",
+          "data": {
+            "page-title": "Abc",
+            "description": "News platform",
+            "keywords": "abc,news,quintype"
+          }
+        }]
+      };
+      const expectedStructuredData = {
+        organization: {
+          name: "abc",
+          url: "abc.com",
+          logo: {"@context": "http://schema.org","@type": "ImageObject","author": "abc","contentUrl": "https://quintype.com/abc.png?w=300&h=300","url": "https://quintype.com/abc.png?w=300&h=300","name": "logo","width": "300","height":"300"},
+          sameAs: ["https://www.facebook.com/abc/", "", "https://www.instagram.com/abc", "https://twitter.com/abc"]
+        },
+        enableNewsArticle: true,
+        storyUrlAsMainEntityUrl: true,
         enableVideo: true,
         enableLiveBlog: true,
         website: {
@@ -167,6 +218,7 @@ describe('Seo Helpers', function() {
           logo: {"@context": "http://schema.org","@type": "ImageObject","author": "Abc","contentUrl": "https://quintype.com/abc.png","url": "https://quintype.com/abc.png","name": "logo","width": "","height":""},
           sameAs: []
         },
+        storyUrlAsMainEntityUrl: false,
         enableNewsArticle: false,
         enableVideo: true,
         enableLiveBlog: true,
