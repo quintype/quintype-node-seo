@@ -108,7 +108,6 @@ function generateArticleImageData(image, story = {}, publisherConfig = {}) {
   return Object.assign({}, {
     "@type": "ImageObject",
     "url": articleImage,
-    "image": get(story['hero-image-s3-key'], '')
   }, getQueryParams(articleImage))
 }
 
