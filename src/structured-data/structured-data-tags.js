@@ -537,12 +537,6 @@ export function StructuredDataTags(
       return ldJson("Article", articleData);
     }
 
-    // if (pageType === "story-page" && story["story-template"] !== "video") {
-    //   return ldJson(
-    //     "ImageObject",
-    //     generateArticleImageData(structuredData, image, publisherConfig)
-    //   );
-    // }
     return {};
   }
 
