@@ -158,7 +158,7 @@ function generateArticleImageData(image, publisherConfig = {}) {
   );
 }
 
-function generateIsPartOfData(story = {}, publisherConfig) {
+function generateIsPartOfData(story = {}, publisherConfig = {}) {
   return Object.assign(
     {},
     {
