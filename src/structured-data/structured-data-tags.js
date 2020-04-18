@@ -218,9 +218,15 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return sectionCrumbsDataList;
   }
 
+  function getMagazinePageCrumbs(magazine = {}) {
+    const crumbsDataList = [{ url: magazine.pagePath, name: magazine.name}];
+    return addCrumb(crumbsDataList, magazine);
+  }
+
   switch (pageType) {
     case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
     case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
+    case "magazine-page": breadcrumbsDataList = breadcrumbsDataList.concat(getMagazinePageCrumbs(data.collection)); break;
   }
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
