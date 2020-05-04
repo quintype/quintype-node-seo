@@ -218,15 +218,17 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return sectionCrumbsDataList;
   }
 
-  function getCustomPageCrumbs(collection = {}) {
-    const crumbsDataList = [{ url: collection.pagePath, name: collection.name}];
+  function getCustomPageCrumbs(collection = {}, breadcrumb = {}) {
+    const crumbsDataList = [{ url: breadcrumb.url, name: breadcrumb.name}];
     return addCrumb(crumbsDataList, collection);
   }
 
+  if(data.breadcrumbs && ("name" in data.breadcrumbs) && ("url" in data.breadcrumbs)) {
+    breadcrumbsDataList = breadcrumbsDataList.concat(getCustomPageCrumbs(data.collection, data.breadcrumbs));
+  }
   switch (pageType) {
     case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
     case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
-    case "custom-page": breadcrumbsDataList = breadcrumbsDataList.concat(getCustomPageCrumbs(data.collection)); break;
   }
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
