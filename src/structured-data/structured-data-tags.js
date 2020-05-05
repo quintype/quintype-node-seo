@@ -218,13 +218,14 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
     return sectionCrumbsDataList;
   }
 
-  function getCustomPageCrumbs(collection = {}, breadcrumb = {}) {
+  function getBreadCrumbs(breadcrumb = {}) {
     const crumbsDataList = [{ url: breadcrumb.url, name: breadcrumb.name}];
-    return addCrumb(crumbsDataList, collection);
+    return addCrumb(crumbsDataList);
   }
 
   if(data.breadcrumbs && ("name" in data.breadcrumbs) && ("url" in data.breadcrumbs)) {
-    breadcrumbsDataList = breadcrumbsDataList.concat(getCustomPageCrumbs(data.collection, data.breadcrumbs));
+    breadcrumbsDataList = breadcrumbsDataList.concat(getBreadCrumbs(data.breadcrumbs));
+    return getSchemaBreadcrumbList(breadcrumbsDataList);
   }
   switch (pageType) {
     case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
