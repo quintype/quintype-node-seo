@@ -14,6 +14,9 @@ function showAmpTag({ampStoryPages = true}, pageType, story) {
     return false;
   }
 
+  if (pageType === "amp-story-page")
+    return false
+
   return true;
 }
 
