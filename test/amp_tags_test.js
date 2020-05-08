@@ -3,7 +3,7 @@ const {getSeoMetadata, assertContains} = require("./utils");
 
 const assert = require('assert');
 
-describe('ImageTags', function() {
+describe('AmpTags', function() {
   const seoConfig = {
     generators: [StoryAmpTags],
     ampStoryPages: true
