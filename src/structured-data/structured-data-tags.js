@@ -221,7 +221,7 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   switch (pageType) {
     case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
     case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
-    case "amp-story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
+    case "story-page-amp": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
   }
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
@@ -320,7 +320,7 @@ export function StructuredDataTags({structuredData = {}}, config, pageType, resp
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
   }
 
-  if(!isStructuredDataEmpty && pageType === 'amp-story-page') {
+  if(!isStructuredDataEmpty && pageType === 'story-page-amp') {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
   }
