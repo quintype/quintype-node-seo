@@ -25,6 +25,12 @@ describe('AmpTags', function() {
     assert.equal('', string);
   });
 
+  it("does not add amphtml link tag to amp story pages", function() {
+    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const string = getSeoMetadata(seoConfig, config, 'story-page-amp', {data: {story: story}}, {})
+    assert.equal('', string);
+  });
+
   it("does not ampify other pages", function() {
     const string = getSeoMetadata(seoConfig, config, 'home-page', {data: {}}, {})
     assert.equal('', string);
