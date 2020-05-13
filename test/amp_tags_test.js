@@ -45,7 +45,7 @@ describe('ImageTags', function() {
   })
 
   it("does append domain to amp stories if appendHostToAmpUrl present", function () {
-    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const story = {"slug": "section/slug", "is-amp-supported": true, "url": "https://madrid.quintype.io/section/slug" }
     const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {data: {story: story}}, {})
     assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
   })
