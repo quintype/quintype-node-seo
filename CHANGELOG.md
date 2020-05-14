@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<<<<<<< HEAD
 ### [1.36.1](https://github.com/quintype/quintype-node-seo/compare/v1.36.1-is-part-of-schema.1...v1.36.1) (2020-05-14)
+=======
+## [1.37.0](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.37.0) (2020-05-07)
+
+
+### Features
+
+* **structuredData:** Added custom page support ([#186](https://github.com/quintype/quintype-node-seo/issues/186)) ([433ed77](https://github.com/quintype/quintype-node-seo/commit/433ed77f1daaabd0b8e0c9ebea56a8b2e5b77bf8))
+>>>>>>> master
 
 ## [1.36.0](https://github.com/quintype/quintype-node-seo/compare/v1.35.1...v1.36.0) (2020-03-11)
 

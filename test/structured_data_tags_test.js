@@ -380,7 +380,11 @@ describe('StructuredDataTags', function() {
     it("adds BreadcrumbList schema by default", function() {
       const string = getSeoMetadata(getSeoConfig(), {}, 'section-page', {"data": {"section": { "section-url": "https://madrid.quintype.io/film", "slug": "film", "name": "Film" }}, config: {"sketches-host": "https://madrid.quintype.io", "sections": [{"section-url": "https://madrid.quintype.io/film", "slug": "film", "name": "Film", "parent-id": null}]}}, {url: url.parse("/")});
       assertContains(sampleBreadcrumbListTag, string);
-    })
+    });
+    it("adds BreadcrumbList schema for custom page", function() {
+      const string = getSeoMetadata(getSeoConfig(), {}, 'custom-page', {"data": {"collection": { "slug": "film", "name": "Film" }, "breadcrumbs":{"name":"Film", "url":"https://madrid.quintype.io/film"}}, config: {"sketches-host": "https://madrid.quintype.io", "sections": [{"section-url": "https://madrid.quintype.io/film", "slug": "film", "name": "Film", "parent-id": null}]}}, {url: url.parse("/")});
+      assertContains(sampleBreadcrumbListTag, string);
+    });
   });
 
   context('Structured DataTags for Entity' , function() {
