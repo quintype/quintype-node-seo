@@ -97,11 +97,12 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
-    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig)
+    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig),
+    isPartOf: generateIsPartOfData(story, publisherConfig)
   }, articleSectionObj(story));
 }
 
-function generateArticleImageData(image, publisherConfig) {
+function generateArticleImageData(image, publisherConfig = {}) {
   const articleImage = imageUrl(publisherConfig, image);
 
   return Object.assign({}, {
@@ -116,6 +117,20 @@ function storyAccess(access) {
   } else if (access === "subscription" ) {
     return false;
   }
+}
+
+function generateIsPartOfData(story = {}, publisherConfig = {}) {
+  return Object.assign(
+    {},
+    {
+      "@type": "WebPage",
+      url: `${publisherConfig["sketches-host"]}/${story.slug}`,
+      primaryImageOfPage: generateArticleImageData(
+        story["hero-image-s3-key"],
+        publisherConfig
+      )
+    }
+  );
 }
 
 function generateHasPartData(storyAccess) {
@@ -137,7 +152,8 @@ function generateNewsArticleData (structuredData = {}, story = {}, publisherConf
   return Object.assign({}, {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
-    "isAccessibleForFree": storyAccessType
+    "isAccessibleForFree": storyAccessType,
+    isPartOf: generateIsPartOfData(story, publisherConfig)
   }, generateHasPartData(storyAccessType));
 }
 
