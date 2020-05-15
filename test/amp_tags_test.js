@@ -3,7 +3,7 @@ const {getSeoMetadata, assertContains} = require("./utils");
 
 const assert = require('assert');
 
-describe('ImageTags', function() {
+describe('AmpTags', function() {
   const seoConfig = {
     generators: [StoryAmpTags],
     ampStoryPages: true
@@ -22,6 +22,12 @@ describe('ImageTags', function() {
   it("does not ampify any non supported stories", function() {
     const story = {"slug": "section/slug", "is-amp-supported": false}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
+    assert.equal('', string);
+  });
+
+  it("does not add amphtml link tag to amp story pages", function() {
+    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const string = getSeoMetadata(seoConfig, config, 'story-page-amp', {data: {story: story}}, {})
     assert.equal('', string);
   });
 

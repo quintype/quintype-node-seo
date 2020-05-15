@@ -43,7 +43,7 @@ function pickImage(pageType, data, url) {
   }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
     const story = get(data, ['story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType === 'story-page') {
+  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromStory(story);
   } else if(pageType === 'visual-story') {

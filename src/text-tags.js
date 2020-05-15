@@ -139,6 +139,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
     case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page-amp': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
     case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
     default: return getSeoData(config, 'home-page', data, url);
   }
@@ -197,7 +198,7 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
   const ogTags = seoConfig.enableOgTags ? {
-    'og:type': pageType === 'story-page' ? 'article' : 'website',
+    'og:type': pageType === 'story-page' || pageType === 'story-page-amp' ? 'article' : 'website',
     'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
     'og:title': seoData.ogTitle,
     'og:description': seoData.ogDescription
@@ -220,11 +221,11 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
     commonTags.push({ tag: "link", rel: "canonical", href: canonical});
   }
 
-  if(pageType === 'story-page') {
+  if(pageType === 'story-page' || pageType === 'story-page-amp') {
     commonTags.push({name: "author", content: seoData.author});
   }
 
-  if(pageType === 'story-page' && seoConfig.enableNews) {
+  if((pageType === 'story-page' || pageType === 'story-page-amp') && seoConfig.enableNews) {
     commonTags.push({name: "news_keywords", content: seoData.keywords});
     if(get(data, ["data", "story", "seo", "meta-google-news-standout"]))
       commonTags.push({tag: "link", rel: "standout", href: seoData.storyUrl || currentUrl});
