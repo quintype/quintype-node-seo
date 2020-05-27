@@ -149,13 +149,9 @@ function generateHasPartData(storyAccess) {
 function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}) {
   const {alternative = {}} = story.alternative || {};
   const storyAccessType = storyAccess(story['access']);
-  const socialShareMsg = get(story , ['summary'], '');
-  const metaDescription = get(story, ['seo', 'meta-description'], '');
-  const subHeadline = get(story, ['subheadline'], '');
-  const headline = get(story, ['headline'], '');
   return Object.assign({}, {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
-    "description": socialShareMsg || metaDescription || subHeadline || headline,
+    "description": story.summary,
     "isAccessibleForFree": storyAccessType,
     isPartOf: generateIsPartOfData(story, publisherConfig)
   }, generateHasPartData(storyAccessType));
