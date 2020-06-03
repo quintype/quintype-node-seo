@@ -51,8 +51,8 @@ describe('AmpTags', function() {
   })
 
   it("does append domain to amp stories if appendHostToAmpUrl present", function () {
-    const story = {"slug": "section/slug", "is-amp-supported": true, "url": "https://madrid.quintype.io/section/slug" }
-    const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {data: {story: story}}, {})
+    const story = {"slug": "section/slug", "is-amp-supported": true}
+    const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {currentHostUrl: "https://madrid.quintype.io/section/slug", data: {story}}, {})
     assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
   })
 });

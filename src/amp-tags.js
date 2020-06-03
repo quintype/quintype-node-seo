@@ -17,7 +17,7 @@ function showAmpTag({ampStoryPages = true}, pageType, story) {
   return true;
 }
 
-const getStoryDomain = (storyUrl) => new URL(storyUrl).origin;
+const getDomain = (url) => new URL(url).origin;
 
 /**
  * StoryAmpTags adds the amphref to stories which support amp.
@@ -29,9 +29,9 @@ const getStoryDomain = (storyUrl) => new URL(storyUrl).origin;
  */
 export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
   const story = get(data, ["data", "story"], {});
-  console.log(config)
+  const currentHostUrl = get(data, ["currentHostUrl"], "");
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
-  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getStoryDomain(story.url) : ''
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl) || config['sketches-host'] : ''
   if(showAmpTag(seoConfig, pageType, story)) {
     return [{
       tag: 'link',
