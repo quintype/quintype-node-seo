@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.3](https://github.com/quintype/quintype-node-seo/compare/v1.38.1...v1.38.3) (2020-06-03)
+
+
+### Bug Fixes
+
+* get domain from current host url, so that we can support subdomains ([#207](https://github.com/quintype/quintype-node-seo/issues/207)) ([27ed6a4](https://github.com/quintype/quintype-node-seo/commit/27ed6a4817d7b4cfc9f042d6f00718d49121691d))
+
 ### [1.38.2](https://github.com/quintype/quintype-node-seo/compare/v1.38.1...v1.38.2) (2020-06-03)
 
 
