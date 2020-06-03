@@ -43,9 +43,20 @@ describe("ImageTags", function() {
       { data: { story: story } },
       {}
     );
+    const ampPageString = getSeoMetadata(
+      seoConfig,
+      config,
+      "story-page-amp",
+      { data: { story: story } },
+      {}
+    );
     assertContains(
       '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
       string
+    );
+    assertContains(
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      ampPageString
     );
   });
 
@@ -93,12 +104,25 @@ describe("ImageTags", function() {
       { data: { story: story } },
       {}
     );
+    const ampPageString = getSeoMetadata(
+      seoConfig,
+      config,
+      "story-page-amp",
+      { data: { story: story } },
+      {}
+    );
     assertContains(
       '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
       string
     );
+    assertContains(
+      '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      ampPageString
+    );
     assertContains('<meta property="og:image:width" content="1200"/>', string);
     assertContains('<meta property="og:image:height" content="630"/>', string);
+    assertContains('<meta property="og:image:width" content="1200"/>', ampPageString);
+    assertContains('<meta property="og:image:height" content="630"/>', ampPageString);
   });
 
   it("gets card image values instead of story image values on card share", function() {
@@ -178,10 +202,21 @@ describe("ImageTags", function() {
       { data: { story: story } },
       opts
     );
+    const ampPageString = getSeoMetadata(
+      seoConfig,
+      config,
+      "story-page-amp",
+      { data: { story: story } },
+      opts
+    );
 
     assertContains(
       '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
       string
+    );
+    assertContains(
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      ampPageString
     );
   });
 
