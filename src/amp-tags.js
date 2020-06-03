@@ -17,7 +17,14 @@ function showAmpTag({ampStoryPages = true}, pageType, story) {
   return true;
 }
 
-const getDomain = (url) => new URL(url).origin;
+const getDomain = (url) => {
+  try {
+    return new URL(url).origin;
+  }
+  catch (err) {
+    return ""
+  }
+}
 
 /**
  * StoryAmpTags adds the amphref to stories which support amp.
