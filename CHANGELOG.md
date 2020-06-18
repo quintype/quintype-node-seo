@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.4](https://github.com/quintype/quintype-node-seo/compare/v1.38.3...v1.38.4) (2020-06-18)
+
+
+### Bug Fixes
+
+* **description:** Add fallbacks for video story ([#211](https://github.com/quintype/quintype-node-seo/issues/211)) ([d13d162](https://github.com/quintype/quintype-node-seo/commit/d13d16282e8217bb0806712b181e31de99440cf9))
+
 ### [1.38.3](https://github.com/quintype/quintype-node-seo/compare/v1.38.1...v1.38.3) (2020-06-03)
 
 
