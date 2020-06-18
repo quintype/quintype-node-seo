@@ -185,13 +185,16 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const articleSection = get(story, ['sections', '0', 'display-name'], '');
   const embedUrl = get(story, ['cards', '0', 'story-elements', '0', 'embed-url'], '');
-
+  const socialShareMsg = get(story , ['summary'], '');
+  const metaDescription = get(story, ['seo', 'meta-description'], '');
+  const subHeadline = get(story, ['subheadline'], '');
+  const headline = get(story, ['headline'], '');
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig), {
     "author": authorData(story.authors),
     "keywords": metaKeywords.join(','),
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "description": story.summary,
+    "description": socialShareMsg || metaDescription || subHeadline || headline,
     "name": story.headline,
     "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'])],
     "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
