@@ -8,23 +8,37 @@ function pickImageFromCard(story, cardId) {
   }
 }
 
-function pickImageFromStory(story) {
-
+function getSocialAlternateHeroImageS3Key(story) {
   function getAlternateProperties (type, key) {
     return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
-   }
- 
-   const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
-   const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
-   const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
-   const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
- 
- 
-   const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
- 
-   const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
- 
-   return new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
+  }
+  const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
+  const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
+  const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
+  return socialAlternateHeroImageS3Key;
+}
+function getSocialAlternateHeroImageS3Metadata(story) {
+  function getAlternateProperties (type, key) {
+    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
+  }
+  const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
+  const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
+  const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
+  return socialAlternateHeroImageS3Metadata;
+}
+function pickImageFromStory(story) {
+  const SocialAlternateHeroImageS3Key = getSocialAlternateHeroImageS3Key(story);
+  const SocialAlternateHeroImageS3Metadata = getSocialAlternateHeroImageS3Metadata(story);
+
+  return new FocusedImage(SocialAlternateHeroImageS3Key, SocialAlternateHeroImageS3Metadata || {});
+}
+
+function pickAmpImageFromStory(story) {
+  const SocialAlternateHeroImageS3Key = getSocialAlternateHeroImageS3Key(story);
+  const SocialAlternateHeroImageS3Metadata = getSocialAlternateHeroImageS3Metadata(story);
+  const AmpSocialAlternateHeroImageS3Metadata = Object.assign({}, SocialAlternateHeroImageS3Metadata, {width: 1200, height: 750});
+
+   return new FocusedImage(SocialAlternateHeroImageS3Key, AmpSocialAlternateHeroImageS3Metadata || {});
 }
 
 function pickImageFromCollection(collection) {
@@ -43,11 +57,14 @@ function pickImage(pageType, data, url) {
   }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
     const story = get(data, ['story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
+  } else if(pageType === 'story-page') {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromStory(story);
+  } else if(pageType === 'story-page-amp') {
+    const story = get(data, ['data', 'story']) || {};
+    return pickAmpImageFromStory(story);
   } else if(pageType === 'visual-story') {
-    const story = get(data, ['story']) || {};
+    const story = get(data, ['story']) || {}; 
     return pickImageFromStory(story);
   } else if(get(data, ['data', 'collection'])) {
     return pickImageFromCollection(get(data, ['data', 'collection']))
