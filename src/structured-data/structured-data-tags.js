@@ -35,7 +35,7 @@ function ldJson(type, fields) {
 
 function imageUrl(publisherConfig, s3Key) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
-  return `${imageSrc}/${s3Key}?w=480&h=270&auto=format%2Ccompress&fit=max`;
+  return `${imageSrc}/${s3Key}?w=1200&h=750&auto=format%2Ccompress&fit=max`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}) {
