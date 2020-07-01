@@ -38,6 +38,7 @@ function imageUrl(publisherConfig, s3Key, pageType) {
   return pageType === 'story-page-amp' ? `${imageSrc}/${s3Key}?w=1200&h=750&auto=format%2Ccompress&fit=max`: `${imageSrc}/${s3Key}?w=480&h=270&auto=format%2Ccompress&fit=max`;
 }
 
+
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
   const storyUrl = story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
   const mainEntityUrl = (Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl) ? storyUrl : get(structuredData, ['organization', 'url'], '');
