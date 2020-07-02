@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.13](https://github.com/quintype/quintype-node-seo/compare/v1.38.12...v1.38.13) (2020-07-02)
+
 ### [1.38.12](https://github.com/quintype/quintype-node-seo/compare/v1.38.11...v1.38.12) (2020-07-01)
 
 ### [1.38.11](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.11) (2020-07-01)
