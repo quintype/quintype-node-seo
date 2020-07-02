@@ -33,18 +33,21 @@ function ldJson(type, fields) {
   };
 }
 
-function imageUrl(publisherConfig, s3Key, pageType) {
+function imageUrl(publisherConfig, s3Key, width, height) {
   const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
-  return pageType === 'story-page-amp' ? `${imageSrc}/${s3Key}?w=1200&h=750&auto=format%2Ccompress&fit=max`: `${imageSrc}/${s3Key}?w=480&h=270&auto=format%2Ccompress&fit=max`;
+  width = width || "";
+  height = height || "";
+  return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max`;
 }
-
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
   const storyUrl = story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
   const mainEntityUrl = (Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl) ? storyUrl : get(structuredData, ['organization', 'url'], '');
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   return Object.assign({},
     {'headline' : story.headline,
-    "image": [imageUrl(publisherConfig, story['hero-image-s3-key'], pageType)],
+    "image": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
     "url": `${publisherConfig['sketches-host']}/${story.slug}`,
     "datePublished": stripMillisecondsFromTime(new Date(story['first-published-at']))},
     getSchemaMainEntityOfPage(mainEntityUrl),
@@ -88,10 +91,12 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   const metaKeywords = story.seo && story.seo['meta-keywords'] || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{name: story["author-name"] || ""}];
   const storyKeysPresence = Object.keys(story).length > 0;
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
     "author": authorData(authors),
     "keywords": metaKeywords.join(','),
-    "thumbnailUrl": imageUrl(publisherConfig, story['hero-image-s3-key'], pageType),
+    "thumbnailUrl": imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight),
     "articleBody": (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
     "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
@@ -102,7 +107,9 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
 }
 
 function generateArticleImageData(image, publisherConfig = {}, pageType = "") {
-  const articleImage = imageUrl(publisherConfig, image, pageType);
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
 
   return Object.assign({}, {
     "@type": "ImageObject",
@@ -166,6 +173,8 @@ function findStoryElementField(card, type, field, defaultValue) {
 }
 
 function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}, pageType){
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   return {
     "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
@@ -173,7 +182,7 @@ function generateLiveBlogPostingData (structuredData = {}, story = {}, publisher
       getSchemaBlogPosting(card,
         authorData(story.authors),
         findStoryElementField(card, "title", "text", story.headline),
-        imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key']), pageType),
+        imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key']), imageWidth, imageHeight),
         structuredData,
         story
       )
@@ -189,6 +198,8 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
   const metaDescription = get(story, ['seo', 'meta-description'], '');
   const subHeadline = get(story, ['subheadline'], '');
   const headline = get(story, ['headline'], '');
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
     "author": authorData(story.authors),
     "keywords": metaKeywords.join(','),
@@ -196,7 +207,7 @@ function generateVideoArticleData (structuredData = {}, story = {}, publisherCon
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "description": socialShareMsg || metaDescription || subHeadline || headline,
     "name": story.headline,
-    "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'], pageType)],
+    "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
     "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "embedUrl": embedUrl
   });
