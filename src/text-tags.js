@@ -1,7 +1,7 @@
 import {get, isEmpty} from 'lodash';
 import {objectToTags} from './utils';
 
-function buildTagsFromStory(config, story, url = {}) {
+function buildTagsFromStory(config, data, story, url = {}) {
   if(!story)
     return;
 
@@ -22,18 +22,17 @@ function buildTagsFromStory(config, story, url = {}) {
   }
 
   const seo = story.seo || {};
-
   const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
-
+  const customSeo = get(data,["data","customSeo"], {})
   const storyMetaData = {
-    title: seo["meta-title"] || story.headline,
-    "page-title": seo["meta-title"] || story.headline,
-    description: seo["meta-description"] || story.summary,
-    keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
+    title: customSeo.title || seo["meta-title"] || story.headline,
+    "page-title": customSeo.title || seo["meta-title"] || story.headline,
+    description: customSeo.description || seo["meta-description"] || story.summary,
+    keywords: customSeo.keywords || (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
     canonicalUrl: story["canonical-url"] || storyUrl,
     ogUrl: get(seo, ["og", "url"]) || storyUrl,
-    ogTitle: story.headline,
-    ogDescription: story.summary,
+    ogTitle: customSeo.title || story.headline,
+    ogDescription: customSeo.description || story.summary,
     storyUrl: storyUrl
   };
 
@@ -41,16 +40,15 @@ function buildTagsFromStory(config, story, url = {}) {
     const storyCardMetadata = getStoryCardMetadata(url.query.cardId);
     return Object.assign({}, storyMetaData, storyCardMetadata); //TODO rewrite in spread syntax, add babel plugin
   }
-
   return storyMetaData;
 }
 
-function buildTagsFromTopic(config, tag, url = {}) {
+function buildTagsFromTopic(config, data, tag, url = {}) {
   if(isEmpty(tag))
     return;
-
-  const tagName = tag.name;
-  const tagDescription = tag['meta-description'];
+  const customSeo = get(data,["data","customSeo"], {})
+  const tagName = customSeo.title || tag.name;
+  const tagDescription = customSeo.description || tag['meta-description'];
   const description = `Read stories listed under on ${tagName}`;
   const tagUrl = `${config['sketches-host']}${url.pathname}`
   const topicMetaData = {
@@ -67,12 +65,12 @@ function buildTagsFromTopic(config, tag, url = {}) {
   return topicMetaData;
 }
 
-function buildTagsFromAuthor(config, author, url = {}) {
+function buildTagsFromAuthor(config, data, author, url = {}) {
   if(isEmpty(author)) return;
-
-  const authorName = author.name;
+  const customSeo = get(data,["data","customSeo"], {})
+  const authorName = customSeo.title || author.name;
   const authorUrl = `${config['sketches-host']}${url.pathname}`;
-  const description = author.bio || `View all articles written by ${authorName}`;
+  const description = customSeo.description || author.bio || `View all articles written by ${authorName}`;
 
   return {
     title: authorName,
@@ -104,21 +102,21 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
     const { sections = [] } = config;
     const section = sections.find(section => ownerType == 'section' && section.id === ownerId) || {};
-
+    const customSeo = get(data,["data","customSeo"], {})
     if(seoMetadata.data || section.id) {
       const result = Object.assign({}, {
-        'page-title': section.name,
-        title: section.name,
-        canonicalUrl: section['section-url'] || undefined,
+        'page-title': customSeo.title || section.name,
+        title: customSeo.title || section.name,
+        canonicalUrl: customSeo["section-url"] || section['section-url'] || undefined,
       }, seoMetadata.data);
 
       if(!result.description) {
         const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {data: {description: ""}};
-        result.description = homeSeoData.data.description;
+        result.description = customSeo.description || homeSeoData.data.description;
       }
 
-      result.ogTitle = result.title;
-      result.ogDescription = result.description;
+      result.ogTitle = customSeo.title || result.title;
+      result.ogDescription = customSeo.description || result.description;
       return result;
     }
   }
@@ -126,14 +124,13 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   if(seoConfig.customTags && seoConfig.customTags[pageType]){
     return buildCustomTags(seoConfig.customTags, pageType);
   }
-
   switch(pageType) {
     case 'home-page': return findRelevantConfig('home')
     case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
-    case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
-    case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
-    case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
-    case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
+    case 'tag-page': return buildTagsFromTopic(config, data, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page': return buildTagsFromStory(config, data, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'visual-story': return buildTagsFromStory(config,data, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'author-page': return buildTagsFromAuthor(config, data, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
     default: return getSeoData(config, 'home-page', data, url);
   }
 }
@@ -141,15 +138,15 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
 function getSeoDataFromCollection(config, data) {
   if (get(data, ["data", "collection", "name"])) {
     let { name, summary } = get(data, ["data", "collection"]);
-
+    const customSeo = get(data,["data","customSeo"], {})
     if (!summary) {
-      summary = (getSeoData(config, 'home-page', data) || {}).description
+      summary = customSeo.description || (getSeoData(config, 'home-page', data) || {}).description
     }
 
     return {
-      'page-title': name,
-      title: name,
-      ogTitle: name,
+      'page-title': customSeo.title || name,
+      title: customSeo.title || name,
+      ogTitle: customSeo.title || name,
       description: summary,
       ogDescription: summary,
       canonicalUrl: SKIP_CANONICAL
@@ -161,36 +158,35 @@ const SKIP_CANONICAL = '__SKIP__CANONICAL__'
 
 export function TextTags(seoConfig, config, pageType, data, {url}) {
   const seoData = getSeoData(config, pageType, data, url, seoConfig);
-
+  const customSeo = get(data,["data","customSeo"], {})
   if(!seoData)
     return [];
 
   const currentUrl = `${config['sketches-host']}${url.pathname}`;
-
   const basicTags = {
-    'description': seoData.description,
-    'title': seoData.title,
-    'keywords': seoData.keywords,
+    'description': customSeo.description || seoData.description,
+    'title': customSeo.title || seoData.title,
+    'keywords': customSeo.keywords || seoData.keywords,
   };
 
   const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
   const ogTags = seoConfig.enableOgTags ? {
     'og:type': pageType === 'story-page' ? 'article' : 'website',
     'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
-    'og:title': seoData.ogTitle,
-    'og:description': seoData.ogDescription
+    'og:title': customSeo.ogTitle || seoData.ogTitle,
+    'og:description': customSeo.ogDescription || seoData.ogDescription
   } : undefined;
 
   const twitterTags = seoConfig.enableTwitterCards ? {
     'twitter:card': "summary_large_image",
-    'twitter:title': seoData.ogTitle,
-    'twitter:description': seoData.ogDescription
+    'twitter:title': customSeo.ogTitle || seoData.ogTitle,
+    'twitter:description': customSeo.ogDescription || seoData.ogDescription
   } : undefined;
 
   const allTags = Object.assign(basicTags, ogTags, twitterTags);
 
   const commonTags = [
-    {tag: "title", children: data.title || seoData['page-title']},
+    {tag: "title", children: customSeo.title || data.title || seoData['page-title']},
   ];
 
   const canonical = seoData.canonicalUrl || currentUrl;
@@ -208,12 +204,13 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 }
 
 export function getTitle(seoConfig, config, pageType, data, params) {
+  const customSeo = get(data,["data","customSeo"], {})
   if(get(data, ["title"]))
-    return get(data, ["title"]);
+    return customSeo.title || get(data, ["title"]);
 
   if(get(data, ["data", "title"]))
-    return get(data, ["data", "title"]);
+    return customSeo.title || get(data, ["data", "title"]);
 
   const seoData = getSeoData(config, pageType, data, undefined, seoConfig) || {};
-  return seoData['page-title'];
+  return customSeo.title || seoData['page-title'];
 }
