@@ -173,6 +173,7 @@ const SKIP_CANONICAL = '__SKIP__CANONICAL__'
  * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
  * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
  * @param {...*} params See {@link Generator} for other Parameters
+ * @param {*} customSeo For custom SEO Metadata, like title, page-title , description etc. Usually looks like `{"customSeo": {"title": "value", "page-title": "value", "description":"value"}}`
  */
 export function TextTags(seoConfig, config, pageType, data, {url}) {
   const seoData = getSeoData(config, pageType, data, url, seoConfig);
