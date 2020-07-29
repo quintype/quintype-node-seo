@@ -9,12 +9,22 @@ function pickImageFromCard(story, cardId) {
 }
 
 function pickImageFromStory(story) {
-  if (story["hero-image-s3-key"]) {
-    return new FocusedImage(story["hero-image-s3-key"], story["hero-image-metadata"] || {})
-  }
-  const alternateHeroImageS3Key = get(story, ["alternative", "home", "default", "hero-image", "hero-image-s3-key"]);
-  const alternateHeroImageS3Metadata = get(story, ["alternative", "home", "default", "hero-image", "hero-image-metadata"]);
-  return new FocusedImage(alternateHeroImageS3Key, alternateHeroImageS3Metadata || {})
+
+  function getAlternateProperties (type, key) {
+    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
+   }
+ 
+   const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
+   const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
+   const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
+   const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
+ 
+ 
+   const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
+ 
+   const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
+ 
+   return new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
 }
 
 function pickImageFromCollection(collection) {
@@ -33,7 +43,7 @@ function pickImage(pageType, data, url) {
   }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
     const story = get(data, ['story']) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType === 'story-page') {
+  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
     const story = get(data, ['data', 'story']) || {};
     return pickImageFromStory(story);
   } else if(pageType === 'visual-story') {
@@ -44,6 +54,19 @@ function pickImage(pageType, data, url) {
   }
 }
 
+/**
+ * ImageTags adds the og and twitter images
+ *
+ * For a story page, this comes from the hero image. For a collection page (including home and section pages), the image will come from the collection hero image.
+ *
+ * If the current story URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
 export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   const image = pickImage(pageType, data, url);
 

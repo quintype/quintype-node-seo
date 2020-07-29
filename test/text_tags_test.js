@@ -10,7 +10,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const config = {"seo-metadata": [{"owner-type": "home", "owner-id": null, "data": {'page-title': "Foobar"}}]};
+      const config = {"seo-metadata": [{"owner-type": "home", "owner-id": null, "data": {'page-title': "Foobar"}, authors: [{'name': "foo"}]}]};
       const string = getSeoMetadata(seoConfig, config, 'home-page', {}, {url: url.parse("/")});
       assertContains('<title>Foobar</title>', string);
     });
@@ -180,10 +180,15 @@ describe('TextTags', function() {
       };
       const config = {"sketches-host": "http://foo.com", "seo-metadata": [{"owner-type": "home", "data": {'title': "Foobar"}}]};
       const string = getSeoMetadata(seoConfig, config, 'story-page', {data:{story:{slug:'story-slug',headline:'story-headline'}}}, {url: url.parse("/")})
+      const ampPageString = getSeoMetadata(seoConfig, config, 'story-page-amp', {data:{story:{slug:'story-slug',headline:'story-headline'}}}, {url: url.parse("/")})
       assertContains('<meta name="title" content="story-headline"/>', string);
       assertContains('<meta name="twitter:title" content="story-headline"/>', string);
       assertContains('<meta property="og:title" content="story-headline"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/story-slug"/>', string);
+      assertContains('<meta name="title" content="story-headline"/>', ampPageString);
+      assertContains('<meta name="twitter:title" content="story-headline"/>', ampPageString);
+      assertContains('<meta property="og:title" content="story-headline"/>', ampPageString);
+      assertContains('<link rel="canonical" href="http://foo.com/story-slug"/>', ampPageString);
     });
 
     describe("falling back to the collection if section is missing", function(){
@@ -244,7 +249,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome"}
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<title>Foobar</title>', string);
       assertContains('<meta name="title" content="Foobar"/>', string);
@@ -257,7 +262,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome", url: "http://domain.com/politics/awesome" }
+      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome",authors: [{'name': "foo"}], url: "http://domain.com/politics/awesome" }
       const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
       assertContains('<link rel="canonical" href="http://domain.com/politics/awesome"/>', string);
     });
@@ -266,7 +271,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       };
-      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome"}
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'visual-story', {story: story}, {url: url.parse("/my-page")})
       assertContains('<title>Foobar</title>', string);
       assertContains('<meta name="title" content="Foobar"/>', string);
@@ -306,6 +311,18 @@ describe('TextTags', function() {
                 }
               }
             }
+          }
+        ],
+        "authors":[
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
           }
         ]
       };
@@ -359,6 +376,18 @@ describe('TextTags', function() {
               }
             }
           }
+        ],
+        "authors" : [
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
+          }
         ]
       };
 
@@ -389,6 +418,16 @@ describe('TextTags', function() {
         summary: "Some Foobar",
         tags: [{name: "Footag"}],
         slug: "politics/awesome",
+        authors: [{
+          id: 712440,
+          name: 'FooBar',
+          slug: 'foobar',
+          'avatar-url': null,
+          'avatar-s3-key': null,
+          'twitter-handle': null,
+          bio: null,
+          'contributor-role': null
+        }],
         "hero-image-s3-key": "my/image.png",
         "cards" : [
           {
@@ -434,7 +473,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {'canonical-url': "http://foobar.com/mystory"}
+      const story = {'canonical-url': "http://foobar.com/mystory", authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<link rel="canonical" href="http://foobar.com/mystory"/>', string);
     });
@@ -443,7 +482,7 @@ describe('TextTags', function() {
       const seoConfig = {
         generators: [TextTags],
       }
-      const story = {seo: {"meta-title": "Foobar", "meta-description": "Some Foobar", "meta-keywords": ["Footag"]}, tags: []}
+      const story = {seo: {"meta-title": "Foobar", "meta-description": "Some Foobar", "meta-keywords": ["Footag"]}, tags: [], authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<meta name="title" content="Foobar"/>', string);
       assertContains('<meta name="description" content="Some Foobar"/>', string);
@@ -455,8 +494,250 @@ describe('TextTags', function() {
         generators: [TextTags],
         enableNews: true
       }
-      const story = {slug: "politics/awesome", seo: {"meta-google-news-standout": true}, tags: [{name: "Footag"}]}
+      const story = {slug: "politics/awesome", seo: {"meta-google-news-standout": true}, tags: [{name: "Footag"}],  authors: [{'name': "foo"}]}
       const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page', {data: {story: story}}, {url: url.parse("/my-page")})
+      assertContains('<meta name="news_keywords" content="Footag"/>', string);
+      assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);
+    });
+  });
+
+  describe('Amp story Page', function() {
+    it("Generates SEO tags for a amp story page", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = {headline: "Foobar", summary: "Some Foobar", tags: [{name: "Footag"}], slug: "politics/awesome", authors: [{'name': "foo"}]}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, {url: url.parse("/my-page")})
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="title" content="Foobar"/>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+    });
+
+    it("takes the story url over the story slug if present", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = { headline: "Foobar", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome",authors: [{'name': "foo"}], url: "http://domain.com/politics/awesome" }
+      const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page-amp', { data: { story: story } }, { url: url.parse("/my-page") })
+      assertContains('<link rel="canonical" href="http://domain.com/politics/awesome"/>', string);
+    });
+
+    it("Generates SEO tags for a card in amp story page", function () {
+      const seoConfig = {
+        generators: [TextTags],
+        enableOgTags: true
+      };
+
+      const story = {
+        headline: "Foobar",
+        summary: "Some Foobar",
+        tags: [{name: "Footag"}],
+        slug: "politics/awesome",
+        "hero-image-s3-key": "my/image.png",
+        "cards" : [
+          {
+            "id" : "sample-card-id",
+            "metadata" : {
+              "social-share": {
+                "title": "share-card-title",
+                "message": "share-card-description",
+                "image": {
+                  "key": "my/card/image.jpg",
+                  "metadata": {
+                    "width": 1300,
+                    "height": 1065,
+                    "mime-type": "image/jpeg"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "authors":[
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
+          }
+        ]
+      };
+
+      const opts = {
+        url : {
+          query : {
+            cardId : 'sample-card-id'
+          }
+        }
+      };
+
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, opts);
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="title" content="share-card-title"/>', string);
+      assertContains('<meta name="description" content="share-card-description"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+      assertContains('<meta property="og:url" content="http://foo.com/politics/awesome?cardId=sample-card-id"/>', string);
+      assertContains('<meta property="og:title" content="share-card-title"/>', string);
+      assertContains('<meta property="og:description" content="share-card-description"/>', string);
+    });
+
+
+    it("gets story data as fallback if the card metadata is falsy", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+
+      const story = {
+        headline: "Foobar",
+        summary: "Some Foobar",
+        tags: [{name: "Footag"}],
+        slug: "politics/awesome",
+        "hero-image-s3-key": "my/image.png",
+        "cards" : [
+          {
+            "id" : "sample-card-id",
+            "metadata" : {
+              "social-share": {
+                "title": undefined,
+                "message": "",
+                "image": {
+                  "key": "my/card/image.jpg",
+                  "metadata": {
+                    "width": 1300,
+                    "height": 1065,
+                    "mime-type": "image/jpeg"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "authors" : [
+          {
+            id: 712440,
+            name: 'Foo',
+            slug: 'foo',
+            'avatar-url': null,
+            'avatar-s3-key': null,
+            'twitter-handle': null,
+            bio: null,
+            'contributor-role': null
+          }
+        ]
+      };
+
+      const opts = {
+        url : {
+          query : {
+            cardId : 'sample-card-id'
+          }
+        }
+      };
+
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, opts);
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="title" content="Foobar"/>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+    });
+
+
+    it("gets story data as fallback if card id is improper", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      };
+
+      const story = {
+        headline: "Foobar",
+        summary: "Some Foobar",
+        tags: [{name: "Footag"}],
+        slug: "politics/awesome",
+        authors: [{
+          id: 712440,
+          name: 'FooBar',
+          slug: 'foobar',
+          'avatar-url': null,
+          'avatar-s3-key': null,
+          'twitter-handle': null,
+          bio: null,
+          'contributor-role': null
+        }],
+        "hero-image-s3-key": "my/image.png",
+        "cards" : [
+          {
+            "id" : "sample-card-id",
+            "metadata" : {
+              "social-share": {
+                "title": "share-card-title",
+                "message": "share-card-description",
+                "image": {
+                  "key": "my/card/image.jpg",
+                  "metadata": {
+                    "width": 1300,
+                    "height": 1065,
+                    "mime-type": "image/jpeg"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      };
+
+      const opts = {
+        url : {
+          query : {
+            cardId : 'sample-card-id-bad'
+          }
+        }
+      };
+
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, opts);
+      assertContains('<title>Foobar</title>', string);
+      assertContains('<meta name="title" content="Foobar"/>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
+    });
+
+
+
+
+    it("Overrides the canonical url", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = {'canonical-url': "http://foobar.com/mystory", authors: [{'name': "foo"}]}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, {url: url.parse("/my-page")})
+      assertContains('<link rel="canonical" href="http://foobar.com/mystory"/>', string);
+    });
+
+    it("Overrides the canonical meta title and description", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = {seo: {"meta-title": "Foobar", "meta-description": "Some Foobar", "meta-keywords": ["Footag"]}, tags: [], authors: [{'name': "foo"}]}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, {url: url.parse("/my-page")})
+      assertContains('<meta name="title" content="Foobar"/>', string);
+      assertContains('<meta name="description" content="Some Foobar"/>', string);
+      assertContains('<meta name="keywords" content="Footag"/>', string);
+    });
+
+    it("Can generate news tags", function() {
+      const seoConfig = {
+        generators: [TextTags],
+        enableNews: true
+      }
+      const story = {slug: "politics/awesome", seo: {"meta-google-news-standout": true}, tags: [{name: "Footag"}],  authors: [{'name': "foo"}]}
+      const string = getSeoMetadata(seoConfig, {"sketches-host": "http://foo.com"}, 'story-page-amp', {data: {story: story}}, {url: url.parse("/my-page")})
       assertContains('<meta name="news_keywords" content="Footag"/>', string);
       assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);
     });

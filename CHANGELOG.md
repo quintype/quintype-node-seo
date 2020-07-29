@@ -1,6 +1,151 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.38.14](https://github.com/quintype/quintype-node-seo/compare/v1.38.13...v1.38.14) (2020-07-02)
+
+### [1.38.13](https://github.com/quintype/quintype-node-seo/compare/v1.38.12...v1.38.13) (2020-07-02)
+
+### [1.38.12](https://github.com/quintype/quintype-node-seo/compare/v1.38.11...v1.38.12) (2020-07-01)
+
+### [1.38.11](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.11) (2020-07-01)
+
+### [1.38.10](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.10) (2020-07-01)
+
+### [1.38.9](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.9) (2020-07-01)
+
+### [1.38.8](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.8) (2020-07-01)
+
+### [1.38.7](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.7) (2020-07-01)
+
+### [1.38.6](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.6) (2020-07-01)
+
+### [1.38.5](https://github.com/quintype/quintype-node-seo/compare/v1.38.4...v1.38.5) (2020-07-01)
+
+### [1.38.4](https://github.com/quintype/quintype-node-seo/compare/v1.38.3...v1.38.4) (2020-06-18)
+
+
+### Bug Fixes
+
+* **description:** Add fallbacks for video story ([#211](https://github.com/quintype/quintype-node-seo/issues/211)) ([d13d162](https://github.com/quintype/quintype-node-seo/commit/d13d16282e8217bb0806712b181e31de99440cf9))
+
+### [1.38.3](https://github.com/quintype/quintype-node-seo/compare/v1.38.1...v1.38.3) (2020-06-03)
+
+
+### Bug Fixes
+
+* get domain from current host url, so that we can support subdomains ([#207](https://github.com/quintype/quintype-node-seo/issues/207)) ([27ed6a4](https://github.com/quintype/quintype-node-seo/commit/27ed6a4817d7b4cfc9f042d6f00718d49121691d))
+
+### [1.38.2](https://github.com/quintype/quintype-node-seo/compare/v1.38.1...v1.38.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* get domain from current host url, so that we can support subdomains ([#207](https://github.com/quintype/quintype-node-seo/issues/207)) ([27ed6a4](https://github.com/quintype/quintype-node-seo/commit/27ed6a4817d7b4cfc9f042d6f00718d49121691d))
+
+### [1.38.1](https://github.com/quintype/quintype-node-seo/compare/v1.37.0...v1.38.1) (2020-05-15)
+
+## [1.38.0](https://github.com/quintype/quintype-node-seo/compare/v1.36.1...v1.38.0) (2020-05-14)
+
+
+### Features
+
+* **structuredData:** Added custom page support ([#186](https://github.com/quintype/quintype-node-seo/issues/186)) ([433ed77](https://github.com/quintype/quintype-node-seo/commit/433ed77f1daaabd0b8e0c9ebea56a8b2e5b77bf8))
+
+### [1.36.1](https://github.com/quintype/quintype-node-seo/compare/v1.36.1-is-part-of-schema.1...v1.36.1) (2020-05-14)
+=======
+## [1.37.0](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.37.0) (2020-05-07)
+
+
+### Features
+
+* **structuredData:** Added custom page support ([#186](https://github.com/quintype/quintype-node-seo/issues/186)) ([433ed77](https://github.com/quintype/quintype-node-seo/commit/433ed77f1daaabd0b8e0c9ebea56a8b2e5b77bf8))
+>>>>>>> master
+
+## [1.36.0](https://github.com/quintype/quintype-node-seo/compare/v1.35.1...v1.36.0) (2020-03-11)
+
+
+### Features
+
+* add `appendHostToAmpUrl` to make AMPUrl (`rel="amphtml"`) absolute. ([9814d7b](https://github.com/quintype/quintype-node-seo/commit/9814d7b6c90d39aa75f974cb8d3418360badd31e))
+
+### [1.35.1](https://github.com/quintype/quintype-node-seo/compare/v1.35.1-amp-absolute.0...v1.35.1) (2020-03-11)
+
+## [1.35.0](https://github.com/quintype/quintype-node-seo/compare/v1.35.0-thumbnail.2...v1.35.0) (2020-03-10)
+
+### [1.34.3](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.34.3) (2020-03-09)
+
+### Fixes
+Fix main entity for story page for news article schema (#152) 
+
+### [1.34.2](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.34.2) (2020-03-02)
+
+<a name="1.34.1"></a>
+## [1.34.1](https://github.com/quintype/quintype-node-seo/compare/v1.34.0...v1.34.1) (2019-10-28)
+
+
+
+<a name="1.34.0"></a>
+# [1.34.0](https://github.com/quintype/quintype-node-seo/compare/v1.33.3...v1.34.0) (2019-10-16)
+
+
+### Features
+
+* In the case of duplicate tags, the last one wins ([#75](https://github.com/quintype/quintype-node-seo/issues/75)) ([2ebfde7](https://github.com/quintype/quintype-node-seo/commit/2ebfde7))
+
+
+
+<a name="1.33.3"></a>
+## [1.33.3](https://github.com/quintype/quintype-node-seo/compare/v1.33.2...v1.33.3) (2019-10-15)
+
+
+
+<a name="1.33.2"></a>
+## [1.33.2](https://github.com/quintype/quintype-node-seo/compare/v1.33.1...v1.33.2) (2019-10-15)
+
+
+
+<a name="1.33.1"></a>
+## [1.33.1](https://github.com/quintype/quintype-node-seo/compare/v1.32.0...v1.33.1) (2019-10-15)
+
+
+### Bug Fixes
+
+* **isAccessibleForFree:** add access condition to check login ([#74](https://github.com/quintype/quintype-node-seo/issues/74)) ([e617e71](https://github.com/quintype/quintype-node-seo/commit/e617e71))
+
+
+
+<a name="1.33.0"></a>
+# [1.33.0](https://github.com/quintype/quintype-node-seo/compare/v1.20.3...v1.33.0) (2019-08-23)
+
+
+### Bug Fixes
+
+* **Remove ampStoryPages key:** Remove ampStoryPages key from StoryAmpTags ([#54](https://github.com/quintype/quintype-node-seo/issues/54)) ([1ec4111](https://github.com/quintype/quintype-node-seo/commit/1ec4111))
+* **Set amp default to true:** Pass default as true for amp ([#57](https://github.com/quintype/quintype-node-seo/issues/57)) ([e53bf34](https://github.com/quintype/quintype-node-seo/commit/e53bf34))
+* **structured data:** Write good test. ([214c6ca](https://github.com/quintype/quintype-node-seo/commit/214c6ca))
+* Add multi domain support for structured data ([#60](https://github.com/quintype/quintype-node-seo/issues/60)) ([1c8dd74](https://github.com/quintype/quintype-node-seo/commit/1c8dd74))
+* Don't crash if homepage config is missing ([3aa2565](https://github.com/quintype/quintype-node-seo/commit/3aa2565))
+* og:urls come from the correct domain ([62bcdbb](https://github.com/quintype/quintype-node-seo/commit/62bcdbb))
+* **test:** Update tests for test tags generation - homepage ([#63](https://github.com/quintype/quintype-node-seo/issues/63)) ([ed17a11](https://github.com/quintype/quintype-node-seo/commit/ed17a11))
+* **textTags:** default the owner id to null for generating home page tags ([#62](https://github.com/quintype/quintype-node-seo/issues/62)) ([53370d5](https://github.com/quintype/quintype-node-seo/commit/53370d5))
+
+
+### Features
+
+* **Add SEO Tags for movie Entity:** new feature ([#50](https://github.com/quintype/quintype-node-seo/issues/50)) ([27dd72a](https://github.com/quintype/quintype-node-seo/commit/27dd72a))
+* **BreadcrumbList schema:** Add support for BreadcrumbList schema ([#70](https://github.com/quintype/quintype-node-seo/issues/70)) ([72c6865](https://github.com/quintype/quintype-node-seo/commit/72c6865))
+* **Multi Domain:** Multi domain support for story and section pages ([#58](https://github.com/quintype/quintype-node-seo/issues/58)) ([d841501](https://github.com/quintype/quintype-node-seo/commit/d841501))
+* Section Pages without a Section are treated as collections ([#61](https://github.com/quintype/quintype-node-seo/issues/61)) ([6161832](https://github.com/quintype/quintype-node-seo/commit/6161832))
+* **structured data:** Support for WPFooter and WPHeader. ([425331d](https://github.com/quintype/quintype-node-seo/commit/425331d))
+* **Website schema:** Add more properties to website schema ([#71](https://github.com/quintype/quintype-node-seo/issues/71)) ([f6ffcb2](https://github.com/quintype/quintype-node-seo/commit/f6ffcb2))
+* A collection with a missing description pulls it from home ([dea9f01](https://github.com/quintype/quintype-node-seo/commit/dea9f01))
+* Allowing you to skip AMP pages on paid stories ([#68](https://github.com/quintype/quintype-node-seo/issues/68)) ([4ab2dd2](https://github.com/quintype/quintype-node-seo/commit/4ab2dd2))
+* fallback to alternate hero image for og image ([056e613](https://github.com/quintype/quintype-node-seo/commit/056e613))
+* Move `Organization` to home page & toggle `Article` schema ([#67](https://github.com/quintype/quintype-node-seo/issues/67)) ([1f5f6a3](https://github.com/quintype/quintype-node-seo/commit/1f5f6a3))
+* Upgrading ResponsiveImage ([56d203a](https://github.com/quintype/quintype-node-seo/commit/56d203a))
+
+
 
 <a name="1.32.0"></a>
 # [1.32.0](https://github.com/quintype/quintype-node-seo/compare/v1.31.0...v1.32.0) (2019-07-16)

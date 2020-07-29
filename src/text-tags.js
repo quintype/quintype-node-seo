@@ -51,12 +51,14 @@ function buildTagsFromTopic(config, data, tag, url = {}) {
   const tagDescription = customSeo.description || tag['meta-description'];
   const description = `Read stories listed under on ${tagName}`;
   const tagUrl = `${config['sketches-host']}${url.pathname}`
+  const canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const canonicalUrl = `${config['sketches-host']}${canonicalSlug}`;
   const topicMetaData = {
     title: tagName,
     "page-title": tagName,
     description: tagDescription || description,
     keywords: tagName,
-    canonicalUrl: tagUrl,
+    canonicalUrl: canonicalUrl,
     ogUrl: tagUrl,
     ogTitle: tagName,
     ogDescription: tagDescription || description
@@ -156,6 +158,22 @@ function getSeoDataFromCollection(config, data) {
 
 const SKIP_CANONICAL = '__SKIP__CANONICAL__'
 
+/**
+ * TextTags adds the majority of basic tags, such as
+ * * Canonical URLs
+ * * Title and Description
+ * * Keywords
+ *
+ * If the current URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
+ * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
 export function TextTags(seoConfig, config, pageType, data, {url}) {
   const seoData = getSeoData(config, pageType, data, url, seoConfig);
   const customSeo = get(data,["data","customSeo"], {})
@@ -171,7 +189,7 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
 
   const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
   const ogTags = seoConfig.enableOgTags ? {
-    'og:type': pageType === 'story-page' ? 'article' : 'website',
+    'og:type': pageType === 'story-page' || pageType === 'story-page-amp' ? 'article' : 'website',
     'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
     'og:title': customSeo.ogTitle || seoData.ogTitle,
     'og:description': customSeo.ogDescription || seoData.ogDescription
@@ -194,7 +212,11 @@ export function TextTags(seoConfig, config, pageType, data, {url}) {
     commonTags.push({ tag: "link", rel: "canonical", href: canonical});
   }
 
-  if(pageType === 'story-page' && seoConfig.enableNews) {
+  if(pageType === 'story-page' || pageType === 'story-page-amp') {
+    commonTags.push({name: "author", content: seoData.author});
+  }
+
+  if((pageType === 'story-page' || pageType === 'story-page-amp') && seoConfig.enableNews) {
     commonTags.push({name: "news_keywords", content: seoData.keywords});
     if(get(data, ["data", "story", "seo", "meta-google-news-standout"]))
       commonTags.push({tag: "link", rel: "standout", href: seoData.storyUrl || currentUrl});
