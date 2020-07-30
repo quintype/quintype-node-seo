@@ -16,7 +16,7 @@ describe('AmpTags', function() {
   it("gets amp tags for supported stories", function() {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
-    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
+    assertContains('<link rel="amphtml" href="/amp/story/section/slug"/>', string);
   });
 
   it("does not ampify any non supported stories", function() {
@@ -39,7 +39,7 @@ describe('AmpTags', function() {
   it("does allows you to only ampify free story pages", function () {
     const story = { "slug": "section/slug", "is-amp-supported": true }
     const publicStoryResults = getSeoMetadata({...seoConfig, ampStoryPages: "public"}, config, 'story-page', { data: { story: story } }, {})
-    assert.equal('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', publicStoryResults);
+    assert.equal('<link rel="amphtml" href="/amp/story/section/slug"/>', publicStoryResults);
     const privateStoryResults = getSeoMetadata({ ...seoConfig, ampStoryPages: "public" }, config, 'story-page', { data: { story: {...story, access: "subscription"} } }, {})
     assert.equal('', privateStoryResults);
   })
