@@ -47,12 +47,12 @@ describe('AmpTags', function() {
   it("does not append domain to amp stories if appendHostToAmpUrl not present", function () {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
-    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
+    assertContains('<link rel="amphtml" href="/amp/story/section/slug"/>', string);
   })
 
   it("does append domain to amp stories if appendHostToAmpUrl present", function () {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {currentHostUrl: "https://madrid.quintype.io/section/slug", data: {story}}, {})
-    assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
+    assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section/slug"/>', string);
   })
 });
