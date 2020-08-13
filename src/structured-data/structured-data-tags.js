@@ -93,6 +93,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
   const storyKeysPresence = Object.keys(story).length > 0;
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const storyAccessType = storyAccess(story["access"]);
+  const isPartOfData = pageType === "story-page-amp" ? generateIsPartOfDataForAmpLib(story, publisherConfig, pageType) : generateIsPartOfData(story, publisherConfig, pageType);
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
     "author": authorData(authors),
     "keywords": metaKeywords.join(','),
@@ -102,7 +104,8 @@ function generateArticleData (structuredData = {}, story = {}, publisherConfig =
     "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
     "name": (storyKeysPresence && story.headline) || '',
     "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig, pageType),
-    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
+    "isAccessibleForFree": storyAccessType,
+    "isPartOf": isPartOfData
   }, articleSectionObj(story));
 }
 
@@ -140,6 +143,25 @@ function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = "") {
   );
 }
 
+function generateIsPartOfDataForAmpLib(story = {}, publisherConfig = {}, pageType = "") {
+  const publisherName = publisherConfig["publisher-name"];
+  const productId = publisherConfig["publisher-name"] + ".com:basic";
+  return Object.assign(
+    {},
+    {
+      "@type": ["CreativeWork", "WebPage", "Product"],
+      url: `${publisherConfig["sketches-host"]}/${story.slug}`,
+      name: publisherName,
+      productID: productId,
+      primaryImageOfPage: generateArticleImageData(
+        story["hero-image-s3-key"],
+        publisherConfig,
+        pageType
+      )
+    }
+  );
+}
+
 function generateHasPartData(storyAccess) {
   return storyAccess ?
     {} :
@@ -156,11 +178,12 @@ function generateHasPartData(storyAccess) {
 function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
   const {alternative = {}} = story.alternative || {};
   const storyAccessType = storyAccess(story['access']);
+  const isPartOfData = pageType === "story-page-amp" ? generateIsPartOfDataForAmpLib(story, publisherConfig, pageType) : generateIsPartOfData(story, publisherConfig, pageType);
   return Object.assign({}, {
     "alternativeHeadline": (alternative.home && alternative.home.default) ? alternative.home.default.headline : "",
     "description": story.summary,
     "isAccessibleForFree": storyAccessType,
-    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
+    isPartOf: isPartOfData
   }, generateHasPartData(storyAccessType));
 }
 
