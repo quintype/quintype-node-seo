@@ -17,9 +17,10 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
   return true;
 }
 
-const getDomain = (url) => {
+const getDomain = (url, domainSlug) => {
+  const domain = domainSlug ? new URL(url).origin : '';
   try {
-    return new URL(url).origin;
+    return domain;
   }
   catch (err) {
     return ""
@@ -34,12 +35,12 @@ const getDomain = (url) => {
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
  * @param {...*} params See {@link Generator} for other Parameters
  */
-export function StoryAmpTags(seoConfig, config = {}, pageType, data = {}, opts) {
+export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
 
   const story = get(data, ["data", "story"], {});
   const { currentHostUrl, domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
-  const ampUrlAppend = seoConfig.appendHostToAmpUrl && domainSlug ? getDomain(currentHostUrl) : config['sketches-host'];
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl, domainSlug) || config['sketches-host'] : '';
   if (showAmpTag(seoConfig, pageType, story)) {
     return [{
       tag: 'link',
