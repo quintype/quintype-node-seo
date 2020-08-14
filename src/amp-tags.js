@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import { isStoryPublic } from './utils';
 
-function showAmpTag({ampStoryPages = true}, pageType, story) {
-  if(!ampStoryPages || pageType !== 'story-page') {
+function showAmpTag({ ampStoryPages = true }, pageType, story) {
+  if (!ampStoryPages || pageType !== 'story-page') {
     return false;
   }
 
@@ -10,7 +10,7 @@ function showAmpTag({ampStoryPages = true}, pageType, story) {
     return false;
   }
 
-  if(ampStoryPages === 'public' && !isStoryPublic(story)) {
+  if (ampStoryPages === 'public' && !isStoryPublic(story)) {
     return false;
   }
 
@@ -34,12 +34,13 @@ const getDomain = (url) => {
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
  * @param {...*} params See {@link Generator} for other Parameters
  */
-export function StoryAmpTags(seoConfig, config, pageType, data, opts) {
+export function StoryAmpTags(seoConfig, config = {}, pageType, data = {}, opts) {
+
   const story = get(data, ["data", "story"], {});
-  const currentHostUrl = get(data, ["currentHostUrl"], "");
+  const { currentHostUrl, domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
-  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl) || config['sketches-host'] : ''
-  if(showAmpTag(seoConfig, pageType, story)) {
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl && domainSlug ? getDomain(currentHostUrl) : config['sketches-host'];
+  if (showAmpTag(seoConfig, pageType, story)) {
     return [{
       tag: 'link',
       rel: 'amphtml',
