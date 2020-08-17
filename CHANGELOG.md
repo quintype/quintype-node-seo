@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.15](https://github.com/quintype/quintype-node-seo/compare/v1.38.14...v1.38.15) (2020-08-17)
+
+
+### Bug Fixes
+
+* **amp:** Amp is not working on subdirectory ([#264](https://github.com/quintype/quintype-node-seo/issues/264)) ([133a834](https://github.com/quintype/quintype-node-seo/commit/133a834158dc2fee28a0e7c5bb541b2700dd9d3d))
+
 ### [1.38.14](https://github.com/quintype/quintype-node-seo/compare/v1.38.13...v1.38.14) (2020-07-02)
 
 ### [1.38.13](https://github.com/quintype/quintype-node-seo/compare/v1.38.12...v1.38.13) (2020-07-02)
