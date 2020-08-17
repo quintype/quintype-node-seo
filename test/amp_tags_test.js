@@ -55,9 +55,9 @@ describe('AmpTags', function () {
     const string = getSeoMetadata({ ...seoConfig, appendHostToAmpUrl: true }, config, 'story-page', { currentHostUrl: "https://news.madrid.quintype.io/section/slug", domainSlug: 'news', data: { story } }, {})
     assertContains('<link rel="amphtml" href="https://news.madrid.quintype.io/amp/story/section%2Fslug"/>', string);
   })
-  it("does append domain to amp stories if appendHostToAmpUrl and domainSlug is not present", function () {
+  it("does  not append domain to amp stories if appendHostToAmpUrl is true  and domainSlug is not present", function () {
     const story = { "slug": "section/slug", "is-amp-supported": true }
-    const string = getSeoMetadata({ ...seoConfig, appendHostToAmpUrl: true }, config, 'story-page', { currentHostUrl: "https://news.madrid.quintype.io/section/slug", domainSlug: undefined, data: { story } }, {})
+    const string = getSeoMetadata({ ...seoConfig, appendHostToAmpUrl: true }, config, 'story-page', { currentHostUrl: "https://madrid.quintype.io/section/slug", domainSlug: undefined, data: { story } }, {})
     assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
   })
 

@@ -38,7 +38,7 @@ const getDomain = (url, domainSlug) => {
 export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
 
   const story = get(data, ["data", "story"], {});
-  const { currentHostUrl, domainSlug } = data;
+  const { currentHostUrl = '', domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
   const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl, domainSlug) || config['sketches-host'] : '';
   if (showAmpTag(seoConfig, pageType, story)) {
