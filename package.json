@@ -47,6 +47,7 @@
     "url": "^0.11.0"
   },
   "dependencies": {
+    "@quintype/amp": "^2.1.7-subscriptions.0",
     "quintype-js": "^1.2.0"
   }
 }
