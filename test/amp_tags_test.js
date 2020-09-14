@@ -16,7 +16,7 @@ describe('AmpTags', function () {
   it("gets amp tags for supported stories", function() {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
-    assertContains('<link rel="amphtml" href="/amp/story/section/slug"/>', string);
+    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
   });
 
   it("does not ampify any non supported stories", function () {
@@ -39,7 +39,7 @@ describe('AmpTags', function () {
   it("does allows you to only ampify free story pages", function () {
     const story = { "slug": "section/slug", "is-amp-supported": true }
     const publicStoryResults = getSeoMetadata({...seoConfig, ampStoryPages: "public"}, config, 'story-page', { data: { story: story } }, {})
-    assert.equal('<link rel="amphtml" href="/amp/story/section/slug"/>', publicStoryResults);
+    assert.equal('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', publicStoryResults);
     const privateStoryResults = getSeoMetadata({ ...seoConfig, ampStoryPages: "public" }, config, 'story-page', { data: { story: {...story, access: "subscription"} } }, {})
     assert.equal('', privateStoryResults);
   })
@@ -47,12 +47,18 @@ describe('AmpTags', function () {
   it("does not append domain to amp stories if appendHostToAmpUrl not present", function () {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata(seoConfig, config, 'story-page', {data: {story: story}}, {})
-    assertContains('<link rel="amphtml" href="/amp/story/section/slug"/>', string);
+    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
   })
 
   it("does append domain to amp stories if appendHostToAmpUrl present", function () {
     const story = {"slug": "section/slug", "is-amp-supported": true}
     const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true}, config, 'story-page', {currentHostUrl: "https://madrid.quintype.io/section/slug", data: {story}}, {})
+    assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section%2Fslug"/>', string);
+  })
+
+  it("does encode the url if encodeAmpUrl is set to false in seoConfig", function () {
+    const story = {"slug": "section%2Fslug", "is-amp-supported": true}
+    const string = getSeoMetadata({...seoConfig, appendHostToAmpUrl: true, decodeAmpUrl: true}, config, 'story-page', {currentHostUrl: "https://madrid.quintype.io/section%2Fslug", data: {story}}, {})
     assertContains('<link rel="amphtml" href="https://madrid.quintype.io/amp/story/section/slug"/>', string);
   })
 
