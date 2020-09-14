@@ -101,7 +101,7 @@ function buildCustomTags(customTags = {}, pageType = ''){
 
 function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   function findRelevantConfig(ownerType, ownerId = null) {
-    const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
+    const seoMetadata = config['seo-metadata'] && config['seo-metadata'].find(page => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
     const { sections = [] } = config;
     const section = sections.find(section => ownerType == 'section' && section.id === ownerId) || {};
     const customSeo = get(data,["data","customSeo"], {})
@@ -113,7 +113,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       }, seoMetadata.data);
 
       if(!result.description) {
-        const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {data: {description: ""}};
+        const homeSeoData = config['seo-metadata'] && config['seo-metadata'].find(page => page['owner-type'] === 'home') || {data: {description: ""}};
         result.description = customSeo.description || homeSeoData.data.description;
       }
 
@@ -144,7 +144,7 @@ function getSeoDataFromCollection(config, data) {
     if (!summary) {
       summary = customSeo.description || (getSeoData(config, 'home-page', data) || {}).description
     }
-
+    
     return {
       'page-title': customSeo.title || name,
       title: customSeo.title || name,
