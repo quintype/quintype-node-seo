@@ -756,7 +756,6 @@ describe('TextTags', function() {
       assert.equal("My Title", seo.getTitle(config, 'home-page', {title: "My Title"}, {}));
       assert.equal("My Title", seo.getTitle(config, 'home-page', {data: {title: "My Title"}}, {}));
     });
-
     it("can also get the customSeo title if passed in from data", function() {
       const seo = new SEO({generators: []});
       const config = {"seo-metadata": [{"owner-type": 'home', "owner-id": null, "data": {'page-title': "Foobar"}}]};
