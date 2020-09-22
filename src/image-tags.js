@@ -77,11 +77,11 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   const tags = [];
 
   if(seoConfig.enableTwitterCards) {
-    tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", fm: "webp", ogImage: true})}`})
+    tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", ogImage: true})}`})
   }
 
   if(seoConfig.enableOgTags) {
-    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress", fm: "webp", ogImage: true})}`});
+    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress", ogImage: true})}`});
     tags.push({property: "og:image:width", content: 1200});
     if(get(image, ["metadata", "focus-point"])) {
       tags.push({property: "og:image:height", content: 630})
