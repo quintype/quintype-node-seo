@@ -1,0 +1,1225 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-66074042-1', 'auto');ga('send', 'pageview');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> dist/index.cjs.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+             
+                <a class="image" href="index.html">
+                    <img src="https://images.assettype.com/quintype-website/2018-10/013e8cbe-92b4-435f-bbbb-3e101efbc99a/quintype_logo.png?w=180" alt="logo">
+                </a>
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">@quintype/seo</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="SEO.html">SEO</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthorTags">AuthorTags</a></li><li><a href="global.html#Generator">Generator</a></li><li><a href="global.html#ImageTags">ImageTags</a></li><li><a href="global.html#StaticTags">StaticTags</a></li><li><a href="global.html#StoryAmpTags">StoryAmpTags</a></li><li><a href="global.html#StructuredDataTags">StructuredDataTags</a></li><li><a href="global.html#TextTags">TextTags</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>dist/index.cjs.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+function _interopDefault (ex) { return (ex &amp;&amp; (typeof ex === 'object') &amp;&amp; 'default' in ex) ? ex['default'] : ex; }
+
+var lodash = require('lodash');
+var React = _interopDefault(require('react'));
+var ReactDomServer = _interopDefault(require('react-dom/server'));
+var url = require('url');
+var quintypeJs = require('quintype-js');
+var get = _interopDefault(require('lodash/get'));
+var omitBy = _interopDefault(require('lodash/omitBy'));
+var isUndefined = _interopDefault(require('lodash/isUndefined'));
+
+function objectToTags(object) {
+  return lodash.entries(object).filter(([key, value]) => value).map(([key, value]) => ({ [getPropertyName(key)]: key, content: value }));
+}
+
+function getPropertyName(key) {
+  return key.startsWith('fb:') || key.startsWith('og:') ? 'property' : 'name';
+}
+
+function stripMillisecondsFromTime(date) {
+  const toReturn = date.toJSON();
+  if (!toReturn) return toReturn;
+  return toReturn.split('.')[0] + "Z";
+}
+
+function getQueryParams(url$1) {
+  const urlObj = new url.URL(url$1);
+  const search_params = new url.URLSearchParams(urlObj.search);
+  const getWidth = search_params.get('w') || '';
+  const getHeight = search_params.get('h') || '';
+  return { width: getWidth, height: getHeight };
+}
+
+function isStoryPublic(story) {
+  return story.access === undefined || story.access === null || story.access === 'public';
+}
+
+function buildTagsFromStory(config, story, url = {}) {
+  if (!story) return;
+
+  function getStoryCardMetadata(cardId) {
+    const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+    const urlWithCardId = `${config['sketches-host']}/${story.slug}?cardId=${cardId}`;
+
+    if (metadata &amp;&amp; !lodash.isEmpty(metadata) &amp;&amp; metadata['social-share']) {
+      return {
+        title: metadata['social-share'].title || story.headline,
+        description: metadata['social-share'].message || story.summary,
+        ogUrl: urlWithCardId,
+        ogTitle: metadata['social-share'].title || story.headline,
+        ogDescription: metadata['social-share'].message || story.summary
+      };
+    }
+    return metadata;
+  }
+
+  const seo = story.seo || {};
+
+  const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
+
+  const getOgTitle = lodash.get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
+  const authors = lodash.get(story, ['authors'], []).map(author => author.name);
+
+  const storyMetaData = {
+    title: seo["meta-title"] || story.headline,
+    "page-title": seo["meta-title"] || story.headline,
+    description: seo["meta-description"] || story.summary,
+    keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
+    canonicalUrl: story["canonical-url"] || storyUrl,
+    ogUrl: lodash.get(seo, ["og", "url"]) || storyUrl,
+    ogTitle: getOgTitle,
+    ogDescription: story.summary || story.subheadline || story.headline,
+    storyUrl: storyUrl,
+    author: authors
+  };
+
+  if (url.query &amp;&amp; url.query.cardId) {
+    const storyCardMetadata = getStoryCardMetadata(url.query.cardId);
+    return Object.assign({}, storyMetaData, storyCardMetadata); //TODO rewrite in spread syntax, add babel plugin
+  }
+
+  return storyMetaData;
+}
+
+function buildTagsFromTopic(config, tag, url = {}) {
+  if (lodash.isEmpty(tag)) return;
+
+  const tagName = tag.name;
+  const tagDescription = tag['meta-description'];
+  const description = `Read stories listed under on ${tagName}`;
+  const tagUrl = `${config['sketches-host']}${url.pathname}`;
+  const canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const canonicalUrl = `${config['sketches-host']}${canonicalSlug}`;
+  const topicMetaData = {
+    title: tagName,
+    "page-title": tagName,
+    description: tagDescription || description,
+    keywords: tagName,
+    canonicalUrl: canonicalUrl,
+    ogUrl: tagUrl,
+    ogTitle: tagName,
+    ogDescription: tagDescription || description
+  };
+
+  return topicMetaData;
+}
+
+function buildTagsFromAuthor(config, author, url = {}) {
+  if (lodash.isEmpty(author)) return;
+
+  const authorName = author.name;
+  const authorUrl = `${config['sketches-host']}${url.pathname}`;
+  const description = author.bio || `View all articles written by ${authorName}`;
+
+  return {
+    title: authorName,
+    "page-title": authorName,
+    description: description,
+    keywords: `${authorName},${config['publisher-name']}`,
+    canonicalUrl: authorUrl,
+    ogUrl: authorUrl,
+    ogTitle: authorName,
+    ogDescription: description
+  };
+}
+
+function buildCustomTags(customTags = {}, pageType = '') {
+  const configObject = customTags[pageType];
+  if (configObject) {
+    return configObject;
+  }
+  return {};
+}
+
+// The findRelevantConfig method call has no ownerId for home page.
+// This causes the seoMetadata to be undefined.
+// So the default value for the ownerId is set to null.
+
+function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
+  function findRelevantConfig(ownerType, ownerId = null) {
+    const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType &amp;&amp; page["owner-id"] === ownerId) || {};
+    const { sections = [] } = config;
+    const section = sections.find(section => ownerType == 'section' &amp;&amp; section.id === ownerId) || {};
+
+    if (seoMetadata.data || section.id) {
+      const result = Object.assign({}, {
+        'page-title': section.name,
+        title: section.name,
+        canonicalUrl: section['section-url'] || undefined
+      }, seoMetadata.data);
+
+      if (!result.description) {
+        const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || { data: { description: "" } };
+        result.description = homeSeoData.data.description;
+      }
+
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+      return result;
+    }
+  }
+
+  if (seoConfig.customTags &amp;&amp; seoConfig.customTags[pageType]) {
+    return buildCustomTags(seoConfig.customTags, pageType);
+  }
+
+  switch (pageType) {
+    case 'home-page':
+      return findRelevantConfig('home');
+    case 'section-page':
+      return findRelevantConfig('section', lodash.get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
+    case 'tag-page':
+      return buildTagsFromTopic(config, lodash.get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page':
+      return buildTagsFromStory(config, lodash.get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'visual-story':
+      return buildTagsFromStory(config, lodash.get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page-amp':
+      return buildTagsFromStory(config, lodash.get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'author-page':
+      return buildTagsFromAuthor(config, lodash.get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
+    default:
+      return getSeoData(config, 'home-page', data, url);
+  }
+}
+
+function getSeoDataFromCollection(config, data) {
+  if (lodash.get(data, ["data", "collection", "name"])) {
+    let { name, summary } = lodash.get(data, ["data", "collection"]);
+
+    if (!summary) {
+      summary = (getSeoData(config, 'home-page', data) || {}).description;
+    }
+
+    return {
+      'page-title': name,
+      title: name,
+      ogTitle: name,
+      description: summary,
+      ogDescription: summary,
+      canonicalUrl: SKIP_CANONICAL
+    };
+  }
+}
+
+const SKIP_CANONICAL = '__SKIP__CANONICAL__';
+
+/**
+ * TextTags adds the majority of basic tags, such as
+ * * Canonical URLs
+ * * Title and Description
+ * * Keywords
+ *
+ * If the current URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
+ * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function TextTags(seoConfig, config, pageType, data, { url }) {
+  const seoData = getSeoData(config, pageType, data, url, seoConfig);
+
+  if (!seoData) return [];
+
+  const currentUrl = `${config['sketches-host']}${url.pathname}`;
+
+  const basicTags = {
+    'description': seoData.description,
+    'title': seoData.title,
+    'keywords': seoData.keywords
+  };
+
+  const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
+  const ogTags = seoConfig.enableOgTags ? {
+    'og:type': pageType === 'story-page' || pageType === 'story-page-amp' ? 'article' : 'website',
+    'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
+    'og:title': seoData.ogTitle,
+    'og:description': seoData.ogDescription
+  } : undefined;
+
+  const twitterTags = seoConfig.enableTwitterCards ? {
+    'twitter:card': "summary_large_image",
+    'twitter:title': seoData.ogTitle,
+    'twitter:description': seoData.ogDescription
+  } : undefined;
+
+  const allTags = Object.assign(basicTags, ogTags, twitterTags);
+
+  const commonTags = [{ tag: "title", children: data.title || seoData['page-title'] }];
+
+  const canonical = seoData.canonicalUrl || currentUrl;
+  if (canonical != SKIP_CANONICAL) {
+    commonTags.push({ tag: "link", rel: "canonical", href: canonical });
+  }
+
+  if (pageType === 'story-page' || pageType === 'story-page-amp') {
+    commonTags.push({ name: "author", content: seoData.author });
+  }
+
+  if ((pageType === 'story-page' || pageType === 'story-page-amp') &amp;&amp; seoConfig.enableNews) {
+    commonTags.push({ name: "news_keywords", content: seoData.keywords });
+    if (lodash.get(data, ["data", "story", "seo", "meta-google-news-standout"])) commonTags.push({ tag: "link", rel: "standout", href: seoData.storyUrl || currentUrl });
+  }
+
+  return commonTags.concat(objectToTags(allTags));
+}
+
+function getTitle(seoConfig, config, pageType, data, params) {
+  if (lodash.get(data, ["title"])) return lodash.get(data, ["title"]);
+
+  if (lodash.get(data, ["data", "title"])) return lodash.get(data, ["data", "title"]);
+
+  const seoData = getSeoData(config, pageType, data, undefined, seoConfig) || {};
+  return seoData['page-title'];
+}
+
+/**
+ * StaticTags puts whatever tags you've passed to it
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {Object} seoConfig.staticTags List of tags to be added. ex: `{"viewport": "width=device-width,initial-scale=1.0"}`
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function StaticTags(seoConfig, config, pageType, data, { url }) {
+  return objectToTags(seoConfig.staticTags || {});
+}
+
+/**
+ * AuthorTags adds the twitter:creator tag for story pages
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function AuthorTags(seoConfig, config, pageType, data, { url }) {
+  if (pageType != "story-page" || pageType != "story-page-amp") return [];
+
+  return [{
+    name: "twitter:creator",
+    content: lodash.get(data, ["data", "story", "author-name"])
+  }];
+}
+
+function pickImageFromCard(story, cardId) {
+  const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+  if (metadata &amp;&amp; !lodash.isEmpty(metadata) &amp;&amp; lodash.get(metadata, ['social-share', 'image', 'key'], false)) {
+    return new quintypeJs.FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
+  }
+}
+
+function pickImageFromStory(story) {
+
+  function getAlternateProperties(type, key) {
+    return lodash.get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]);
+  }
+
+  const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
+  const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
+  const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
+  const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
+
+  const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata) || story["hero-image-metadata"];
+
+  const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
+
+  return new quintypeJs.FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
+}
+
+function pickImageFromCollection(collection) {
+  const coverImage = lodash.get(collection, ["metadata", "cover-image"]) || {};
+  if (!coverImage["cover-image-s3-key"]) return;
+
+  return new quintypeJs.FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {});
+}
+
+// The image is grabbed from the story, else from from the collection
+function pickImage(pageType, data, url) {
+  if (pageType === 'story-page' &amp;&amp; url.query &amp;&amp; url.query.cardId) {
+    const story = lodash.get(data, ['data', 'story']) || {};
+    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
+  } else if (pageType === 'visual-story' &amp;&amp; url.query &amp;&amp; url.query.cardId) {
+    const story = lodash.get(data, ['story']) || {};
+    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
+  } else if (pageType === 'story-page' || pageType === 'story-page-amp') {
+    const story = lodash.get(data, ['data', 'story']) || {};
+    return pickImageFromStory(story);
+  } else if (pageType === 'visual-story') {
+    const story = lodash.get(data, ['story']) || {};
+    return pickImageFromStory(story);
+  } else if (lodash.get(data, ['data', 'collection'])) {
+    return pickImageFromCollection(lodash.get(data, ['data', 'collection']));
+  }
+}
+
+/**
+ * ImageTags adds the og and twitter images
+ *
+ * For a story page, this comes from the hero image. For a collection page (including home and section pages), the image will come from the collection hero image.
+ *
+ * If the current story URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
+  const image = pickImage(pageType, data, url);
+
+  if (!image) {
+    return [];
+  }
+
+  const tags = [];
+
+  if (seoConfig.enableTwitterCards) {
+    tags.push({ name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], { w: 1200, auto: "format,compress", ogImage: true })}` });
+  }
+
+  if (seoConfig.enableOgTags) {
+    tags.push({ property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], { w: 1200, auto: "format,compress", ogImage: true })}` });
+    tags.push({ property: "og:image:width", content: 1200 });
+    if (lodash.get(image, ["metadata", "focus-point"])) {
+      tags.push({ property: "og:image:height", content: 630 });
+    }
+  }
+
+  return tags;
+}
+
+const getSchemaContext = { "@context": "http://schema.org" };
+
+function getSchemaType(type) {
+  return { "@type": type };
+}
+
+function getSchemaPerson(name) {
+  return Object.assign({}, getSchemaType("Person"), {
+    "givenName": name,
+    "name": name
+  });
+}
+
+function getSchemaFooter({ cssSelector }) {
+  return cssSelector ? Object.assign({}, getSchemaContext, getSchemaType("WPFooter"), {
+    "cssSelector": cssSelector
+  }) : {};
+}
+
+function getSchemaHeader({ cssSelector }) {
+  return cssSelector ? Object.assign({}, getSchemaContext, getSchemaType("WPHeader"), {
+    "cssSelector": cssSelector
+  }) : {};
+}
+
+function getSchemaBlogPosting(card = {}, author = {}, headline = '', image = '', structuredData = {}, story = {}) {
+  const { website: { url = '' } = {} } = structuredData;
+  return Object.assign({}, getSchemaType("BlogPosting"), getSchemaMainEntityOfPage(`${url}/${story.slug}`), getSchemaPublisher(structuredData.organization), {
+    "dateModified": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
+    "dateCreated": stripMillisecondsFromTime(new Date(card['card-added-at'])),
+    "datePublished": stripMillisecondsFromTime(new Date(card['card-updated-at'])),
+    "author": author,
+    "headline": headline,
+    "image": image
+  });
+}
+
+function getSchemaPublisher(organization) {
+  return {
+    "publisher": Object.assign({}, getSchemaType("Organization"), getSchemaContext, organization)
+  };
+}
+
+function getSchemaMainEntityOfPage(id) {
+  return {
+    "mainEntityOfPage": Object.assign({}, getSchemaType("WebPage"), { "@id": id })
+  };
+}
+
+function getSchemaMovieReview(movieObject = {}) {
+  const movieCreatedAt = lodash.get(movieObject, ["created-at"], null);
+  const actors = lodash.get(movieObject, ["actors"], []).map(actor => getSchemaPerson(actor.name));
+  const directors = lodash.get(movieObject, ["directors"], []).map(director => getSchemaPerson(director.name));
+  const producers = lodash.get(movieObject, ["producers"], []).map(producer => getSchemaPerson(producer.name));
+
+  return {
+    "actors": actors,
+    "directors": directors,
+    "name": lodash.get(movieObject, ["name"], ''),
+    "sameAs": lodash.get(movieObject, ["sameAs"], ''),
+    "description": lodash.get(movieObject, ["meta-description"], ''),
+    "producer": producers,
+    "image": lodash.get(movieObject, ["photo", "0", "url"], ''),
+    "dateCreated": movieCreatedAt ? new Date(movieCreatedAt).toISOString() : ''
+  };
+}
+
+function getSchemaWebsite(website = {}) {
+  const { url, searchpath, name, headline, keywords, queryinput } = website;
+
+  return Object.assign({}, getSchemaContext, getSchemaType("WebSite"), {
+    "url": url,
+    "interactivityType": "mixed",
+    "name": name,
+    "headline": headline,
+    "keywords": keywords,
+    copyrightHolder: Object.assign({}, getSchemaType("Organization"), { "name": name }),
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${url}/${searchpath}`,
+      "query-input": queryinput
+    }
+  }, getSchemaMainEntityOfPage(url));
+}
+
+function getSchemaListItem(position = 0, name = "", url = "") {
+  return Object.assign({}, getSchemaType("ListItem"), {
+    position,
+    name,
+    item: url
+  });
+}
+
+function getSchemaBreadcrumbList(breadcrumbsDataList) {
+  const itemListElement = breadcrumbsDataList.map(({ name = "", url = "" }, index) => getSchemaListItem(index + 1, name, url));
+  return Object.assign({}, getSchemaContext, getSchemaType("BreadcrumbList"), { itemListElement });
+}
+
+function getMovieEntityTags(movieJson) {
+    return getSchemaMovieReview(movieJson);
+}
+
+function generateTagsForEntity(entity, ldJson) {
+    if (entity.type &amp;&amp; entity.type.toLowerCase() === "movie") {
+        return ldJson("Movie", getMovieEntityTags(entity));
+    }
+}
+
+function getTitle$1(config) {
+  return config["publisher-settings"] ? config["publisher-settings"]["title"] : config["publisher-name"];
+}
+
+function generateStaticData(config) {
+  const title = getTitle$1(config);
+  const themeConfig = config["theme-attributes"] || {};
+  const publicIntegrations = get(config, ['public-integrations'], {});
+  const staticData = {
+    "twitter:site": title,
+    "twitter:domain": config["sketches-host"],
+    "twitter:app:name:ipad": themeConfig["twitter_app_name_ipad"],
+    "twitter:app:name:googleplay": themeConfig["twitter_app_name_googleplay"],
+    "twitter:app:id:googleplay": themeConfig["twitter_app_id_googleplay"],
+    "twitter:app:name:iphone": themeConfig["twitter_app_name_iphone"],
+    "twitter:app:id:iphone": themeConfig["twitter_app_id_iphone"],
+    "apple-itunes-app": themeConfig["apple_itunes_app"],
+    "google-play-app": themeConfig["google_play_app"],
+    "fb:app_id": get(publicIntegrations, ['facebook', 'app-id']) || get(themeConfig, ["fb_app_id"]),
+    "fb:pages": themeConfig["fb_pages"],
+    "og:site_name": title
+  };
+
+  return omitBy(staticData, isUndefined);
+}
+
+function generateImageObject(config = {}) {
+  const { "theme-attributes": themeConfig = {} } = config;
+  return {
+    "@context": "http://schema.org",
+    "@type": "ImageObject",
+    "author": config['publisher-name'],
+    "contentUrl": themeConfig.logo,
+    "url": themeConfig.logo,
+    "name": "logo",
+    "width": themeConfig.logo &amp;&amp; getQueryParams(themeConfig.logo).width,
+    "height": themeConfig.logo &amp;&amp; getQueryParams(themeConfig.logo).height
+  };
+}
+
+function generateStructuredData(config = {}) {
+  const title = getTitle$1(config);
+  const { "theme-attributes": themeConfig, "social-links": socialLinks, "seo-metadata": seoMetadata = [] } = config;
+  const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
+  const { "page-title": pageTitle = "", description = "", keywords = "" } = get(homePageSeo, ["data"], {});
+
+  if (!themeConfig || !themeConfig.logo) {
+    return {};
+  }
+
+  return {
+    organization: {
+      name: title,
+      url: config["sketches-host"],
+      logo: generateImageObject(config),
+      sameAs: socialLinks ? Object.values(socialLinks) : []
+    },
+    enableNewsArticle: !!themeConfig['structured_data_news_article'],
+    storyUrlAsMainEntityUrl: !!themeConfig['structured_data_news_article'],
+    enableVideo: !themeConfig['structured_data_enable_video'],
+    enableLiveBlog: !themeConfig['structured_data_enable_live_blog'],
+    website: {
+      url: config["sketches-host"],
+      searchpath: "search?q={query}",
+      queryinput: "required name=query",
+      name: pageTitle || title,
+      headline: description,
+      keywords
+    }
+  };
+}
+
+function getLdJsonFields(type, fields) {
+  return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
+}
+
+function ldJson(type, fields) {
+  const json = JSON.stringify(getLdJsonFields(type, fields)).replace(/&lt;/g, '&amp;lt;').replace(/>/g, '&amp;gt;');
+
+  return {
+    tag: "script",
+    type: "application/ld+json",
+    dangerouslySetInnerHTML: { __html: json }
+  };
+}
+
+function imageUrl(publisherConfig, s3Key, width, height) {
+  const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
+  width = width || "";
+  height = height || "";
+  return `${imageSrc}/${s3Key}?w=${width}&amp;h=${height}&amp;auto=format%2Ccompress&amp;fit=max`;
+}
+
+function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
+  const storyUrl = story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
+  const mainEntityUrl = Object.keys(story).length > 0 &amp;&amp; structuredData.storyUrlAsMainEntityUrl ? storyUrl : get(structuredData, ['organization', 'url'], '');
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  return Object.assign({}, { 'headline': story.headline,
+    "image": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
+    "url": `${publisherConfig['sketches-host']}/${story.slug}`,
+    "datePublished": stripMillisecondsFromTime(new Date(story['first-published-at'])) }, getSchemaMainEntityOfPage(mainEntityUrl), getSchemaPublisher(structuredData.organization));
+}
+
+function authorData(authors) {
+  return (authors || []).map(author => getSchemaPerson(author.name));
+}
+
+function getTextElementsOfCards(story) {
+  if (story &amp;&amp; story.cards) {
+    return story.cards.reduce((acc, currentCard) => {
+      return acc.concat(currentCard['story-elements'].filter(element => element.type === 'text'));
+    }, []);
+  }
+}
+
+function getPlainText(text = '') {
+  return text.replace(/&lt;[^>]+>/g, '');
+}
+
+function getCompleteText(story, stripHtmlFromArticleBody) {
+  const textArray = [];
+  getTextElementsOfCards(story).forEach(item => {
+    const textContent = stripHtmlFromArticleBody ? getPlainText(item.text) : item.text;
+    textArray.push(textContent);
+  });
+  const completeCardText = textArray.join('.');
+  return completeCardText;
+}
+
+function articleSectionObj(story) {
+  if (story['story-template'] !== 'video') {
+    return { 'articleSection': get(story, ['sections', '0', 'display-name'], '') };
+  }
+}
+
+function generateArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
+  const metaKeywords = story.seo &amp;&amp; story.seo['meta-keywords'] || [];
+  const authors = story.authors &amp;&amp; story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
+  const storyKeysPresence = Object.keys(story).length > 0;
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
+    "author": authorData(authors),
+    "keywords": metaKeywords.join(','),
+    "thumbnailUrl": imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight),
+    "articleBody": storyKeysPresence &amp;&amp; getCompleteText(story, structuredData.stripHtmlFromArticleBody) || '',
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "name": storyKeysPresence &amp;&amp; story.headline || '',
+    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig, pageType),
+    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
+  }, articleSectionObj(story));
+}
+
+function generateArticleImageData(image, publisherConfig = {}, pageType = "") {
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
+
+  return Object.assign({}, {
+    "@type": "ImageObject",
+    "url": articleImage
+  }, getQueryParams(articleImage));
+}
+
+function storyAccess(access) {
+  if (access === null || access === "public" || access === "login") {
+    return true;
+  } else if (access === "subscription") {
+    return false;
+  }
+}
+
+function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = "") {
+  return Object.assign({}, {
+    "@type": "WebPage",
+    url: `${publisherConfig["sketches-host"]}/${story.slug}`,
+    primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig, pageType)
+  });
+}
+
+function generateHasPartData(storyAccess) {
+  return storyAccess ? {} : { "hasPart": [{
+      "@type": "WebPageElement",
+      "isAccessibleForFree": storyAccess,
+      "cssSelector": ".paywall"
+    }]
+  };
+}
+
+function generateNewsArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
+  const { alternative = {} } = story.alternative || {};
+  const storyAccessType = storyAccess(story['access']);
+  return Object.assign({}, {
+    "alternativeHeadline": alternative.home &amp;&amp; alternative.home.default ? alternative.home.default.headline : "",
+    "description": story.summary,
+    "isAccessibleForFree": storyAccessType,
+    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
+  }, generateHasPartData(storyAccessType));
+}
+
+function findStoryElementField(card, type, field, defaultValue) {
+  const elements = card['story-elements'].filter(e => e.type == type || e.subtype == type);
+  if (elements.length > 0) return elements[0][field];else return defaultValue;
+}
+
+function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, pageType) {
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  return {
+    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "liveBlogUpdate": story.cards.map(card => getSchemaBlogPosting(card, authorData(story.authors), findStoryElementField(card, "title", "text", story.headline), imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key']), imageWidth, imageHeight), structuredData, story))
+  };
+}
+
+function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
+  const metaKeywords = story.seo &amp;&amp; story.seo['meta-keywords'] || [];
+  const articleSection = get(story, ['sections', '0', 'display-name'], '');
+  const embedUrl = get(story, ['cards', '0', 'story-elements', '0', 'embed-url'], '');
+  const socialShareMsg = get(story, ['summary'], '');
+  const metaDescription = get(story, ['seo', 'meta-description'], '');
+  const subHeadline = get(story, ['subheadline'], '');
+  const headline = get(story, ['headline'], '');
+  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
+  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
+    "author": authorData(story.authors),
+    "keywords": metaKeywords.join(','),
+    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
+    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "description": socialShareMsg || metaDescription || subHeadline || headline,
+    "name": story.headline,
+    "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
+    "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
+    "embedUrl": embedUrl
+  });
+}
+
+function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
+  return getSchemaWebsite(structuredData.website);
+}
+
+function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
+  const { "sketches-host": domain = "", sections = [] } = publisherConfig;
+  let breadcrumbsDataList = [{ name: "Home", url: domain }];
+  function addCrumb(crumbsDataList = [], currentSection = {}) {
+    if (!currentSection["parent-id"]) return crumbsDataList;
+
+    const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
+
+    if (!parentSection) return crumbsDataList;
+
+    const { "section-url": url = "", name = "" } = parentSection;
+    crumbsDataList.unshift({ url, name });
+    return addCrumb(crumbsDataList, parentSection);
+  }
+
+  function getSectionPageCrumbs(section = {}) {
+    const { "section-url": url = "", name = "" } = section;
+    const crumbsDataList = [{ url, name }];
+    return addCrumb(crumbsDataList, section);
+  }
+
+  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection] } = {}) {
+    let sectionCrumbsDataList = [];
+    if (storySection) {
+      sectionCrumbsDataList = getSectionPageCrumbs(storySection);
+    }
+    sectionCrumbsDataList.push({ name: headline, url });
+    return sectionCrumbsDataList;
+  }
+
+  function getBreadCrumbs(breadcrumb = {}) {
+    const crumbsDataList = [{ url: breadcrumb.url, name: breadcrumb.name }];
+    return addCrumb(crumbsDataList);
+  }
+
+  if (data.breadcrumbs &amp;&amp; "name" in data.breadcrumbs &amp;&amp; "url" in data.breadcrumbs) {
+    breadcrumbsDataList = breadcrumbsDataList.concat(getBreadCrumbs(data.breadcrumbs));
+    return getSchemaBreadcrumbList(breadcrumbsDataList);
+  }
+  switch (pageType) {
+    case "section-page":
+      breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section));break;
+    case "story-page":
+      breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story));break;
+    case "story-page-amp":
+      breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story));break;
+  }
+  return getSchemaBreadcrumbList(breadcrumbsDataList);
+}
+
+/**
+ * Options for a schema.org Organization
+ * Example
+ * ```javascript
+ * {
+ *   name: "Quintype",
+ *   url: "http://www.quintype.com/",
+ *   logo: "https://quintype.com/logo.png",
+ *   sameAs: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]
+ * }
+ * ```
+ * @typedef Organization
+ */
+
+/**
+* Options for a schema.org Website
+* Example
+* ```javascript
+* {
+*   url: 'https://www.quintype.com/',
+*   searchpath: 'search?q={q}',
+*   queryinput: 'required name=q',
+*   name: 'Quintype',
+*   headline: 'Quintype - Discover news',
+*   keywords: 'news,quintype'
+* }
+* ```
+* @typedef Website
+*/
+
+/**
+ * Options to {@link StructuredDataTags}
+ *
+ * @typedef StructuredDataConfig
+ * @property {boolean} enableBreadcrumbList Should breadcrumbs be enabled (default true)
+ * @property {boolean} enableLiveBlog Should LiveBlog schema be implemented for live blogs (default false)
+ * @property {boolean} enableVideo Should VideoObject be enabled for video stories (default false)
+ * @property {(boolean | "withoutArticleSchema")} enableNewsArticle If set to true, then both Article and NewsArticle schema are implemented. If set to *"withoutArticleSchema"*, then only NewsArticle is implemented
+ * @property {Organization} organization The organization to put on the homepage. See {@link Organization} for an example
+ * @property {Website} website The website and search urls. See {@link Website} for an example
+ * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
+ * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
+ * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
+ * 
+ */
+
+/**
+ * StructuredData adds tags for schema.org's structured data
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {StructuredDataConfig} seoConfig.structuredData Please see {@link StructuredDataConfig} for a full list of supported options
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function StructuredDataTags({ structuredData = {} }, config, pageType, response = {}, { url }) {
+  const tags = [];
+  const { story = {} } = response.data || {};
+  const entities = get(response, ["data", "linkedEntities"], null) || [];
+  const { config: publisherConfig = {} } = response;
+  const { articleType = '' } = publisherConfig['publisher-settings'] || {};
+  const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
+  const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
+  const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
+
+  let articleData = {};
+
+  if (!isStructuredDataEmpty) {
+    articleData = generateArticleData(structuredData, story, publisherConfig, pageType);
+    structuredDataTags.map(type => {
+      if (pageType === type) {
+        tags.push(ldJson("Organization", structuredData.organization));
+        if (structuredData.website) {
+          tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+        }
+      }
+    });
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'home-page') {
+    tags.push(ldJson("Organization", structuredData.organization));
+    if (structuredData.website) {
+      tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+    }
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; enableBreadcrumbList) {
+    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'story-page') {
+    const newsArticleTags = generateNewsArticleTags();
+    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'story-page-amp') {
+    const newsArticleTags = generateNewsArticleTags();
+    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; structuredData.header) {
+    tags.push(ldJson("WPHeader", getSchemaHeader(structuredData.header)));
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; structuredData.footer) {
+    tags.push(ldJson("WPFooter", getSchemaFooter(structuredData.footer)));
+  }
+
+  if (entities.length > 0) {
+    for (let entity of entities) {
+      const entityTags = generateTagsForEntity(entity, ldJson);
+      entityTags &amp;&amp; tags.push(entityTags);
+    }
+  }
+
+  function generateNewsArticleTags() {
+    if (structuredData.enableNewsArticle) {
+      return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig, pageType)));
+    }
+  }
+
+  function storyTags() {
+    if (structuredData.enableLiveBlog &amp;&amp; story['story-template'] === 'live-blog') {
+      return ldJson("LiveBlogPosting", Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig, pageType)));
+    }
+
+    if (structuredData.enableVideo &amp;&amp; story['story-template'] === 'video') {
+      return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig, pageType));
+    }
+
+    if (structuredData.enableNewsArticle !== 'withoutArticleSchema') {
+      return ldJson("Article", articleData);
+    }
+    return {};
+  }
+
+  // All Pages have: Publisher, Site
+  // Story Page have : Article/NewsArticle/LiveBlog/Review as appropriate
+  return tags;
+}
+
+function showAmpTag({ ampStoryPages = true }, pageType, story) {
+  if (!ampStoryPages || pageType !== 'story-page') {
+    return false;
+  }
+
+  if (!get(story, ["is-amp-supported"])) {
+    return false;
+  }
+
+  if (ampStoryPages === 'public' &amp;&amp; !isStoryPublic(story)) {
+    return false;
+  }
+
+  return true;
+}
+
+const getDomain = (url, domainSlug) => {
+  const domain = domainSlug ? new URL(url).origin : '';
+  try {
+    return domain;
+  } catch (err) {
+    return "";
+  }
+};
+
+/**
+ * StoryAmpTags adds the amphref to stories which support amp.
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
+
+  const story = get(data, ["data", "story"], {});
+  const { currentHostUrl = '', domainSlug } = data;
+  // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl, domainSlug) || config['sketches-host'] : '';
+  const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug) : encodeURIComponent(story.slug);
+  if (showAmpTag(seoConfig, pageType, story)) {
+    return [{
+      tag: 'link',
+      rel: 'amphtml',
+      href: `${ampUrlAppend}/amp/story/${storySlug}`
+    }];
+  } else {
+    return [];
+  }
+}
+
+function tagToKey(tag) {
+  switch (tag.tag || "meta") {
+    case "meta":
+      return `meta-${tag.name || "name"}-${tag.property || "property"}`;
+    case "link":
+      return `link-${tag.rel}`;
+    case "title":
+      return `title`;
+    default:
+      return Math.random().toString();
+  }
+}
+
+class MetaTagList {
+  constructor(tags) {
+    this.tags = tags;
+  }
+
+  toString() {
+    const uniqueTags = lodash.uniqBy(this.tags.reverse(), tagToKey).reverse();
+    return ReactDomServer.renderToStaticMarkup(uniqueTags.map(tag => React.createElement(tag.tag || "meta", lodash.omit(tag, "tag"))));
+  }
+
+  addTag() {
+    return new MetaTagList(this.tags.concat([].slice.call(arguments)));
+  }
+}
+
+/**
+ * This class represents the SEO tag generator, and is the main export from this library.
+ *
+ * The SEO class works by passing the data related to the current page through a series of {@link Generator}s, which take data and return a series of tags.
+ *
+ * By default, the following generators are included:
+ * * {@link TextTags}
+ * * {@link ImageTags}
+ * * {@link AuthorTags}
+ * * {@link StaticTags}
+ * * {@link StructuredDataTags}
+ * * {@link StoryAmpTags}
+ *
+ * This library should already be installed in the malibu app generator, and an example can be found in there.
+ *
+ * ```javascript
+ * new SEO({
+ *   staticTags: {
+ *     "twitter:site": "Quintype",
+ *     "twitter:domain": "quintype.com",
+ *     "twitter:app:name:ipad": "Quintype",
+ *     "twitter:app:name:googleplay": "Quintype (Official App)",
+ *     "twitter:app:id:googleplay": "com.quintype",
+ *     "twitter:app:name:iphone": "Quintype for iPhone",
+ *     "twitter:app:id:iphone": "42",
+ *     "apple-itunes-app": "app-id=42",
+ *     "google-play-app": "app-id=com.quintype",
+ *     "fb:app_id": "42",
+ *     "fb:pages": "42",
+ *     "og:site_name": "Quintype"
+ *   },
+ *   enableTwitterCards: true,
+ *   enableOgTags: true,
+ *   enableNews: true,
+ *   structuredData: {
+ *     organization: {
+ *       name: "Quintype",
+ *       url: "http://www.quintype.com/",
+ *       logo: "https://quintype.com/logo.png",
+ *       sameAs: ["https://www.facebook.com/quintype","https://twitter.com/quintype_in","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],
+ *     },
+ *     enableNewsArticle: true
+ *   },
+ *   ampStoryPages: true
+ * });
+ * ```
+ */
+class SEO {
+  /**
+   * Create a new SEO Object
+   * @param {Object} seoConfig Configuration that is passed as the first argument to each {@link Generator}
+   * @param {Array&lt;Generator>} seoConfig.generators List of generators to run (optional)
+   * @param {Array&lt;Generator>} seoConfig.extraGenerators List of generators to run after the main generators run. Generators here can override tags that are returned by earlier generator. See [Custom SEO Malibu Tutorial](https://developers.quintype.com/malibu/tutorial/custom-seo).
+   * @param {Object} seoConfig.pageTypeAliases A map of aliases to their original page type. This is a convenience if you want to have a different page type for some sections. ex: `{"budget-page":"section-page"}`
+   */
+  constructor(seoConfig = {}) {
+    this.seoConfig = seoConfig;
+    this.generators = (seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags, StoryAmpTags]).concat(seoConfig.extraGenerators || []);
+  }
+
+  getMetaTags(config, pageType, data, params = {}) {
+    pageType = lodash.get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
+    return new MetaTagList(lodash.flatMap(this.generators, generator => generator(this.seoConfig, config, pageType, data, params)));
+  }
+
+  getTitle(config, pageType, data, params = {}) {
+    return getTitle(this.seoConfig, config, pageType, data);
+  }
+}
+
+exports.AuthorTags = AuthorTags;
+exports.ImageTags = ImageTags;
+exports.MetaTagList = MetaTagList;
+exports.SEO = SEO;
+exports.StaticTags = StaticTags;
+exports.StoryAmpTags = StoryAmpTags;
+exports.StructuredDataTags = StructuredDataTags;
+exports.TextTags = TextTags;
+exports.generateStaticData = generateStaticData;
+exports.generateStructuredData = generateStructuredData;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>

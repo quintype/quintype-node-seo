@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');ga('create', 'UA-66074042-1', 'auto');ga('send', 'pageview');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> src/text-tags.js</title>
+
+  <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="./build/entry.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700|Inconsolata,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+  <link type="text/css" rel="stylesheet" href="styles/iframe.css">
+  <link type="text/css" rel="stylesheet" href="">
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  
+</head>
+
+
+
+<body class="layout small-header">
+    <div id="stickyNavbarOverlay"></div>
+    
+
+<div class="top-nav">
+    <div class="inner">
+        <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <div class="logo">
+             
+                <a class="image" href="index.html">
+                    <img src="https://images.assettype.com/quintype-website/2018-10/013e8cbe-92b4-435f-bbbb-3e101efbc99a/quintype_logo.png?w=180" alt="logo">
+                </a>
+            
+             
+                <a href="index.html">
+                    <h1 class="navbar-item">@quintype/seo</h1>
+                </a>
+            
+        </div>
+        <div class="menu">
+            
+            <div class="navigation">
+                <a
+                    href="index.html"
+                    class="link"
+                >
+                    API Documentation
+                </a>
+                
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+    <div id="main">
+        <div
+            class="sidebar "
+            id="sidebarNav"
+        >
+            
+            <nav>
+                
+                    <h2><a href="index.html">Documentation</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="SEO.html">SEO</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AuthorTags">AuthorTags</a></li><li><a href="global.html#Generator">Generator</a></li><li><a href="global.html#ImageTags">ImageTags</a></li><li><a href="global.html#StaticTags">StaticTags</a></li><li><a href="global.html#StoryAmpTags">StoryAmpTags</a></li><li><a href="global.html#StructuredDataTags">StructuredDataTags</a></li><li><a href="global.html#TextTags">TextTags</a></li></ul></div>
+                
+            </nav>
+        </div>
+        <div class="core" id="main-content-wrapper">
+            <div class="content">
+                <header class="page-title">
+                    <p>Source</p>
+                    <h1>src/text-tags.js</h1>
+                </header>
+                
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {get, isEmpty} from 'lodash';
+import {objectToTags} from './utils';
+
+function buildTagsFromStory(config, story, url = {}) {
+  if(!story)
+    return;
+
+  function getStoryCardMetadata(cardId) {
+    const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+    const urlWithCardId = `${config['sketches-host']}/${story.slug}?cardId=${cardId}`;
+
+    if(metadata &amp;&amp; !isEmpty(metadata) &amp;&amp;  metadata['social-share']){
+      return {
+        title: metadata['social-share'].title || story.headline,
+        description: metadata['social-share'].message || story.summary,
+        ogUrl: urlWithCardId,
+        ogTitle: metadata['social-share'].title || story.headline,
+        ogDescription: metadata['social-share'].message || story.summary
+      };
+    }
+    return metadata;
+  }
+
+  const seo = story.seo || {};
+
+  const storyUrl = story.url || `${config['sketches-host']}/${story.slug}`;
+
+  const getOgTitle = get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
+  const authors = get(story, ['authors'], []).map(author => author.name);
+
+  const storyMetaData = {
+    title: seo["meta-title"] || story.headline,
+    "page-title": seo["meta-title"] || story.headline,
+    description: seo["meta-description"] || story.summary,
+    keywords: (seo["meta-keywords"] || (story.tags || []).map(tag => tag.name)).join(","),
+    canonicalUrl: story["canonical-url"] || storyUrl,
+    ogUrl: get(seo, ["og", "url"]) || storyUrl,
+    ogTitle: getOgTitle,
+    ogDescription: story.summary || story.subheadline || story.headline,
+    storyUrl: storyUrl,
+    author: authors
+  };
+
+  if(url.query &amp;&amp; url.query.cardId){
+    const storyCardMetadata = getStoryCardMetadata(url.query.cardId);
+    return Object.assign({}, storyMetaData, storyCardMetadata); //TODO rewrite in spread syntax, add babel plugin
+  }
+
+  return storyMetaData;
+}
+
+function buildTagsFromTopic(config, tag, url = {}) {
+  if(isEmpty(tag))
+    return;
+
+  const tagName = tag.name;
+  const tagDescription = tag['meta-description'];
+  const description = `Read stories listed under on ${tagName}`;
+  const tagUrl = `${config['sketches-host']}${url.pathname}`
+  const canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const canonicalUrl = `${config['sketches-host']}${canonicalSlug}`;
+  const topicMetaData = {
+    title: tagName,
+    "page-title": tagName,
+    description: tagDescription || description,
+    keywords: tagName,
+    canonicalUrl: canonicalUrl,
+    ogUrl: tagUrl,
+    ogTitle: tagName,
+    ogDescription: tagDescription || description
+  };
+
+  return topicMetaData;
+}
+
+function buildTagsFromAuthor(config, author, url = {}) {
+  if(isEmpty(author)) return;
+
+  const authorName = author.name;
+  const authorUrl = `${config['sketches-host']}${url.pathname}`;
+  const description = author.bio || `View all articles written by ${authorName}`;
+
+  return {
+    title: authorName,
+    "page-title": authorName,
+    description: description,
+    keywords: `${authorName},${config['publisher-name']}`,
+    canonicalUrl: authorUrl,
+    ogUrl: authorUrl,
+    ogTitle: authorName,
+    ogDescription: description,
+  };
+}
+
+function buildCustomTags(customTags = {}, pageType = ''){
+  const configObject = customTags[pageType];
+  if(configObject) {
+    return configObject;
+  }
+  return {};
+}
+
+
+// The findRelevantConfig method call has no ownerId for home page.
+// This causes the seoMetadata to be undefined.
+// So the default value for the ownerId is set to null.
+
+function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
+  function findRelevantConfig(ownerType, ownerId = null) {
+    const seoMetadata = config['seo-metadata'].find(page => page["owner-type"] === ownerType &amp;&amp; page["owner-id"] === ownerId) || {};
+    const { sections = [] } = config;
+    const section = sections.find(section => ownerType == 'section' &amp;&amp; section.id === ownerId) || {};
+
+    if(seoMetadata.data || section.id) {
+      const result = Object.assign({}, {
+        'page-title': section.name,
+        title: section.name,
+        canonicalUrl: section['section-url'] || undefined,
+      }, seoMetadata.data);
+
+      if(!result.description) {
+        const homeSeoData = config['seo-metadata'].find(page => page['owner-type'] === 'home') || {data: {description: ""}};
+        result.description = homeSeoData.data.description;
+      }
+
+      result.ogTitle = result.title;
+      result.ogDescription = result.description;
+      return result;
+    }
+  }
+
+  if(seoConfig.customTags &amp;&amp; seoConfig.customTags[pageType]){
+    return buildCustomTags(seoConfig.customTags, pageType);
+  }
+
+  switch(pageType) {
+    case 'home-page': return findRelevantConfig('home')
+    case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
+    case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'story-page-amp': return buildTagsFromStory(config, get(data, ["data", "story"]), url) || getSeoData(config, "home-page", data, url);
+    case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url) || getSeoData(config, "home-page", data, url);
+    default: return getSeoData(config, 'home-page', data, url);
+  }
+}
+
+function getSeoDataFromCollection(config, data) {
+  if (get(data, ["data", "collection", "name"])) {
+    let { name, summary } = get(data, ["data", "collection"]);
+
+    if (!summary) {
+      summary = (getSeoData(config, 'home-page', data) || {}).description
+    }
+
+    return {
+      'page-title': name,
+      title: name,
+      ogTitle: name,
+      description: summary,
+      ogDescription: summary,
+      canonicalUrl: SKIP_CANONICAL
+    }
+  }
+}
+
+const SKIP_CANONICAL = '__SKIP__CANONICAL__'
+
+/**
+ * TextTags adds the majority of basic tags, such as
+ * * Canonical URLs
+ * * Title and Description
+ * * Keywords
+ *
+ * If the current URL contains a cardId in the query parameters, then the title and description will come from *card["social-share"]*
+ *
+ * @extends Generator
+ * @param {*} seoConfig
+ * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
+ * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
+ * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
+ * @param {...*} params See {@link Generator} for other Parameters
+ */
+export function TextTags(seoConfig, config, pageType, data, {url}) {
+  const seoData = getSeoData(config, pageType, data, url, seoConfig);
+
+  if(!seoData)
+    return [];
+
+  const currentUrl = `${config['sketches-host']}${url.pathname}`;
+
+  const basicTags = {
+    'description': seoData.description,
+    'title': seoData.title,
+    'keywords': seoData.keywords,
+  };
+
+  const ogUrl = seoData.ogUrl || seoData.canonicalUrl || currentUrl;
+  const ogTags = seoConfig.enableOgTags ? {
+    'og:type': pageType === 'story-page' || pageType === 'story-page-amp' ? 'article' : 'website',
+    'og:url': ogUrl === SKIP_CANONICAL ? undefined : ogUrl,
+    'og:title': seoData.ogTitle,
+    'og:description': seoData.ogDescription
+  } : undefined;
+
+  const twitterTags = seoConfig.enableTwitterCards ? {
+    'twitter:card': "summary_large_image",
+    'twitter:title': seoData.ogTitle,
+    'twitter:description': seoData.ogDescription
+  } : undefined;
+
+  const allTags = Object.assign(basicTags, ogTags, twitterTags);
+
+  const commonTags = [
+    {tag: "title", children: data.title || seoData['page-title']},
+  ];
+
+  const canonical = seoData.canonicalUrl || currentUrl;
+  if(canonical != SKIP_CANONICAL) {
+    commonTags.push({ tag: "link", rel: "canonical", href: canonical});
+  }
+
+  if(pageType === 'story-page' || pageType === 'story-page-amp') {
+    commonTags.push({name: "author", content: seoData.author});
+  }
+
+  if((pageType === 'story-page' || pageType === 'story-page-amp') &amp;&amp; seoConfig.enableNews) {
+    commonTags.push({name: "news_keywords", content: seoData.keywords});
+    if(get(data, ["data", "story", "seo", "meta-google-news-standout"]))
+      commonTags.push({tag: "link", rel: "standout", href: seoData.storyUrl || currentUrl});
+  }
+
+  return commonTags.concat(objectToTags(allTags));
+}
+
+export function getTitle(seoConfig, config, pageType, data, params) {
+  if(get(data, ["title"]))
+    return get(data, ["title"]);
+
+  if(get(data, ["data", "title"]))
+    return get(data, ["data", "title"]);
+
+  const seoData = getSeoData(config, pageType, data, undefined, seoConfig) || {};
+  return seoData['page-title'];
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+            </div>
+            
+            <footer class="footer">
+                <div class="content has-text-centered">
+                    <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a></p>
+                    <p class="sidebar-created-by">
+                        <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+                        <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers - JavaScript Development Agency</a>
+                    </p>
+                </div>
+            </footer>
+            
+        </div>
+        <div id="side-nav" class="side-nav">
+        </div>
+    </div>
+<script src="scripts/app.min.js"></script>
+<script>PR.prettyPrint();</script>
+<script src="scripts/linenumber.js"> </script>
+
+</body>
+</html>
