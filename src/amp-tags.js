@@ -41,11 +41,12 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
   const { currentHostUrl = '', domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
   const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl, domainSlug) || config['sketches-host'] : '';
+  const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug): encodeURIComponent(story.slug);
   if (showAmpTag(seoConfig, pageType, story)) {
     return [{
       tag: 'link',
       rel: 'amphtml',
-      href: `${ampUrlAppend}/amp/story/${encodeURIComponent(story.slug)}`
+      href: `${ampUrlAppend}/amp/story/${storySlug}`
     }];
   } else {
     return [];
