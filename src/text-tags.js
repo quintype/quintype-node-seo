@@ -149,6 +149,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
   switch(pageType) {
     case 'home-page': return findRelevantConfig('home')
     case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
+    case 'collection-page': return getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
     case 'tag-page': return buildTagsFromTopic(config, get(data, ["data", "tag"]), url, data) || getSeoData(config, "home-page", data, url);
     case 'story-page': return buildTagsFromStory(config, get(data, ["data", "story"]), url, data) || getSeoData(config, "home-page", data, url);
     case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url, data) || getSeoData(config, "home-page", data, url);
