@@ -87,9 +87,8 @@ function buildTagsFromAuthor(config, author, url = {}, data) {
 
   const customSeo = get(data, ["data", "customSeo"], {})
   const title = customSeo.title || author.name;
-  const authorName = customSeo.title || author.name;
   const pageTitle = customSeo["page-title"] || title;
-  const description = customSeo.description || author.bio || `View all articles written by ${authorName}`;
+  const description = customSeo.description || author.bio || `View all articles written by ${title}`;
   const ogTitle = customSeo.ogTitle || author.name;
   const authorUrl = `${config['sketches-host']}${url.pathname}`;
   const ogDescription = customSeo.ogDescription || description;
@@ -98,7 +97,7 @@ function buildTagsFromAuthor(config, author, url = {}, data) {
     title,
     "page-title": pageTitle,
     description,
-    keywords: `${authorName},${config['publisher-name']}`,
+    keywords: `${title},${config['publisher-name']}`,
     canonicalUrl: authorUrl,
     ogUrl: authorUrl,
     ogTitle,
