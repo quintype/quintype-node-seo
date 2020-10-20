@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.24](https://github.com/quintype/quintype-node-seo/compare/v1.38.22...v1.38.24) (2020-10-20)
+
+
+### Bug Fixes
+
+* **author SEO:** added missing variable ([#305](https://github.com/quintype/quintype-node-seo/issues/305)) ([1e1e7fc](https://github.com/quintype/quintype-node-seo/commit/1e1e7fce78a35c29b9a6b8273d273cce5974fee3))
+
 ### [1.38.23](https://github.com/quintype/quintype-node-seo/compare/v1.38.22...v1.38.23) (2020-10-16)
 
 ### [1.38.22](https://github.com/quintype/quintype-node-seo/compare/v1.38.15...v1.38.22) (2020-10-16)
