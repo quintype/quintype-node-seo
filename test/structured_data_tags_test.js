@@ -821,6 +821,51 @@ describe('StructuredDataTags', function() {
         ampPageString
       );
     });
+
+    it('uses default story headline if the story has no summary', function() {
+      const options = {
+        seo: {
+          'meta-description': 'Meta description',
+        },
+        headline:
+          'Personalise or perish - Why publishers need to use personalised content',
+        summary: '',
+        subheadline: 'subheadline',
+      };
+
+      const cards = [
+        {
+          'card-added-at': 1519816264773,
+          'card-updated-at': 1524204205102,
+          'story-elements': [],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({newsArticle: true, liveBlog: true}),
+        {},
+        'story-page',
+        sampleStoryData('live-blog', cards, sampleAuthorsData(), options),
+        {url: url.parse('/')}
+      );
+
+      const ampPageString = getSeoMetadata(
+        getSeoConfig({newsArticle: true, liveBlog: true}),
+        {},
+        'story-page-amp',
+        sampleStoryData('live-blog', cards, sampleAuthorsData(), options),
+        {url: url.parse('/')}
+      );
+
+      assertContains(
+        '<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madrid.quintype.io"},{"@type":"ListItem","position":2,"name":"Section Name","item":""},{"@type":"ListItem","position":3,"name":"Personalise or perish - Why publishers need to use personalised content","item":""}]}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","author":"Greeshma","coverageEndTime":"2018-04-20T06:03:25Z","coverageStartTime":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","liveBlogUpdate":[{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"dateModified":"2018-04-20T06:03:25Z","dateCreated":"2018-02-28T11:11:04Z","datePublished":"2018-04-20T06:03:25Z","author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"headline":"Personalise or perish - Why publishers need to use personalised content","image":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max"}],"@type":"LiveBlogPosting","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":"","thumbnailUrl":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","articleBody":"","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","isPartOf":{"@type":"WebPage","url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","primaryImageOfPage":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"}},"articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","hasPart":[{"@type":"WebPageElement","cssSelector":".paywall"}],"@type":"NewsArticle","@context":"http://schema.org"}</script>',
+        string
+      );
+      assertContains(
+        '<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madrid.quintype.io"},{"@type":"ListItem","position":2,"name":"Section Name","item":""},{"@type":"ListItem","position":3,"name":"Personalise or perish - Why publishers need to use personalised content","item":""}]}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","author":"Greeshma","coverageEndTime":"2018-04-20T06:03:25Z","coverageStartTime":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","liveBlogUpdate":[{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"dateModified":"2018-04-20T06:03:25Z","dateCreated":"2018-02-28T11:11:04Z","datePublished":"2018-04-20T06:03:25Z","author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"headline":"Personalise or perish - Why publishers need to use personalised content","image":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=750&auto=format%2Ccompress&fit=max"}],"@type":"LiveBlogPosting","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=750&auto=format%2Ccompress&fit=max","width":"1200","height":"750"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":"","thumbnailUrl":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=750&auto=format%2Ccompress&fit=max","articleBody":"","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:25Z","name":"Personalise or perish - Why publishers need to use personalised content","isPartOf":{"@type":["CreativeWork","WebPage","Product"],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","name":"quintype-demo","productID":"quintype-demo.com:basic","primaryImageOfPage":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=750&auto=format%2Ccompress&fit=max","width":"1200","height":"750"}},"articleSection":"Section Name","alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","hasPart":[{"@type":"WebPageElement","cssSelector":".paywall"}],"@type":"NewsArticle","@context":"http://schema.org"}</script>',
+        ampPageString
+      );
+    });
   });
 
   describe('with BreadcrumbList schema', function() {
