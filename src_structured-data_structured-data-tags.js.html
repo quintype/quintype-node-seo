@@ -104,13 +104,13 @@
   getSchemaMainEntityOfPage,
   getSchemaWebsite,
   getSchemaBreadcrumbList,
-  getSchemaListItem
+  getSchemaListItem,
 } from './schema';
-import get from "lodash/get";
-import { generateTagsForEntity } from './entity';
+import get from 'lodash/get';
+import {generateTagsForEntity} from './entity';
 
-import { stripMillisecondsFromTime, getQueryParams } from "../utils";
-import { generateImageObject } from '../generate-common-seo';
+import {stripMillisecondsFromTime, getQueryParams} from '../utils';
+import {generateImageObject} from '../generate-common-seo';
 
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
@@ -122,32 +122,55 @@ function ldJson(type, fields) {
     .replace(/>/g, '&amp;gt;');
 
   return {
-    tag: "script",
-    type: "application/ld+json",
-    dangerouslySetInnerHTML: {__html: json}
+    tag: 'script',
+    type: 'application/ld+json',
+    dangerouslySetInnerHTML: {__html: json},
   };
 }
 
 function imageUrl(publisherConfig, s3Key, width, height) {
-  const imageSrc = /^https?.*/.test(publisherConfig['cdn-image']) ? publisherConfig['cdn-image'] : `https://${publisherConfig['cdn-image']}`;
-  width = width || "";
-  height = height || "";
+  const imageSrc = /^https?.*/.test(publisherConfig['cdn-image'])
+    ? publisherConfig['cdn-image']
+    : `https://${publisherConfig['cdn-image']}`;
+  width = width || '';
+  height = height || '';
   return `${imageSrc}/${s3Key}?w=${width}&amp;h=${height}&amp;auto=format%2Ccompress&amp;fit=max`;
 }
 
-function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
-  const storyUrl = story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
-  const mainEntityUrl = (Object.keys(story).length > 0 &amp;&amp; structuredData.storyUrlAsMainEntityUrl) ? storyUrl : get(structuredData, ['organization', 'url'], '');
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  return Object.assign({},
-    {'headline' : story.headline,
-      "image": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
-      "url": `${publisherConfig['sketches-host']}/${story.slug}`,
-      "datePublished": stripMillisecondsFromTime(new Date(story['first-published-at']))},
+function generateCommonData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {},
+  pageType = ''
+) {
+  const storyUrl =
+    story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
+  const mainEntityUrl =
+    Object.keys(story).length > 0 &amp;&amp; structuredData.storyUrlAsMainEntityUrl
+      ? storyUrl
+      : get(structuredData, ['organization', 'url'], '');
+  const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
+  const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
+  return Object.assign(
+    {},
+    {
+      headline: story.headline,
+      image: [
+        imageUrl(
+          publisherConfig,
+          story['hero-image-s3-key'],
+          imageWidth,
+          imageHeight
+        ),
+      ],
+      url: `${publisherConfig['sketches-host']}/${story.slug}`,
+      datePublished: stripMillisecondsFromTime(
+        new Date(story['first-published-at'])
+      ),
+    },
     getSchemaMainEntityOfPage(mainEntityUrl),
     getSchemaPublisher(structuredData.organization)
-  )
+  );
 }
 
 function authorData(authors) {
@@ -155,9 +178,11 @@ function authorData(authors) {
 }
 
 function getTextElementsOfCards(story) {
-  if(story &amp;&amp; story.cards) {
+  if (story &amp;&amp; story.cards) {
     return story.cards.reduce((acc, currentCard) => {
-      return acc.concat(currentCard['story-elements'].filter(element => element.type === 'text'));
+      return acc.concat(
+        currentCard['story-elements'].filter(element => element.type === 'text')
+      );
     }, []);
   }
 }
@@ -167,214 +192,350 @@ function getPlainText(text = '') {
 }
 
 function getCompleteText(story, stripHtmlFromArticleBody) {
-  const textArray = []
-  getTextElementsOfCards(story).forEach((item) => {
-    const textContent = stripHtmlFromArticleBody ? getPlainText(item.text) : item.text;
-    textArray.push(textContent)
-  })
+  const textArray = [];
+  getTextElementsOfCards(story).forEach(item => {
+    const textContent = stripHtmlFromArticleBody
+      ? getPlainText(item.text)
+      : item.text;
+    textArray.push(textContent);
+  });
   const completeCardText = textArray.join('.');
   return completeCardText;
 }
 
 function articleSectionObj(story) {
-  if(story['story-template'] !== 'video') {
-    return { 'articleSection': get(story, ['sections', '0', 'display-name'], '') }
+  if (story['story-template'] !== 'video') {
+    return {articleSection: get(story, ['sections', '0', 'display-name'], '')};
   }
 }
 
-function generateArticleData (structuredData = {}, story = {}, publisherConfig = {}, pageType = ""){
-  const metaKeywords = story.seo &amp;&amp; story.seo['meta-keywords'] || [];
-  const authors = story.authors &amp;&amp; story.authors.length !== 0 ? story.authors : [{name: story["author-name"] || ""}];
+function generateArticleData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {},
+  pageType = ''
+) {
+  const metaKeywords = (story.seo &amp;&amp; story.seo['meta-keywords']) || [];
+  const authors =
+    story.authors &amp;&amp; story.authors.length !== 0
+      ? story.authors
+      : [{name: story['author-name'] || ''}];
   const storyKeysPresence = Object.keys(story).length > 0;
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const storyAccessType = storyAccess(story["access"]);
-  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
-    "author": authorData(authors),
-    "keywords": metaKeywords.join(','),
-    "thumbnailUrl": imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight),
-    "articleBody": (storyKeysPresence &amp;&amp; getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || '',
-    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "name": (storyKeysPresence &amp;&amp; story.headline) || '',
-    "image": generateArticleImageData(story['hero-image-s3-key'], publisherConfig, pageType),
-    "isAccessibleForFree": storyAccessType,
-    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
-  }, articleSectionObj(story));
+  const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
+  const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
+  const storyAccessType = storyAccess(story['access']);
+  return Object.assign(
+    {},
+    generateCommonData(structuredData, story, publisherConfig, pageType),
+    {
+      author: authorData(authors),
+      keywords: metaKeywords.join(','),
+      thumbnailUrl: imageUrl(
+        publisherConfig,
+        story['hero-image-s3-key'],
+        imageWidth,
+        imageHeight
+      ),
+      articleBody:
+        (storyKeysPresence &amp;&amp;
+          getCompleteText(story, structuredData.stripHtmlFromArticleBody)) ||
+        '',
+      dateCreated: stripMillisecondsFromTime(
+        new Date(story['first-published-at'])
+      ),
+      dateModified: stripMillisecondsFromTime(
+        new Date(story['last-published-at'])
+      ),
+      name: (storyKeysPresence &amp;&amp; story.headline) || '',
+      image: generateArticleImageData(
+        story['hero-image-s3-key'],
+        publisherConfig,
+        pageType
+      ),
+      isAccessibleForFree: storyAccessType,
+      isPartOf: generateIsPartOfData(story, publisherConfig, pageType),
+    },
+    articleSectionObj(story)
+  );
 }
 
-function generateArticleImageData(image, publisherConfig = {}, pageType = "") {
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
+function generateArticleImageData(image, publisherConfig = {}, pageType = '') {
+  const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
+  const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
+  const articleImage = imageUrl(
+    publisherConfig,
+    image,
+    imageWidth,
+    imageHeight
+  );
 
-  return Object.assign({}, {
-    "@type": "ImageObject",
-    "url": articleImage
-  }, getQueryParams(articleImage))
+  return Object.assign(
+    {},
+    {
+      '@type': 'ImageObject',
+      url: articleImage,
+    },
+    getQueryParams(articleImage)
+  );
 }
 
 function storyAccess(access) {
-  if (access === null || access === "public" || access === "login") {
+  if (access === null || access === 'public' || access === 'login') {
     return true;
-  } else if (access === "subscription" ) {
+  } else if (access === 'subscription') {
     return false;
   }
 }
 
-function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = "") {
-  const publisherName = publisherConfig["publisher-name"];
-  const productId = publisherConfig["publisher-name"] + ".com:basic";
-  return pageType === "story-page-amp" ?
-    Object.assign(
-      {},
-      {
-        "@type": ["CreativeWork", "WebPage", "Product"],
-        url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-        name: publisherName,
-        productID: productId,
-        primaryImageOfPage: generateArticleImageData(
-          story["hero-image-s3-key"],
-          publisherConfig,
-          pageType
-        )
-      }
-    )
-    :
-    Object.assign(
-      {},
-      {
-        "@type": "WebPage",
-        url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-        primaryImageOfPage: generateArticleImageData(
-          story["hero-image-s3-key"],
-          publisherConfig,
-          pageType
-        )
-      }
-    );
+function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = '') {
+  const publisherName = publisherConfig['publisher-name'];
+  const productId = publisherConfig['publisher-name'] + '.com:basic';
+  return pageType === 'story-page-amp'
+    ? Object.assign(
+        {},
+        {
+          '@type': ['CreativeWork', 'WebPage', 'Product'],
+          url: `${publisherConfig['sketches-host']}/${story.slug}`,
+          name: publisherName,
+          productID: productId,
+          primaryImageOfPage: generateArticleImageData(
+            story['hero-image-s3-key'],
+            publisherConfig,
+            pageType
+          ),
+        }
+      )
+    : Object.assign(
+        {},
+        {
+          '@type': 'WebPage',
+          url: `${publisherConfig['sketches-host']}/${story.slug}`,
+          primaryImageOfPage: generateArticleImageData(
+            story['hero-image-s3-key'],
+            publisherConfig,
+            pageType
+          ),
+        }
+      );
 }
 
 function generateHasPartData(storyAccess) {
-  return storyAccess ?
-    {} :
-    {"hasPart": [
-        {
-          "@type": "WebPageElement",
-          "isAccessibleForFree": storyAccess,
-          "cssSelector": ".paywall"
-        }
-      ]
-    }
+  return storyAccess
+    ? {}
+    : {
+        hasPart: [
+          {
+            '@type': 'WebPageElement',
+            isAccessibleForFree: storyAccess,
+            cssSelector: '.paywall',
+          },
+        ],
+      };
 }
 
-function generateNewsArticleData (structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
+function generateNewsArticleData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {},
+  pageType = ''
+) {
   const {alternative = {}} = story.alternative || {};
   const storyAccessType = storyAccess(story['access']);
-  return Object.assign({}, {
-    "alternativeHeadline": (alternative.home &amp;&amp; alternative.home.default) ? alternative.home.default.headline : "",
-    "description": story.summary,
-    "isAccessibleForFree": storyAccessType,
-    isPartOf: generateIsPartOfData(story, publisherConfig, pageType)
-  }, generateHasPartData(storyAccessType));
+  return Object.assign(
+    {},
+    {
+      alternativeHeadline:
+        alternative.home &amp;&amp; alternative.home.default
+          ? alternative.home.default.headline
+          : '',
+      description: story.summary,
+      isAccessibleForFree: storyAccessType,
+      isPartOf: generateIsPartOfData(story, publisherConfig, pageType),
+    },
+    generateHasPartData(storyAccessType)
+  );
 }
 
 function findStoryElementField(card, type, field, defaultValue) {
-  const elements = card['story-elements'].filter(e => e.type == type || e.subtype == type);
-  if(elements.length > 0)
-    return elements[0][field];
-  else
-    return defaultValue;
+  const elements = card['story-elements'].filter(
+    e => e.type == type || e.subtype == type
+  );
+  if (elements.length > 0) return elements[0][field];
+  else return defaultValue;
 }
 
-function generateLiveBlogPostingData (structuredData = {}, story = {}, publisherConfig = {}, pageType){
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+function generateLiveBlogPostingData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {},
+  pageType
+) {
+  const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
+  const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
   return {
-    "coverageEndTime": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "coverageStartTime": stripMillisecondsFromTime(new Date(story['first-published-at'])),
-    "liveBlogUpdate": story.cards.map(card =>
-      getSchemaBlogPosting(card,
+    headline: story.headline,
+    description: story.summary || story.headline,
+    author: story['author-name'],
+    coverageEndTime: stripMillisecondsFromTime(
+      new Date(story['last-published-at'])
+    ),
+    coverageStartTime: stripMillisecondsFromTime(
+      new Date(story['first-published-at'])
+    ),
+    dateModified: stripMillisecondsFromTime(
+      new Date(story['last-published-at'])
+    ),
+    liveBlogUpdate: story.cards.map(card =>
+      getSchemaBlogPosting(
+        card,
         authorData(story.authors),
-        findStoryElementField(card, "title", "text", story.headline),
-        imageUrl(publisherConfig, findStoryElementField(card, "image", "image-s3-key", story['hero-image-s3-key']), imageWidth, imageHeight),
+        findStoryElementField(card, 'title', 'text', story.headline),
+        imageUrl(
+          publisherConfig,
+          findStoryElementField(
+            card,
+            'image',
+            'image-s3-key',
+            story['hero-image-s3-key']
+          ),
+          imageWidth,
+          imageHeight
+        ),
         structuredData,
         story
       )
-    )
+    ),
   };
 }
 
-function generateVideoArticleData (structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
-  const metaKeywords = story.seo &amp;&amp; story.seo['meta-keywords'] || [];
+function generateVideoArticleData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {},
+  pageType = ''
+) {
+  const metaKeywords = (story.seo &amp;&amp; story.seo['meta-keywords']) || [];
   const articleSection = get(story, ['sections', '0', 'display-name'], '');
-  const embedUrl = get(story, ['cards', '0', 'story-elements', '0', 'embed-url'], '');
-  const socialShareMsg = get(story , ['summary'], '');
+  const embedUrl = get(
+    story,
+    ['cards', '0', 'story-elements', '0', 'embed-url'],
+    ''
+  );
+  const socialShareMsg = get(story, ['summary'], '');
   const metaDescription = get(story, ['seo', 'meta-description'], '');
   const subHeadline = get(story, ['subheadline'], '');
   const headline = get(story, ['headline'], '');
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType), {
-    "author": authorData(story.authors),
-    "keywords": metaKeywords.join(','),
-    "dateCreated": stripMillisecondsFromTime(new Date(story['first-published-at'])),
-    "dateModified": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "description": socialShareMsg || metaDescription || subHeadline || headline,
-    "name": story.headline,
-    "thumbnailUrl": [imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)],
-    "uploadDate": stripMillisecondsFromTime(new Date(story['last-published-at'])),
-    "embedUrl": embedUrl
-  });
+  const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
+  const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
+  return Object.assign(
+    {},
+    generateCommonData(structuredData, story, publisherConfig, pageType),
+    {
+      author: authorData(story.authors),
+      keywords: metaKeywords.join(','),
+      dateCreated: stripMillisecondsFromTime(
+        new Date(story['first-published-at'])
+      ),
+      dateModified: stripMillisecondsFromTime(
+        new Date(story['last-published-at'])
+      ),
+      description: socialShareMsg || metaDescription || subHeadline || headline,
+      name: story.headline,
+      thumbnailUrl: [
+        imageUrl(
+          publisherConfig,
+          story['hero-image-s3-key'],
+          imageWidth,
+          imageHeight
+        ),
+      ],
+      uploadDate: stripMillisecondsFromTime(
+        new Date(story['last-published-at'])
+      ),
+      embedUrl: embedUrl,
+    }
+  );
 }
 
-function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
+function generateWebSiteData(
+  structuredData = {},
+  story = {},
+  publisherConfig = {}
+) {
   return getSchemaWebsite(structuredData.website);
 }
 
-function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
-  const { "sketches-host": domain = "", sections = [] } = publisherConfig;
-  let breadcrumbsDataList = [{ name: "Home", url: domain }];
+function generateBreadcrumbListData(
+  pageType = '',
+  publisherConfig = {},
+  data = {}
+) {
+  const {'sketches-host': domain = '', sections = []} = publisherConfig;
+  let breadcrumbsDataList = [{name: 'Home', url: domain}];
   function addCrumb(crumbsDataList = [], currentSection = {}) {
-    if(!currentSection["parent-id"]) return crumbsDataList;
+    if (!currentSection['parent-id']) return crumbsDataList;
 
-    const parentSection = sections.find(section => section.id === currentSection["parent-id"]);
+    const parentSection = sections.find(
+      section => section.id === currentSection['parent-id']
+    );
 
-    if(!parentSection) return crumbsDataList;
+    if (!parentSection) return crumbsDataList;
 
-    const { "section-url":url = "", name = "" } = parentSection;
-    crumbsDataList.unshift({ url, name });
+    const {'section-url': url = '', name = ''} = parentSection;
+    crumbsDataList.unshift({url, name});
     return addCrumb(crumbsDataList, parentSection);
   }
 
   function getSectionPageCrumbs(section = {}) {
-    const { "section-url":url = "", name = "" } = section;
-    const crumbsDataList = [{ url, name }];
+    const {'section-url': url = '', name = ''} = section;
+    const crumbsDataList = [{url, name}];
     return addCrumb(crumbsDataList, section);
   }
 
-  function getStoryPageCrumbs({ headline = "", url = "", sections: [storySection] } = {}) {
+  function getStoryPageCrumbs({
+    headline = '',
+    url = '',
+    sections: [storySection],
+  } = {}) {
     let sectionCrumbsDataList = [];
-    if(storySection) {
+    if (storySection) {
       sectionCrumbsDataList = getSectionPageCrumbs(storySection);
     }
-    sectionCrumbsDataList.push({ name:headline, url});
+    sectionCrumbsDataList.push({name: headline, url});
     return sectionCrumbsDataList;
   }
 
   function getBreadCrumbs(breadcrumb = {}) {
-    const crumbsDataList = [{ url: breadcrumb.url, name: breadcrumb.name}];
+    const crumbsDataList = [{url: breadcrumb.url, name: breadcrumb.name}];
     return addCrumb(crumbsDataList);
   }
 
-  if(data.breadcrumbs &amp;&amp; ("name" in data.breadcrumbs) &amp;&amp; ("url" in data.breadcrumbs)) {
-    breadcrumbsDataList = breadcrumbsDataList.concat(getBreadCrumbs(data.breadcrumbs));
+  if (
+    data.breadcrumbs &amp;&amp;
+    'name' in data.breadcrumbs &amp;&amp;
+    'url' in data.breadcrumbs
+  ) {
+    breadcrumbsDataList = breadcrumbsDataList.concat(
+      getBreadCrumbs(data.breadcrumbs)
+    );
     return getSchemaBreadcrumbList(breadcrumbsDataList);
   }
   switch (pageType) {
-    case "section-page": breadcrumbsDataList = breadcrumbsDataList.concat(getSectionPageCrumbs(data.section)); break;
-    case "story-page": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
-    case "story-page-amp": breadcrumbsDataList = breadcrumbsDataList.concat(getStoryPageCrumbs(data.story)); break;
+    case 'section-page':
+      breadcrumbsDataList = breadcrumbsDataList.concat(
+        getSectionPageCrumbs(data.section)
+      );
+      break;
+    case 'story-page':
+      breadcrumbsDataList = breadcrumbsDataList.concat(
+        getStoryPageCrumbs(data.story)
+      );
+      break;
+    case 'story-page-amp':
+      breadcrumbsDataList = breadcrumbsDataList.concat(
+        getStoryPageCrumbs(data.story)
+      );
+      break;
   }
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
@@ -394,20 +555,20 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  */
 
 /**
-* Options for a schema.org Website
-* Example
-* ```javascript
-* {
-*   url: 'https://www.quintype.com/',
-*   searchpath: 'search?q={q}',
-*   queryinput: 'required name=q',
-*   name: 'Quintype',
-*   headline: 'Quintype - Discover news',
-*   keywords: 'news,quintype'
-* }
-* ```
-* @typedef Website
-*/
+ * Options for a schema.org Website
+ * Example
+ * ```javascript
+ * {
+ *   url: 'https://www.quintype.com/',
+ *   searchpath: 'search?q={q}',
+ *   queryinput: 'required name=q',
+ *   name: 'Quintype',
+ *   headline: 'Quintype - Discover news',
+ *   keywords: 'news,quintype'
+ * }
+ * ```
+ * @typedef Website
+ */
 
 /**
  * Options to {@link StructuredDataTags}
@@ -422,7 +583,7 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
  * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
  * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
- * 
+ *
  */
 
 /**
@@ -433,85 +594,159 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @param {StructuredDataConfig} seoConfig.structuredData Please see {@link StructuredDataConfig} for a full list of supported options
  * @param {...*} params See {@link Generator} for other Parameters
  */
-export function StructuredDataTags({structuredData = {}}, config, pageType, response = {}, {url}) {
+export function StructuredDataTags(
+  {structuredData = {}},
+  config,
+  pageType,
+  response = {},
+  {url}
+) {
   const tags = [];
   const {story = {}} = response.data || {};
-  const entities = get (response, ["data", "linkedEntities"], null) || [];
+  const entities = get(response, ['data', 'linkedEntities'], null) || [];
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
-  const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
-  const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
+  const enableBreadcrumbList = get(
+    structuredData,
+    ['enableBreadcrumbList'],
+    true
+  );
+  const structuredDataTags = get(structuredData, ['structuredDataTags'], []);
 
   let articleData = {};
 
-  if(!isStructuredDataEmpty) {
-    articleData = generateArticleData(structuredData, story, publisherConfig, pageType);
-    structuredDataTags.map((type)=> {
-      if(pageType === type) {
-        tags.push(ldJson("Organization", structuredData.organization));
+  if (!isStructuredDataEmpty) {
+    articleData = generateArticleData(
+      structuredData,
+      story,
+      publisherConfig,
+      pageType
+    );
+    structuredDataTags.map(type => {
+      if (pageType === type) {
+        tags.push(ldJson('Organization', structuredData.organization));
         if (structuredData.website) {
-          tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+          tags.push(
+            ldJson(
+              'Website',
+              Object.assign(
+                {},
+                generateWebSiteData(structuredData, story, publisherConfig)
+              )
+            )
+          );
         }
       }
-    })
+    });
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; pageType === 'home-page') {
-    tags.push(ldJson("Organization", structuredData.organization));
-    if(structuredData.website)  {
-      tags.push(ldJson("Website", Object.assign({}, generateWebSiteData(structuredData, story, publisherConfig))));
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'home-page') {
+    tags.push(ldJson('Organization', structuredData.organization));
+    if (structuredData.website) {
+      tags.push(
+        ldJson(
+          'Website',
+          Object.assign(
+            {},
+            generateWebSiteData(structuredData, story, publisherConfig)
+          )
+        )
+      );
     }
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; enableBreadcrumbList) {
-    tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
+  if (!isStructuredDataEmpty &amp;&amp; enableBreadcrumbList) {
+    tags.push(
+      ldJson(
+        'BreadcrumbList',
+        generateBreadcrumbListData(pageType, publisherConfig, response.data)
+      )
+    );
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; pageType === 'story-page') {
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'story-page') {
     const newsArticleTags = generateNewsArticleTags();
-    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    newsArticleTags
+      ? tags.push(storyTags(), newsArticleTags)
+      : tags.push(storyTags());
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; pageType === 'story-page-amp') {
+  if (!isStructuredDataEmpty &amp;&amp; pageType === 'story-page-amp') {
     const newsArticleTags = generateNewsArticleTags();
-    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    newsArticleTags
+      ? tags.push(storyTags(), newsArticleTags)
+      : tags.push(storyTags());
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; structuredData.header) {
-    tags.push(ldJson("WPHeader", getSchemaHeader(structuredData.header)));
+  if (!isStructuredDataEmpty &amp;&amp; structuredData.header) {
+    tags.push(ldJson('WPHeader', getSchemaHeader(structuredData.header)));
   }
 
-  if(!isStructuredDataEmpty &amp;&amp; structuredData.footer) {
-    tags.push(ldJson("WPFooter",getSchemaFooter(structuredData.footer)));
+  if (!isStructuredDataEmpty &amp;&amp; structuredData.footer) {
+    tags.push(ldJson('WPFooter', getSchemaFooter(structuredData.footer)));
   }
 
-  if (entities.length> 0 ) {
-    for ( let entity of entities) {
+  if (entities.length > 0) {
+    for (let entity of entities) {
       const entityTags = generateTagsForEntity(entity, ldJson);
       entityTags &amp;&amp; tags.push(entityTags);
     }
   }
 
   function generateNewsArticleTags() {
-    if(structuredData.enableNewsArticle) {
-      return ldJson('NewsArticle', Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig, pageType)))
+    if (structuredData.enableNewsArticle) {
+      return ldJson(
+        'NewsArticle',
+        Object.assign(
+          {},
+          articleData,
+          generateNewsArticleData(
+            structuredData,
+            story,
+            publisherConfig,
+            pageType
+          )
+        )
+      );
     }
   }
 
   function storyTags() {
-    if(structuredData.enableLiveBlog &amp;&amp; story['story-template'] === 'live-blog') {
-      return ldJson("LiveBlogPosting", Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig, pageType)))
+    if (
+      structuredData.enableLiveBlog &amp;&amp;
+      story['story-template'] === 'live-blog'
+    ) {
+      return ldJson(
+        'LiveBlogPosting',
+        Object.assign(
+          {},
+          generateLiveBlogPostingData(
+            structuredData,
+            story,
+            publisherConfig,
+            pageType
+          )
+        )
+      );
     }
 
-    if(structuredData.enableVideo &amp;&amp; story['story-template'] === 'video') {
-      return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig, pageType))
+    if (structuredData.enableVideo &amp;&amp; story['story-template'] === 'video') {
+      return ldJson(
+        'VideoObject',
+        generateVideoArticleData(
+          structuredData,
+          story,
+          publisherConfig,
+          pageType
+        )
+      );
     }
 
-    if(structuredData.enableNewsArticle !== 'withoutArticleSchema') {
-      return ldJson("Article", articleData);
+    if (structuredData.enableNewsArticle !== 'withoutArticleSchema') {
+      return ldJson('Article', articleData);
     }
-    return {}
+    return {};
   }
 
   // All Pages have: Publisher, Site
