@@ -241,32 +241,7 @@ describe('TextTags', function () {
         assertDoesNotContains('description', string);
       });
     })
-
-
-
-
-
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   describe('Story Page', function () {
     it("Generates SEO tags for a story page", function () {
@@ -303,8 +278,6 @@ describe('TextTags', function () {
       assertContains('<meta name="keywords" content="Footag"/>', string);
       assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
     });
-
-
 
     it("Generates SEO tags for a card in story page", function () {
       const seoConfig = {
@@ -490,9 +463,6 @@ describe('TextTags', function () {
       assertContains('<link rel="canonical" href="http://foo.com/politics/awesome"/>', string);
     });
 
-
-
-
     it("Overrides the canonical url", function () {
       const seoConfig = {
         generators: [TextTags],
@@ -522,6 +492,19 @@ describe('TextTags', function () {
       const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
       assertContains('<meta name="news_keywords" content="Footag"/>', string);
       assertContains('<link rel="standout" href="http://foo.com/politics/awesome"/>', string);
+    });
+
+    it("Generates canonical URL pointing to the amp page if it is a visual story", function () {
+      const seoConfig = {
+        generators: [TextTags],
+      }
+      const story = { headline: "Foobar", "story-template": "visual-story", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome", authors: [{ 'name': "foo" }] }
+      const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
+      // assertContains('<title>Foobar</title>', string);
+      // assertContains('<meta name="title" content="Foobar"/>', string);
+      // assertContains('<meta name="description" content="Some Foobar"/>', string);
+      // assertContains('<meta name="keywords" content="Footag"/>', string);
+      assertContains('<link rel="canonical" href="/amp/story/politics/awesome"/>', string);
     });
   });
 

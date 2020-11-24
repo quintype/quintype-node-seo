@@ -47,6 +47,10 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
     author: authors
   };
 
+  if (story["story-template"] === "visual-story") {
+    storyMetaData.canonicalUrl = `/amp/story/${story.slug}`
+  }
+
   if (url.query && url.query.cardId) {
     const storyCardMetadata = getStoryCardMetadata(url.query.cardId);
     return Object.assign({}, storyMetaData, storyCardMetadata); //TODO rewrite in spread syntax, add babel plugin
