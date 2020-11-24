@@ -500,10 +500,6 @@ describe('TextTags', function () {
       }
       const story = { headline: "Foobar", "story-template": "visual-story", summary: "Some Foobar", tags: [{ name: "Footag" }], slug: "politics/awesome", authors: [{ 'name': "foo" }] }
       const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
-      // assertContains('<title>Foobar</title>', string);
-      // assertContains('<meta name="title" content="Foobar"/>', string);
-      // assertContains('<meta name="description" content="Some Foobar"/>', string);
-      // assertContains('<meta name="keywords" content="Footag"/>', string);
       assertContains('<link rel="canonical" href="/amp/story/politics/awesome"/>', string);
     });
   });
