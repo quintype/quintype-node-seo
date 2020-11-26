@@ -158,7 +158,7 @@ function generateArticleData(
         pageType
       ),
       isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfData(story, publisherConfig, pageType),
+      isPartOf: generateIsPartOfDataForArticle(story, publisherConfig, pageType),
     },
     articleSectionObj(story)
   );
@@ -192,25 +192,8 @@ function storyAccess(access) {
   }
 }
 
-function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = '') {
-  const publisherName = publisherConfig['publisher-name'];
-  const productId = publisherConfig['publisher-name'] + '.com:basic';
-  return pageType === 'story-page-amp'
-    ? Object.assign(
-        {},
-        {
-          '@type': ['CreativeWork', 'WebPage', 'Product'],
-          url: `${publisherConfig['sketches-host']}/${story.slug}`,
-          name: publisherName,
-          productID: productId,
-          primaryImageOfPage: generateArticleImageData(
-            story['hero-image-s3-key'],
-            publisherConfig,
-            pageType
-          ),
-        }
-      )
-    : Object.assign(
+function generateIsPartOfDataForArticle(story = {}, publisherConfig = {}, pageType = '') {
+  return Object.assign(
         {},
         {
           '@type': 'WebPage',
@@ -222,6 +205,38 @@ function generateIsPartOfData(story = {}, publisherConfig = {}, pageType = '') {
           ),
         }
       );
+}
+
+function generateIsPartOfDataForNewArticle(story ={}, publisherConfig = {}, pageType = '', structuredData = {}) {
+  const publisherName = publisherConfig['publisher-name'];
+  const productId = publisherConfig['publisher-name'] + '.com:basic';
+  return pageType === 'story-page-amp' && structuredData.isAmpSubscriptionsEnabled
+    ? Object.assign(
+        {},
+        {
+          '@type': ['WebPage', 'CreativeWork', 'Product'],
+          name: publisherName,
+          productID: productId,
+          url: `${publisherConfig['sketches-host']}/${story.slug}`,
+          primaryImageOfPage: generateArticleImageData(
+            story['hero-image-s3-key'],
+            publisherConfig,
+            pageType
+          ),
+        }
+      )
+    : Object.assign(
+      {},
+      {
+        '@type': 'WebPage',
+        url: `${publisherConfig['sketches-host']}/${story.slug}`,
+        primaryImageOfPage: generateArticleImageData(
+          story['hero-image-s3-key'],
+          publisherConfig,
+          pageType
+        ),
+      }
+    );
 }
 
 function generateHasPartData(storyAccess) {
@@ -255,7 +270,7 @@ function generateNewsArticleData(
           : '',
       description: story.summary,
       isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfData(story, publisherConfig, pageType),
+      isPartOf: generateIsPartOfDataForNewArticle(story, publisherConfig, pageType, structuredData),
     },
     generateHasPartData(storyAccessType)
   );
