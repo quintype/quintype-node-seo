@@ -207,28 +207,18 @@ function generateIsPartOfDataForArticle(story = {}, publisherConfig = {}, pageTy
       );
 }
 
-function generateIsPartOfDataForNewArticle(story ={}, publisherConfig = {}, pageType = '', structuredData = {}) {
+function generateIsPartOfDataForNewsArticle(story ={}, publisherConfig = {}, pageType = '', structuredData = {}) {
   const publisherName = publisherConfig['publisher-name'];
   const productId = publisherConfig['publisher-name'] + '.com:basic';
-  return pageType === 'story-page-amp' && structuredData.isAmpSubscriptionsEnabled
-    ? Object.assign(
-        {},
-        {
-          '@type': ['WebPage', 'CreativeWork', 'Product'],
-          name: publisherName,
-          productID: productId,
-          url: `${publisherConfig['sketches-host']}/${story.slug}`,
-          primaryImageOfPage: generateArticleImageData(
-            story['hero-image-s3-key'],
-            publisherConfig,
-            pageType
-          ),
-        }
-      )
-    : Object.assign(
+  const isPartOfData = generateIsPartOfDataForArticle(story, publisherConfig, pageType);
+
+  if(pageType === 'story-page-amp' && structuredData.isAmpSubscriptionsEnabled) {
+    return Object.assign(
       {},
       {
-        '@type': 'WebPage',
+        '@type': ['WebPage', 'CreativeWork', 'Product'],
+        name: publisherName,
+        productID: productId,
         url: `${publisherConfig['sketches-host']}/${story.slug}`,
         primaryImageOfPage: generateArticleImageData(
           story['hero-image-s3-key'],
@@ -236,7 +226,9 @@ function generateIsPartOfDataForNewArticle(story ={}, publisherConfig = {}, page
           pageType
         ),
       }
-    );
+    )
+  }
+  return isPartOfData
 }
 
 function generateHasPartData(storyAccess) {
@@ -270,7 +262,7 @@ function generateNewsArticleData(
           : '',
       description: story.summary,
       isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfDataForNewArticle(story, publisherConfig, pageType, structuredData),
+      isPartOf: generateIsPartOfDataForNewsArticle(story, publisherConfig, pageType, structuredData),
     },
     generateHasPartData(storyAccessType)
   );
