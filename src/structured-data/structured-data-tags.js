@@ -578,6 +578,10 @@ export function StructuredDataTags(
   }
 
   if (!isStructuredDataEmpty && pageType === 'story-page') {
+    if (structuredData.enableVideo && story['story-template'] === 'video') {
+      // Add Organization for video page
+      tags.push(ldJson('Organization', structuredData.organization));
+    }
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags
       ? tags.push(storyTags(), newsArticleTags)
