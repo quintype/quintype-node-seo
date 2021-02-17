@@ -21,6 +21,7 @@
     "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.16",
     "babel-core": "^6.26.3",
     "babel-preset-react": "^6.24.1",
     "better-docs": "^2.0.1",
@@ -47,6 +48,7 @@
     "url": "^0.11.0"
   },
   "dependencies": {
+    "date-fns": "^2.17.0",
     "date-fns-tz": "^1.1.1",
     "quintype-js": "^1.2.0"
   }
