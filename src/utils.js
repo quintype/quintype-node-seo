@@ -13,10 +13,12 @@ function getPropertyName(key) {
 }
 
 export function stripMillisecondsFromTime(date, timezone) {
-  const zoneTime = timezone ? utcToZonedTime(date, timezone) : null;
-  const formatZonedTime = zoneTime ? format(zoneTime, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone }) : "";
   const toReturn = date.toJSON();
-  return timezone ? formatZonedTime : (toReturn.split('.')[0]+"Z" || "");
+  if(!toReturn)
+    return toReturn
+  const zonedTime = timezone ? utcToZonedTime(date, timezone) : null;
+  const formatZonedTime = zonedTime ? format(zonedTime, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: timezone }) : "";
+  return timezone ? formatZonedTime : (toReturn.split('.')[0]+"Z");
 }
 
 export function getQueryParams(url) {
