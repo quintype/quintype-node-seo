@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.27](https://github.com/quintype/quintype-node-seo/compare/v1.38.24...v1.38.27) (2021-02-18)
+
+
+### Bug Fixes
+
+* **isPartof schema:** Duplicate productID issue ([#330](https://github.com/quintype/quintype-node-seo/issues/330)) ([f2be4b2](https://github.com/quintype/quintype-node-seo/commit/f2be4b271dd5e495672d1beb3908dfb5743c9ee9))
+* errors in live blog posting structure data ([#320](https://github.com/quintype/quintype-node-seo/issues/320)) ([02ddf07](https://github.com/quintype/quintype-node-seo/commit/02ddf075ae148dc71f85a5123053a1eeb74bf844))
+
 ### [1.38.26](https://github.com/quintype/quintype-node-seo/compare/v1.38.25...v1.38.26) (2020-12-07)
 
 
