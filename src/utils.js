@@ -1,5 +1,6 @@
 import {entries} from 'lodash';
 import { URL, URLSearchParams } from 'url';
+import { format, utcToZonedTime } from 'date-fns-tz';
 
 export function objectToTags(object) {
   return entries(object)
@@ -11,11 +12,14 @@ function getPropertyName(key) {
   return (key.startsWith('fb:') || key.startsWith('og:')) ? 'property' : 'name';
 }
 
-export function stripMillisecondsFromTime(date) {
+export function stripMillisecondsFromTime(date, timezone) {
   const toReturn = date.toJSON();
   if(!toReturn)
-    return toReturn;
-  return toReturn.split('.')[0]+"Z";
+    return toReturn
+  const zonedTime = timezone && utcToZonedTime(date, timezone);
+  const formatZonedTime = zonedTime && format(zonedTime, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: timezone });
+  const formatToReturn = toReturn.split('.')[0]+"Z";
+  return timezone ? formatZonedTime : formatToReturn;
 }
 
 export function getQueryParams(url) {

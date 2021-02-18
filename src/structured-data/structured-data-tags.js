@@ -46,7 +46,8 @@ function generateCommonData(
   structuredData = {},
   story = {},
   publisherConfig = {},
-  pageType = ''
+  pageType = '',
+  timezone
 ) {
   const storyUrl =
     story.url || `${publisherConfig['sketches-host']}/${story.slug}`;
@@ -70,7 +71,7 @@ function generateCommonData(
       ],
       url: `${publisherConfig['sketches-host']}/${story.slug}`,
       datePublished: stripMillisecondsFromTime(
-        new Date(story['first-published-at'])
+        new Date(story['first-published-at']), timezone
       ),
     },
     getSchemaMainEntityOfPage(mainEntityUrl),
@@ -118,7 +119,8 @@ function generateArticleData(
   structuredData = {},
   story = {},
   publisherConfig = {},
-  pageType = ''
+  pageType = '',
+  timezone
 ) {
   const metaKeywords = (story.seo && story.seo['meta-keywords']) || [];
   const authors =
@@ -131,7 +133,7 @@ function generateArticleData(
   const storyAccessType = storyAccess(story['access']);
   return Object.assign(
     {},
-    generateCommonData(structuredData, story, publisherConfig, pageType),
+    generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
     {
       author: authorData(authors),
       keywords: metaKeywords.join(','),
@@ -146,10 +148,10 @@ function generateArticleData(
           getCompleteText(story, structuredData.stripHtmlFromArticleBody)) ||
         '',
       dateCreated: stripMillisecondsFromTime(
-        new Date(story['first-published-at'])
+        new Date(story['first-published-at']), timezone
       ),
       dateModified: stripMillisecondsFromTime(
-        new Date(story['last-published-at'])
+        new Date(story['last-published-at']), timezone
       ),
       name: (storyKeysPresence && story.headline) || '',
       image: generateArticleImageData(
@@ -280,7 +282,8 @@ function generateLiveBlogPostingData(
   structuredData = {},
   story = {},
   publisherConfig = {},
-  pageType
+  pageType,
+  timezone
 ) {
   const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
   const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
@@ -289,13 +292,13 @@ function generateLiveBlogPostingData(
     description: story.summary || story.headline,
     author: story['author-name'],
     coverageEndTime: stripMillisecondsFromTime(
-      new Date(story['last-published-at'])
+      new Date(story['last-published-at']), timezone
     ),
     coverageStartTime: stripMillisecondsFromTime(
-      new Date(story['first-published-at'])
+      new Date(story['first-published-at']), timezone
     ),
     dateModified: stripMillisecondsFromTime(
-      new Date(story['last-published-at'])
+      new Date(story['last-published-at']), timezone
     ),
     liveBlogUpdate: story.cards.map(card =>
       getSchemaBlogPosting(
@@ -314,7 +317,8 @@ function generateLiveBlogPostingData(
           imageHeight
         ),
         structuredData,
-        story
+        story,
+        timezone
       )
     ),
   };
@@ -324,7 +328,8 @@ function generateVideoArticleData(
   structuredData = {},
   story = {},
   publisherConfig = {},
-  pageType = ''
+  pageType = '',
+  timezone
 ) {
   const metaKeywords = (story.seo && story.seo['meta-keywords']) || [];
   const articleSection = get(story, ['sections', '0', 'display-name'], '');
@@ -341,15 +346,15 @@ function generateVideoArticleData(
   const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
   return Object.assign(
     {},
-    generateCommonData(structuredData, story, publisherConfig, pageType),
+    generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
     {
       author: authorData(story.authors),
       keywords: metaKeywords.join(','),
       dateCreated: stripMillisecondsFromTime(
-        new Date(story['first-published-at'])
+        new Date(story['first-published-at']), timezone
       ),
       dateModified: stripMillisecondsFromTime(
-        new Date(story['last-published-at'])
+        new Date(story['last-published-at']), timezone
       ),
       description: socialShareMsg || metaDescription || subHeadline || headline,
       name: story.headline,
@@ -362,7 +367,7 @@ function generateVideoArticleData(
         ),
       ],
       uploadDate: stripMillisecondsFromTime(
-        new Date(story['last-published-at'])
+        new Date(story['last-published-at']), timezone
       ),
       embedUrl: embedUrl,
     }
@@ -514,7 +519,7 @@ export function StructuredDataTags(
   {url}
 ) {
   const tags = [];
-  const {story = {}} = response.data || {};
+  const {story = {}, timezone = null } = response.data || {};
   const entities = get(response, ['data', 'linkedEntities'], null) || [];
   const {config: publisherConfig = {}} = response;
   const {articleType = ''} = publisherConfig['publisher-settings'] || {};
@@ -533,7 +538,8 @@ export function StructuredDataTags(
       structuredData,
       story,
       publisherConfig,
-      pageType
+      pageType,
+      timezone
     );
     structuredDataTags.map(type => {
       if (pageType === type) {
@@ -637,7 +643,8 @@ export function StructuredDataTags(
             structuredData,
             story,
             publisherConfig,
-            pageType
+            pageType,
+            timezone
           )
         )
       );
@@ -650,7 +657,8 @@ export function StructuredDataTags(
           structuredData,
           story,
           publisherConfig,
-          pageType
+          pageType,
+          timezone
         )
       );
     }

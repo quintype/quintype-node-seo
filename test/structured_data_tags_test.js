@@ -926,6 +926,23 @@ describe('StructuredDataTags', function() {
     });
   });
 
+  describe("custom timezone passed to the payload to return the date property in that timezone", function() {
+    it("returns custom date wrt the timezone and the offset", function() {
+      const sampleStoryDataObj = sampleStoryData('video', [], sampleAuthorsData(), '');
+      sampleStoryDataObj.data.timezone = "Asia/Baku";
+      const string = getSeoMetadata(
+        getSeoConfig({video: true, newsArticle: true}),
+        {},
+        'story-page',
+        sampleStoryDataObj
+      );
+      assertContains(
+        '<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madrid.quintype.io"},{"@type":"ListItem","position":2,"name":"Section Name","item":""},{"@type":"ListItem","position":3,"name":"Personalise or perish - Why publishers need to use personalised content","item":""}]}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":["https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max"],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28 15:11:04+04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":"","dateCreated":"2018-02-28 15:11:04+04:00","dateModified":"2018-04-20 10:03:25+04:00","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","name":"Personalise or perish - Why publishers need to use personalised content","thumbnailUrl":["https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max"],"uploadDate":"2018-04-20 10:03:25+04:00","embedUrl":"","@type":"VideoObject","@context":"http://schema.org"}</script><script type="application/ld+json">{"headline":"Personalise or perish - Why publishers need to use personalised content","image":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"},"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28 15:11:04+04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.quintype.com/"},"publisher":{"@type":"Organization","@context":"http://schema.org","name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"]},"author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":"","thumbnailUrl":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","articleBody":"","dateCreated":"2018-02-28 15:11:04+04:00","dateModified":"2018-04-20 10:03:25+04:00","name":"Personalise or perish - Why publishers need to use personalised content","isPartOf":{"@type":"WebPage","url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","primaryImageOfPage":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=480&h=270&auto=format%2Ccompress&fit=max","width":"480","height":"270"}},"alternativeHeadline":"","description":"Personalised content marketing is the slayer weapon in this war for attention and engagement.","hasPart":[{"@type":"WebPageElement","cssSelector":".paywall"}],"@type":"NewsArticle","@context":"http://schema.org"}</script>',
+        string
+      );
+    })
+  })
+
   context('Structured DataTags for Entity', function() {
     it('generate Structured DataTags for Movie Entities', function() {
       const movieEntity = {
