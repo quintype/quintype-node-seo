@@ -17,7 +17,7 @@ export function stripMillisecondsFromTime(date, timezone) {
   if(!toReturn)
     return toReturn
   const zonedTime = timezone && utcToZonedTime(date, timezone);
-  const formatZonedTime = zonedTime && format(zonedTime, 'yyyy-MM-dd HH:mm:ssXXX', { timeZone: timezone });
+  const formatZonedTime = zonedTime && format(zonedTime, "yyyy-MM-dd'T'HH:mm:ssXXX", { timeZone: timezone });
   const formatToReturn = toReturn.split('.')[0]+"Z";
   return timezone ? formatZonedTime : formatToReturn;
 }
