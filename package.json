@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.38.28",
+  "version": "1.38.29-metadata-fix.0",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
