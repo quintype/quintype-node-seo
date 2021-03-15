@@ -219,7 +219,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     const { sections = [] } = config;
     const section = sections.find(section => ownerType == 'section' &amp;&amp; section.id === ownerId) || {};
     const customSeo = get(data, ["data", "customSeo"], {})
-    if (seoMetadata.data || section.id) {
+    if (seoMetadata.data || section.id || !isEmpty(customSeo)) {
       const result = Object.assign({}, {
         'page-title': customSeo['page-title'] || section.name,
         title: customSeo.title || section.name,
