@@ -128,6 +128,8 @@ const getDomain = (url, domainSlug) => {
  * @extends Generator
  * @param {*} seoConfig
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
+ * @param {(boolean)} seoConfig.appendHostToAmpUrl If set to true, the url to be appended to the slug is computed based on the currentHostUrl and the domain slug, else the url is taken as the sketches host. Default: false
+ * @param {(boolean)} seoConfig.decodeAmpUrl If set to true, the storySlug that goes as the amp href url is decoded, else the storyslug is encoded. Default: false
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
