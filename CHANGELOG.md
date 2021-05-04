@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.30](https://github.com/quintype/quintype-node-seo/compare/v1.38.29...v1.38.30) (2021-05-04)
+
+
+### Bug Fixes
+
+* update package to 1.38.30 ([#427](https://github.com/quintype/quintype-node-seo/issues/427)) ([b2f68f5](https://github.com/quintype/quintype-node-seo/commit/b2f68f51fa9cd9a01fdd96bc41be3949c50b6357))
+
 ### [1.38.29](https://github.com/quintype/quintype-node-seo/compare/v1.38.28...v1.38.29) (2021-05-04)
 
 
