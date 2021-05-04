@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.29](https://github.com/quintype/quintype-node-seo/compare/v1.38.28...v1.38.29) (2021-05-04)
+
+
+### Bug Fixes
+
+* Update the docs for amp story tags ([#424](https://github.com/quintype/quintype-node-seo/issues/424)) ([51013ae](https://github.com/quintype/quintype-node-seo/commit/51013aea2963f293021bc68cb5039f839b0c0a5a))
+
 ### [1.38.29](https://github.com/quintype/quintype-node-seo/compare/v1.38.29-metadata-fix.0...v1.38.29) (2021-03-15)
 
 ### [1.38.28](https://github.com/quintype/quintype-node-seo/compare/v1.38.27...v1.38.28) (2021-02-26)
