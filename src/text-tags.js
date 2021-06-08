@@ -202,7 +202,9 @@ const SKIP_CANONICAL = '__SKIP__CANONICAL__'
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function TextTags(seoConfig, config, pageType, data, { url }) {
+  console.log(`********** INSIDE text tags.. pageType >> ${pageType}`)
   const seoData = getSeoData(config, pageType, data, url, seoConfig);
+  console.log("seoData >> ", seoData)
   const customSeo = get(data, ["data", "customSeo"], {})
 
   if (!seoData)
