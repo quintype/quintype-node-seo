@@ -21,24 +21,29 @@
     "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.14.5",
     "@babel/preset-env": "^7.12.16",
     "babel-core": "^6.26.3",
     "babel-preset-react": "^6.24.1",
     "better-docs": "^2.0.1",
-    "eslint": "^7.2.0",
-    "eslint-config-prettier": "^8.0.0",
-    "eslint-config-standard": "^16.0.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-standard": "^5.0.0",
     "gh-pages": "^3.0.0",
+    "husky": "^4.3.8",
     "jsdoc": "^3.6.3",
+    "lint-staged": "^8.1.5",
     "lodash": "^4.17.11",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "onchange": "^7.0.2",
+    "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "rimraf": "^3.0.2",
@@ -51,5 +56,16 @@
     "date-fns": "^2.17.0",
     "date-fns-tz": "^1.1.1",
     "quintype-js": "^1.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "npx eslint --fix",
+      "git add"
+    ]
   }
 }
