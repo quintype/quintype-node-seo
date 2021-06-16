@@ -2,8 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.38.32](https://github.com/quintype/quintype-node-seo/compare/v1.38.31...v1.38.32) (2021-06-16)
-
 ### [1.38.30](https://github.com/quintype/quintype-node-seo/compare/v1.38.29...v1.38.30) (2021-05-04)
 
 
@@ -155,7 +153,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### [1.34.3](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.34.3) (2020-03-09)
 
 ### Fixes
-Fix main entity for story page for news article schema (#152) 
+Fix main entity for story page for news article schema (#152)
 
 ### [1.34.2](https://github.com/quintype/quintype-node-seo/compare/v1.34.1...v1.34.2) (2020-03-02)
 
