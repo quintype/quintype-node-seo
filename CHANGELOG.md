@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.36](https://github.com/quintype/quintype-node-seo/compare/v1.38.35...v1.38.36) (2021-06-17)
+
+
+### Bug Fixes
+
+* update node version in circle ci config ([#470](https://github.com/quintype/quintype-node-seo/issues/470)) ([accecd1](https://github.com/quintype/quintype-node-seo/commit/accecd1144804d57488d11fd27d396fdf8a3a83f))
+
 ### [1.38.35](https://github.com/quintype/quintype-node-seo/compare/v1.38.34...v1.38.35) (2021-06-17)
 
 
