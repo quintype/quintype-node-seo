@@ -7,6 +7,7 @@ export default {
     babel({
       exclude: "node_modules/**",
       presets: ["react"],
+      babelHelpers: "bundled",
     }),
   ],
   external: ["react", "react-dom/server", "lodash", "quintype-js"],
