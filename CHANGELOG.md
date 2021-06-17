@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.35](https://github.com/quintype/quintype-node-seo/compare/v1.38.34...v1.38.35) (2021-06-17)
+
+
+### Bug Fixes
+
+* standardize-linter to avoid lint issue ([#469](https://github.com/quintype/quintype-node-seo/issues/469)) ([a14085b](https://github.com/quintype/quintype-node-seo/commit/a14085bc1ffd3966b77d5329dd82674cd2a7461e))
+
 ### [1.38.34](https://github.com/quintype/quintype-node-seo/compare/v1.38.32...v1.38.34) (2021-06-17)
 
 
