@@ -27,7 +27,7 @@
     "babel-preset-react": "^6.24.1",
     "better-docs": "^2.0.1",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^11.0.0",
