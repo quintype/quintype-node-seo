@@ -128,7 +128,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       const result = Object.assign({}, {
         'page-title': customSeo['page-title'] || section.name,
         title: customSeo.title || section.name,
-        canonicalUrl: customSeo["canonicalUrl"] || section['section-url'] || undefined,
+        canonicalUrl: url.pathname === '/shell.html' ? SKIP_CANONICAL : customSeo["canonicalUrl"] || section['section-url'] || undefined
       }, seoMetadata.data);
 
       if (!result.description) {
