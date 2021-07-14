@@ -146,6 +146,11 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     return buildCustomTags(seoConfig.customTags, pageType);
   }
 
+  function getShellSeoData(config) {
+    const seoMetadata = config["seo-metadata"].find((meta) => meta["owner-type"] === "home") || {};
+    return { ...seoMetadata.data, canonicalUrl: SKIP_CANONICAL };
+  }
+
   switch (pageType) {
     case 'home-page': return findRelevantConfig('home')
     case 'section-page': return findRelevantConfig('section', get(data, ['data', 'section', 'id'])) || getSeoDataFromCollection(config, data) || getSeoData(config, 'home-page', data, url);
@@ -155,6 +160,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     case 'visual-story': return buildTagsFromStory(config, get(data, ["story"]), url, data) || getSeoData(config, "home-page", data, url);
     case 'story-page-amp': return buildTagsFromStory(config, get(data, ["data", "story"]), url, data) || getSeoData(config, "home-page", data, url);
     case 'author-page': return buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url, data) || getSeoData(config, "home-page", data, url);
+    case 'shell': return getShellSeoData(config);
     default: return getSeoData(config, 'home-page', data, url);
   }
 }
