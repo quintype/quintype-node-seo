@@ -148,7 +148,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
 
   function getShellSeoData(config) {
     const seoMetadata = config["seo-metadata"].find((meta) => meta["owner-type"] === "home") || {};
-    return { ...seoMetadata.data, canonicalUrl: SKIP_CANONICAL };
+    return {...seoMetadata.data, canonicalUrl: SKIP_CANONICAL };
   }
 
   switch (pageType) {
