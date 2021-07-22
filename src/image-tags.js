@@ -1,5 +1,5 @@
-import {get, isEmpty} from 'lodash';
-import {FocusedImage} from 'quintype-js';
+import { get, isEmpty } from 'lodash';
+import { FocusedImage } from 'quintype-js';
 
 function pickImageFromCard(story, cardId) {
   const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
@@ -13,17 +13,17 @@ function pickImageFromStory(story) {
   function getAlternateProperties (type, key) {
     return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
    }
- 
+
    const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
    const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
    const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
    const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
- 
- 
+
+
    const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
- 
+
    const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
- 
+
    return new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
 }
 
@@ -54,6 +54,34 @@ function pickImage(pageType, data, url) {
   }
 }
 
+function pickAttributionFromCard (story, cardId) {
+  const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
+  if(metadata && !isEmpty(metadata) && get(metadata, ['social-share', 'image', 'attribution'], false)) {
+    return metadata['social-share'].image.attribution || undefined;
+  }
+}
+
+function pickAttributionFromStory(story){
+  return story["hero-image-attribution"] || story.summary || get(story, ["alternative", "home", "default", "headline"]) || story.headline;
+}
+
+function pickAttribution(pageType, data, url) {
+  if(pageType === 'story-page' && url.query && url.query.cardId) {
+    const story = get(data, ['data', 'story']) || {};
+    return pickAttributionFromCard(story, url.query.cardId) || pickAttributionFromStory(story);
+  }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
+    const story = get(data, ['story']) || {};
+    return pickAttributionFromCard(story, url.query.cardId) || pickAttributionFromStory(story);
+  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
+    const story = get(data, ['data', 'story']) || {};
+    return pickAttributionFromStory(story);
+  } else if(pageType === 'visual-story') {
+    const story = get(data, ['story']) || {};
+    return pickAttributionFromStory(story);
+  }
+}
+
+
 /**
  * ImageTags adds the og and twitter images
  *
@@ -75,9 +103,11 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
   }
 
   const tags = [];
+  const alt = pickAttribution(pageType, data, url);
 
   if(seoConfig.enableTwitterCards) {
     tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", ogImage: true})}`})
+    tags.push({property: "twitter:image:alt", content: alt})
   }
 
   if(seoConfig.enableOgTags) {
@@ -86,6 +116,7 @@ export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
     if(get(image, ["metadata", "focus-point"])) {
       tags.push({property: "og:image:height", content: 630})
     }
+    tags.push({property: "og:image:alt", content: alt})
   }
 
   return tags;
