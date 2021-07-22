@@ -48,12 +48,12 @@ export function generateStructuredData(config = {}) {
   const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
   const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
   const { "page-title":pageTitle = "", description = "", keywords  =  "" } = get(homePageSeo, ["data"], {});
-  let enableNewsArticle = themeConfig['structured_data_news_article'];
+  let enableStructuredDataForNewsArticle = themeConfig['structured_data_news_article'];
   if(!themeConfig || !themeConfig.logo) {
     return {};
   }
-  if(config.hasOwnProperty('enableNewsArticle')){
-    enableNewsArticle = config.enableNewsArticle;
+  if(config.hasOwnProperty('enableNewsArticle') && typeof config.enableNewsArticle !== "undefined"){
+    enableStructuredDataForNewsArticle = config.enableNewsArticle;
   }
 
   return {
@@ -63,8 +63,8 @@ export function generateStructuredData(config = {}) {
       logo: generateImageObject(config),
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
-		enableNewsArticle: !!enableNewsArticle,
-		storyUrlAsMainEntityUrl: !!enableNewsArticle,
+		enableNewsArticle: !!enableStructuredDataForNewsArticle,
+		storyUrlAsMainEntityUrl: !!enableStructuredDataForNewsArticle,
     enableVideo: !themeConfig['structured_data_enable_video'],
     enableLiveBlog: !themeConfig['structured_data_enable_live_blog'],
     website: {
