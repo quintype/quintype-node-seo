@@ -52,8 +52,8 @@ export function generateStructuredData(config = {}) {
   if(!themeConfig || !themeConfig.logo) {
     return {};
   }
-  if(config.hasOwnProperty('enableNewsArticle') && typeof config.enableNewsArticle !== "undefined"){
-    enableStructuredDataForNewsArticle = config.enableNewsArticle;
+  if(config.hasOwnProperty('enableStructuredDataForNewsArticle') && typeof config.enableStructuredDataForNewsArticle !== "undefined"){
+    enableStructuredDataForNewsArticle = config.enableStructuredDataForNewsArticle;
   }
 
   return {
