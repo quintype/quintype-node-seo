@@ -171,7 +171,7 @@ describe("ImageTags", function() {
     );
   });
 
-  it("gets stroy hero image attribution values instead of card attribution values on story share", function() {
+  it("gets story hero image attribution values instead of card attribution values on story share", function() {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": "attribution test",
@@ -184,6 +184,7 @@ describe("ImageTags", function() {
               message: "share-card-description",
               image: {
                 key: "my/card/image.jpg",
+                attribution: null,
                 metadata: {
                   width: 1300,
                   height: 1065,
@@ -218,7 +219,7 @@ describe("ImageTags", function() {
 
   });
 
-  it("gets stroy summary as attribution if hero image attribution is not present", function() {
+  it("gets story summary as attribution if hero image attribution is not present", function() {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": null,
@@ -266,7 +267,7 @@ describe("ImageTags", function() {
 
   });
 
-  it("gets stroy headline as attribution if hero image attribution and summary is not present", function() {
+  it("gets story headline as attribution if hero image attribution and summary is not present", function() {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": null,
@@ -318,6 +319,7 @@ describe("ImageTags", function() {
   it("gets card image attribution values instead of story attribution values on card share", function() {
     const story = {
       "hero-image-s3-key": "my/image.png",
+      headline: "story headline",
       cards: [
         {
           id: "sample-card-id",
