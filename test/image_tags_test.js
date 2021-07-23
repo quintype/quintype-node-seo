@@ -197,13 +197,7 @@ describe("ImageTags", function() {
       ]
     };
 
-    const opts = {
-      url: {
-        query: {
-          cardId: "sample-card-id"
-        }
-      }
-    };
+    const opts = {};
 
     const string = getSeoMetadata(
       seoConfig,
@@ -245,13 +239,7 @@ describe("ImageTags", function() {
       ]
     };
 
-    const opts = {
-      url: {
-        query: {
-          cardId: "sample-card-id"
-        }
-      }
-    };
+    const opts = {};
 
     const string = getSeoMetadata(
       seoConfig,
@@ -294,13 +282,7 @@ describe("ImageTags", function() {
       ]
     };
 
-    const opts = {
-      url: {
-        query: {
-          cardId: "sample-card-id"
-        }
-      }
-    };
+    const opts = {};
 
     const string = getSeoMetadata(
       seoConfig,
@@ -444,6 +426,38 @@ describe("ImageTags", function() {
       );
       assertContains(
         '<meta property="og:image:height" content="630"/>',
+        string
+      );
+    });
+
+    it("pulls images with alt from the collection if present", function() {
+      const collection = {
+        name: "collection name",
+        summary: "collection summary",
+        metadata: {
+          "cover-image": {
+            "cover-image-s3-key": "my/image.png",
+            "cover-image-metadata": {
+              width: 2400,
+              height: 1260,
+              "focus-point": [0, 0]
+            }
+          }
+        }
+      };
+      const string = getSeoMetadata(
+        seoConfig,
+        config,
+        "home-page",
+        { data: { collection: collection } },
+        {}
+      );
+      assertContains(
+        '<meta property="og:image:alt" content="collection summary"/>',
+        string
+      );
+      assertContains(
+        '<meta property="twitter:image:alt" content="collection summary"/>',
         string
       );
     });

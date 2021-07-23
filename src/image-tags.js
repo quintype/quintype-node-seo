@@ -4,7 +4,8 @@ import { FocusedImage } from 'quintype-js';
 function pickImageFromCard(story, cardId) {
   const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
   if(metadata && !isEmpty(metadata) && get(metadata, ['social-share', 'image', 'key'], false)) {
-    return new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {});
+    const alt = metadata['social-share'].image.attribution || undefined;
+    return {image: new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {}), alt};
   }
 }
 
@@ -24,15 +25,17 @@ function pickImageFromStory(story) {
 
    const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
 
-   return new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {});
+   const alt = story["hero-image-attribution"] || story.summary || get(story, ["alternative", "home", "default", "headline"]) || story.headline;
+
+   return {image: new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {}), alt};
 }
 
 function pickImageFromCollection(collection) {
   const coverImage = get(collection, ["metadata", "cover-image"]) || {};
   if(!coverImage["cover-image-s3-key"])
-    return;
-
-  return new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {})
+    return {};
+  const alt = collection.summary || collection.name || null;
+  return {image: new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {}), alt }
 }
 
 // The image is grabbed from the story, else from from the collection
@@ -54,34 +57,6 @@ function pickImage(pageType, data, url) {
   }
 }
 
-function pickAttributionFromCard (story, cardId) {
-  const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
-  if(metadata && !isEmpty(metadata) && get(metadata, ['social-share', 'image', 'attribution'], false)) {
-    return metadata['social-share'].image.attribution || undefined;
-  }
-}
-
-function pickAttributionFromStory(story){
-  return story["hero-image-attribution"] || story.summary || get(story, ["alternative", "home", "default", "headline"]) || story.headline;
-}
-
-function pickAttribution(pageType, data, url) {
-  if(pageType === 'story-page' && url.query && url.query.cardId) {
-    const story = get(data, ['data', 'story']) || {};
-    return pickAttributionFromCard(story, url.query.cardId) || pickAttributionFromStory(story);
-  }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
-    const story = get(data, ['story']) || {};
-    return pickAttributionFromCard(story, url.query.cardId) || pickAttributionFromStory(story);
-  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
-    const story = get(data, ['data', 'story']) || {};
-    return pickAttributionFromStory(story);
-  } else if(pageType === 'visual-story') {
-    const story = get(data, ['story']) || {};
-    return pickAttributionFromStory(story);
-  }
-}
-
-
 /**
  * ImageTags adds the og and twitter images
  *
@@ -96,14 +71,13 @@ function pickAttribution(pageType, data, url) {
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
-  const image = pickImage(pageType, data, url);
+  const {image, alt} = pickImage(pageType, data, url);
 
   if(!image) {
     return [];
   }
 
   const tags = [];
-  const alt = pickAttribution(pageType, data, url);
 
   if(seoConfig.enableTwitterCards) {
     tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", ogImage: true})}`})
