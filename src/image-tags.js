@@ -1,59 +1,70 @@
-import { get, isEmpty } from 'lodash';
-import { FocusedImage } from 'quintype-js';
+import { get, isEmpty } from "lodash";
+import { FocusedImage } from "quintype-js";
 
 function pickImageFromCard(story, cardId) {
-  const { metadata = {} } = story.cards.find(card => card.id === cardId) || {};
-  if(metadata && !isEmpty(metadata) && get(metadata, ['social-share', 'image', 'key'], false)) {
-    const alt = metadata['social-share'].image.attribution || undefined;
-    return {image: new FocusedImage(metadata['social-share'].image.key, metadata['social-share'].image.metadata || {}), alt};
+  const { metadata = {} } = story.cards.find((card) => card.id === cardId) || {};
+  if (metadata && !isEmpty(metadata) && get(metadata, ["social-share", "image", "key"], false)) {
+    const alt = metadata["social-share"].image.attribution || getAltribution(story);
+    return {
+      image: new FocusedImage(metadata["social-share"].image.key, metadata["social-share"].image.metadata || {}),
+      alt,
+    };
   }
 }
 
+function getAltribution(story) {
+  return (
+    story["hero-image-attribution"] ||
+    story.summary ||
+    get(story, ["alternative", "home", "default", "headline"]) ||
+    story.headline
+  );
+}
+
 function pickImageFromStory(story) {
+  function getAlternateProperties(type, key) {
+    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]);
+  }
 
-  function getAlternateProperties (type, key) {
-    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]) ;
-   }
+  const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
+  const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
+  const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
+  const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
 
-   const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
-   const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
-   const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
-   const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
+  const socialAlternateHeroImageS3Metadata =
+    (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata) || story["hero-image-metadata"];
 
+  const socialAlternateHeroImageS3Key =
+    (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
 
-   const socialAlternateHeroImageS3Metadata = (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata)  ||  story["hero-image-metadata"];
+  const alt = getAltribution(story);
 
-   const socialAlternateHeroImageS3Key = (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
-
-   const alt = story["hero-image-attribution"] || story.summary || get(story, ["alternative", "home", "default", "headline"]) || story.headline;
-
-   return {image: new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {}), alt};
+  return { image: new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {}), alt };
 }
 
 function pickImageFromCollection(collection) {
   const coverImage = get(collection, ["metadata", "cover-image"]) || {};
-  if(!coverImage["cover-image-s3-key"])
-    return {};
+  if (!coverImage["cover-image-s3-key"]) return {};
   const alt = collection.summary || collection.name || null;
-  return {image: new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {}), alt }
+  return { image: new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {}), alt };
 }
 
 // The image is grabbed from the story, else from from the collection
 function pickImage(pageType, data, url) {
-  if(pageType === 'story-page' && url.query && url.query.cardId) {
-    const story = get(data, ['data', 'story']) || {};
+  if (pageType === "story-page" && url.query && url.query.cardId) {
+    const story = get(data, ["data", "story"]) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  }else if(pageType === 'visual-story' && url.query && url.query.cardId) {
-    const story = get(data, ['story']) || {};
+  } else if (pageType === "visual-story" && url.query && url.query.cardId) {
+    const story = get(data, ["story"]) || {};
     return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
-  } else if(pageType === 'story-page' || pageType === 'story-page-amp') {
-    const story = get(data, ['data', 'story']) || {};
+  } else if (pageType === "story-page" || pageType === "story-page-amp") {
+    const story = get(data, ["data", "story"]) || {};
     return pickImageFromStory(story);
-  } else if(pageType === 'visual-story') {
-    const story = get(data, ['story']) || {};
+  } else if (pageType === "visual-story") {
+    const story = get(data, ["story"]) || {};
     return pickImageFromStory(story);
-  } else if(get(data, ['data', 'collection'])) {
-    return pickImageFromCollection(get(data, ['data', 'collection']))
+  } else if (get(data, ["data", "collection"])) {
+    return pickImageFromCollection(get(data, ["data", "collection"]));
   }
 }
 
@@ -70,27 +81,41 @@ function pickImage(pageType, data, url) {
  * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
  * @param {...*} params See {@link Generator} for other Parameters
  */
-export function ImageTags(seoConfig, config, pageType, data, {url = {}}) {
-  const {image, alt} = pickImage(pageType, data, url);
+export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
+  const { image, alt } = pickImage(pageType, data, url);
 
-  if(!image) {
+  if (!image) {
     return [];
   }
 
   const tags = [];
 
-  if(seoConfig.enableTwitterCards) {
-    tags.push({name: "twitter:image", content: `https://${config['cdn-image']}/${image.path([16, 9], {w: 1200, auto: "format,compress", ogImage: true})}`})
-    tags.push({property: "twitter:image:alt", content: alt})
+  if (seoConfig.enableTwitterCards) {
+    tags.push({
+      name: "twitter:image",
+      content: `https://${config["cdn-image"]}/${image.path([16, 9], {
+        w: 1200,
+        auto: "format,compress",
+        ogImage: true,
+      })}`,
+    });
+    alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
 
-  if(seoConfig.enableOgTags) {
-    tags.push({property: "og:image", content: `https://${config['cdn-image']}/${image.path([40, 21], {w: 1200, auto: "format,compress", ogImage: true})}`});
-    tags.push({property: "og:image:width", content: 1200});
-    if(get(image, ["metadata", "focus-point"])) {
-      tags.push({property: "og:image:height", content: 630})
+  if (seoConfig.enableOgTags) {
+    tags.push({
+      property: "og:image",
+      content: `https://${config["cdn-image"]}/${image.path([40, 21], {
+        w: 1200,
+        auto: "format,compress",
+        ogImage: true,
+      })}`,
+    });
+    tags.push({ property: "og:image:width", content: 1200 });
+    if (get(image, ["metadata", "focus-point"])) {
+      tags.push({ property: "og:image:height", content: 630 });
     }
-    tags.push({property: "og:image:alt", content: alt})
+    alt && tags.push({ property: "og:image:alt", content: alt });
   }
 
   return tags;
