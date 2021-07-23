@@ -8,7 +8,7 @@ function pickImageFromCard(story, cardId) {
       metadata["social-share"].image.attribution ||
       metadata["social-share"].title ||
       metadata["social-share"].message ||
-      getAltribution(story);
+      getAttribution(story);
     return {
       image: new FocusedImage(metadata["social-share"].image.key, metadata["social-share"].image.metadata || {}),
       alt,
@@ -16,7 +16,7 @@ function pickImageFromCard(story, cardId) {
   }
 }
 
-function getAltribution(story) {
+function getAttribution(story) {
   return (
     story["hero-image-attribution"] ||
     story.summary ||
@@ -41,7 +41,7 @@ function pickImageFromStory(story) {
   const socialAlternateHeroImageS3Key =
     (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
 
-  const alt = getAltribution(story);
+  const alt = getAttribution(story);
 
   return { image: new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {}), alt };
 }
