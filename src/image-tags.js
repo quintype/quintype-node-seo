@@ -4,7 +4,11 @@ import { FocusedImage } from "quintype-js";
 function pickImageFromCard(story, cardId) {
   const { metadata = {} } = story.cards.find((card) => card.id === cardId) || {};
   if (metadata && !isEmpty(metadata) && get(metadata, ["social-share", "image", "key"], false)) {
-    const alt = metadata["social-share"].image.attribution || getAltribution(story);
+    const alt =
+      metadata["social-share"].image.attribution ||
+      metadata["social-share"].title ||
+      metadata["social-share"].message ||
+      getAltribution(story);
     return {
       image: new FocusedImage(metadata["social-share"].image.key, metadata["social-share"].image.metadata || {}),
       alt,
