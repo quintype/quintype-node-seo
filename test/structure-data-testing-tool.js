@@ -42,7 +42,7 @@ describe("Structure data tool testing", () => {
   //   const url = "https://malibu-advanced-web.qtstage.io/search?q=science";
   //   testSchema(url, ["BreadcrumbList"], false);
   // });
-  it("Author page", async (done) => {
+  it("Author page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/author/deo-kumar-3";
     const result = await testSchema(url, ["BreadcrumbList"], false);
     if (result) {

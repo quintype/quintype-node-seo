@@ -26,7 +26,7 @@ exports.testSchema = async (url, schemas, addpreset = true) => {
     // Check the page includes a specific Schema (see https://schema.org/docs/full.html for a list)
     obj.schemas = schemas;
   }
-  return structuredDataTest(url, obj)
+  return Promise.resolve(structuredDataTest(url, obj))
     .then((res) => {
       console.log("✅ All tests passed!");
       return res;
