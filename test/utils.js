@@ -15,17 +15,21 @@ exports.assertDoesNotContains = function assertDoesNotContains(expected, actual)
   assert(!actual.includes(expected), `Expected ${actual} not to contain ${expected}`);
 };
 
-exports.testSchema = async (url, schemas) => {
+exports.testSchema = async (url, schemas, addpreset = true) => {
   var result;
-  return await structuredDataTest(url, {
+  const obj = {};
+  if (addpreset) {
     // Check for compliance with Google, Twitter and Facebook recommendations
-    presets: [Google, Twitter, Facebook],
+    obj.presets = [Google, Twitter, Facebook];
+  }
+  if (schemas.length > 0) {
     // Check the page includes a specific Schema (see https://schema.org/docs/full.html for a list)
-    schemas: schemas,
-  })
+    obj.schemas = schemas;
+  }
+  return structuredDataTest(url, obj)
     .then((res) => {
       console.log("✅ All tests passed!");
-      result = res;
+      return res;
     })
     .catch((err) => {
       if (err.type === "VALIDATION_FAILED") {
@@ -33,26 +37,8 @@ exports.testSchema = async (url, schemas) => {
         result = err.res;
       } else {
         console.log(err); // Handle other errors here (e.g. an error fetching a URL)
+        return err;
       }
-    })
-    .finally(async () => {
-      if (result) {
-        console.log(
-          `Passed: ${result.passed.length},`,
-          `Failed: ${result.failed.length},`,
-          `Warnings: ${result.warnings.length}`
-        );
-        console.log(`Schemas found: ${result.schemas.join(",")}`);
-
-        // Loop over validation errors
-        if (result.failed.length > 0) {
-          console.log(
-            "⚠️  Errors:\n",
-            result.failed.map((test) => test)
-          );
-          return await "failed";
-        }
-      }
-      return await "passed";
+      return result;
     });
 };
