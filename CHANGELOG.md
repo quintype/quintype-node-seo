@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.37](https://github.com/quintype/quintype-node-seo/compare/v1.38.37-fix-canonical-url.0...v1.38.37) (2021-07-15)
+
 ### [1.38.36](https://github.com/quintype/quintype-node-seo/compare/v1.38.35...v1.38.36) (2021-06-17)
 
 
