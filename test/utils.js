@@ -15,10 +15,10 @@ exports.assertDoesNotContains = function assertDoesNotContains(expected, actual)
   assert(!actual.includes(expected), `Expected ${actual} not to contain ${expected}`);
 };
 
-exports.testSchema = async (url, schemas, addpreset = true) => {
+exports.testSchema = async (url, schemas, addPreset = true) => {
   var result;
   const obj = {};
-  if (addpreset) {
+  if (addPreset) {
     // Check for compliance with Google, Twitter and Facebook recommendations
     obj.presets = [Google, Twitter, Facebook];
   }

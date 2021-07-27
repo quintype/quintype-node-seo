@@ -77,6 +77,7 @@ describe("Structure data tool testing", () => {
     showResult(result);
     assert.equal(0, result.failed.length);
   }).timeout(3000);
+
   it("Author page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/author/deo-kumar";
     const result = await testSchema(url, ["BreadcrumbList"], false);
