@@ -69,6 +69,8 @@ function pickImage(pageType, data, url) {
     return pickImageFromStory(story);
   } else if (get(data, ["data", "collection"])) {
     return pickImageFromCollection(get(data, ["data", "collection"]));
+  } else {
+    return { image: undefined, alt: undefined };
   }
 }
 
