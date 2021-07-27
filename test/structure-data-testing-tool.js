@@ -26,7 +26,7 @@ describe("Structure data tool testing", () => {
     const result = await testSchema(url, homePageSchema);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Text story page", async () => {
     const url =
       "https://malibu-advanced-web.quintype.io/technology/automobiles/an-startling-fusion-of-technology-comfort-and-driver-experience";
@@ -34,21 +34,21 @@ describe("Structure data tool testing", () => {
     const result = await testSchema(url, schemas);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Photo story page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/entertainment/government-of-goa-official-portal";
     const schemas = ["NewsArticle", "BreadcrumbList"];
     const result = await testSchema(url, schemas);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Video story page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/entertainment/goa";
     const schemas = ["NewsArticle", "BreadcrumbList", "VideoObject"];
     const result = await testSchema(url, schemas);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Live blog story page", async () => {
     const url =
       "https://malibu-advanced-web.quintype.io/entertainment/tata-motors-q1-results-revenue-tumbles-loss-higher-than-expected";
@@ -56,7 +56,7 @@ describe("Structure data tool testing", () => {
     const result = await testSchema(url, schemas);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Listicle story page", async () => {
     const url =
       "https://malibu-advanced-web.quintype.io/politics/international/share-market-live-sensex-nifty-hold-steady-gains";
@@ -64,24 +64,24 @@ describe("Structure data tool testing", () => {
     const result = await testSchema(url, schemas);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Section page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/sports";
     const result = await testSchema(url, ["BreadcrumbList"], false);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
   it("Search page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/search?q=india";
     const result = await testSchema(url, ["BreadcrumbList"], false);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
 
   it("Author page", async () => {
     const url = "https://malibu-advanced-web.quintype.io/author/deo-kumar";
     const result = await testSchema(url, ["BreadcrumbList"], false);
     showResult(result);
     assert.equal(0, result.failed.length);
-  }).timeout(3000);
+  }).timeout(5000);
 });

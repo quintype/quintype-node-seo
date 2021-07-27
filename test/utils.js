@@ -37,7 +37,7 @@ exports.testSchema = async (url, schemas, addPreset = true) => {
         result = err.res;
       } else {
         console.log(err); // Handle other errors here (e.g. an error fetching a URL)
-        return err;
+        result.failed = [1];
       }
       return result;
     });
