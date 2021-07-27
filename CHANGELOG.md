@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.39](https://github.com/quintype/quintype-node-seo/compare/v1.38.38...v1.38.39) (2021-07-27)
+
+
+### Bug Fixes
+
+* **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
+
 ### [1.38.38](https://github.com/quintype/quintype-node-seo/compare/v1.38.37...v1.38.38) (2021-07-26)
 
 
