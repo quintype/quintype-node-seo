@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.40](https://github.com/quintype/quintype-node-seo/compare/v1.38.39...v1.38.40) (2021-07-28)
+
+
+### Features
+
+* **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡  ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
+
 ### [1.38.39](https://github.com/quintype/quintype-node-seo/compare/v1.38.38...v1.38.39) (2021-07-27)
 
 
