@@ -48,10 +48,10 @@ export function generateStructuredData(config = {}) {
   const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
   const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
   const { "page-title":pageTitle = "", description = "", keywords  =  "" } = get(homePageSeo, ["data"], {});
-  let enableStructuredDataForNewsArticle = themeConfig['structured_data_news_article'];
   if(!themeConfig || !themeConfig.logo) {
     return {};
   }
+  let enableStructuredDataForNewsArticle = themeConfig['structured_data_news_article'] || false;
   if(config.hasOwnProperty('enableStructuredDataForNewsArticle') && typeof config.enableStructuredDataForNewsArticle !== "undefined"){
     enableStructuredDataForNewsArticle = config.enableStructuredDataForNewsArticle;
   }
