@@ -1,21 +1,11 @@
-import {
-  getSchemaContext,
-  getSchemaType,
-  getSchemaPerson,
-  getSchemaFooter,
-  getSchemaHeader,
-  getSchemaBlogPosting,
-  getSchemaPublisher,
-  getSchemaMainEntityOfPage,
-  getSchemaWebsite,
-  getSchemaBreadcrumbList,
-  getSchemaListItem,
-} from './schema';
 import get from 'lodash/get';
-import {generateTagsForEntity} from './entity';
+import { getQueryParams, stripMillisecondsFromTime } from '../utils';
+import { generateTagsForEntity } from './entity';
+import {
+  getSchemaBlogPosting, getSchemaBreadcrumbList, getSchemaContext, getSchemaFooter,
+  getSchemaHeader, getSchemaMainEntityOfPage, getSchemaPerson, getSchemaPublisher, getSchemaType, getSchemaWebsite
+} from './schema';
 
-import {stripMillisecondsFromTime, getQueryParams} from '../utils';
-import {generateImageObject} from '../generate-common-seo';
 
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
@@ -214,6 +204,8 @@ function generateIsPartOfDataForNewsArticle(story ={}, publisherConfig = {}, pag
   const productId = publisherConfig['publisher-name'] + '.com:basic';
   const isPartOfData = generateIsPartOfDataForArticle(story, publisherConfig, pageType);
 
+  console.log("fooooooo-----", pageType, structuredData.isAmpSubscriptionsEnabled)
+
   if(pageType === 'story-page-amp' && structuredData.isAmpSubscriptionsEnabled) {
     return Object.assign(
       {},
@@ -255,6 +247,7 @@ function generateNewsArticleData(
 ) {
   const {alternative = {}} = story.alternative || {};
   const storyAccessType = storyAccess(story['access']);
+  console.log("fooooo111111-------", storyAccessType)
   return Object.assign(
     {},
     {
