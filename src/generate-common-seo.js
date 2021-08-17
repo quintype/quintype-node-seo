@@ -1,6 +1,6 @@
-import omitBy from 'lodash/omitBy';
-import isUndefined from 'lodash/isUndefined';
 import get from 'lodash/get';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
 import { getQueryParams } from "./utils";
 
 export function getTitle(config) {
@@ -48,9 +48,12 @@ export function generateStructuredData(config = {}) {
   const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
   const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
   const { "page-title":pageTitle = "", description = "", keywords  =  "" } = get(homePageSeo, ["data"], {});
-
   if(!themeConfig || !themeConfig.logo) {
     return {};
+  }
+  let enableStructuredDataForNewsArticle = themeConfig['structured_data_news_article'] || false;
+  if(config.hasOwnProperty('enableStructuredDataForNewsArticle') && typeof config.enableStructuredDataForNewsArticle !== "undefined"){
+    enableStructuredDataForNewsArticle = config.enableStructuredDataForNewsArticle;
   }
 
   return {
@@ -60,8 +63,8 @@ export function generateStructuredData(config = {}) {
       logo: generateImageObject(config),
       sameAs: socialLinks ? Object.values(socialLinks) : []
     },
-		enableNewsArticle: !!themeConfig['structured_data_news_article'],
-		storyUrlAsMainEntityUrl: !!themeConfig['structured_data_news_article'],
+		enableNewsArticle: !!enableStructuredDataForNewsArticle,
+		storyUrlAsMainEntityUrl: !!enableStructuredDataForNewsArticle,
     enableVideo: !themeConfig['structured_data_enable_video'],
     enableLiveBlog: !themeConfig['structured_data_enable_live_blog'],
     website: {
