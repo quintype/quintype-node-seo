@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.38.41](https://github.com/quintype/quintype-node-seo/compare/v1.38.41-news-article-schema.1...v1.38.41) (2021-08-17)
+
 ### [1.38.40](https://github.com/quintype/quintype-node-seo/compare/v1.38.39...v1.38.40) (2021-07-28)
 
 

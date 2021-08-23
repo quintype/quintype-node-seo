@@ -368,6 +368,8 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Object} header Enable WPHeader tag. ex: `{cssSelector: ".header"}`
  * @property {Object} footer Enable WPFooter tag. ex: `{cssSelector: ".footer"}`
  * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
+ * @property {boolean} isSubscriptionsEnabled Enable subscription based schema (default false)
+ * @property {boolean} isShowcaseProduct Should product type be showcase (default false, fallback: basic)
  *
  */
 
