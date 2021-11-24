@@ -1,21 +1,11 @@
-import {
-  getSchemaContext,
-  getSchemaType,
-  getSchemaPerson,
-  getSchemaFooter,
-  getSchemaHeader,
-  getSchemaBlogPosting,
-  getSchemaPublisher,
-  getSchemaMainEntityOfPage,
-  getSchemaWebsite,
-  getSchemaBreadcrumbList,
-  getSchemaListItem,
-} from './schema';
 import get from 'lodash/get';
-import {generateTagsForEntity} from './entity';
+import { getQueryParams, stripMillisecondsFromTime } from '../utils';
+import { generateTagsForEntity } from './entity';
+import {
+  getSchemaBlogPosting, getSchemaBreadcrumbList, getSchemaContext, getSchemaFooter,
+  getSchemaHeader, getSchemaMainEntityOfPage, getSchemaPerson, getSchemaPublisher, getSchemaType, getSchemaWebsite
+} from './schema';
 
-import {stripMillisecondsFromTime, getQueryParams} from '../utils';
-import {generateImageObject} from '../generate-common-seo';
 
 function getLdJsonFields(type, fields) {
   return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
@@ -79,8 +69,8 @@ function generateCommonData(
   );
 }
 
-function authorData(authors) {
-  return (authors || []).map(author => getSchemaPerson(author.name));
+function authorData(authors, authorUrl) {
+  return (authors || []).map(author => getSchemaPerson(author.name, authorUrl));
 }
 
 function getTextElementsOfCards(story) {
@@ -131,11 +121,12 @@ function generateArticleData(
   const imageWidth = pageType === 'story-page-amp' ? '1200' : '480';
   const imageHeight = pageType === 'story-page-amp' ? '750' : '270';
   const storyAccessType = storyAccess(story['access']);
+  const authorUrl = structuredData.authorUrl(story) || `${publisherConfig['sketches-host']}/author${author.name}`;
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
     {
-      author: authorData(authors),
+      author: authorData(authors,authorUrl),
       keywords: metaKeywords.join(','),
       thumbnailUrl: imageUrl(
         publisherConfig,

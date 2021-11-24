@@ -1,17 +1,18 @@
-import { stripMillisecondsFromTime } from "../utils";
 import { get } from 'lodash';
+import { stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" }
 
 export function getSchemaType(type) {
   return { "@type": type };
 }
 
-export function getSchemaPerson(name) {
+export function getSchemaPerson(name, authorUrl) {
   return Object.assign({},
     getSchemaType("Person"),
     {
       "givenName": name,
-      "name": name
+      "name": name,
+      "url": authorUrl
     }
   )
 }
@@ -77,7 +78,7 @@ export function getSchemaMovieReview(movieObject={}) {
   const actors = get(movieObject,["actors"], []).map((actor) => getSchemaPerson(actor.name));
   const directors = get(movieObject,["directors"], []).map((director) => getSchemaPerson(director.name));
   const producers = get(movieObject,["producers"], []).map((producer) => getSchemaPerson(producer.name));
-  
+
   return  {
       "actors": actors,
       "directors": directors,
@@ -110,7 +111,7 @@ export function getSchemaWebsite(website = {}) {
         "@type": "SearchAction",
         "target": `${url}/${searchpath}`,
         "query-input": queryinput
-      }, 
+      },
     },
     getSchemaMainEntityOfPage(url)
   )
