@@ -6,10 +6,11 @@ export function getSchemaType(type) {
   return { "@type": type };
 }
 
-export function getSchemaPerson(name) {
+export function getSchemaPerson(name, url="") {
   return Object.assign({}, getSchemaType("Person"), {
     givenName: name,
     name: name,
+    "url": url
   });
 }
 
