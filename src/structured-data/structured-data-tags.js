@@ -63,8 +63,8 @@ function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   if (authorSchema.length > 0) {
     return (authorSchema || []).map((author) => getSchemaPerson(author.name, author.url));
   }
-  authors.map((author) => {
-    const authorUrl = `${publisherConfig["sketches-host"]}/author/${author.slug}`;
+  return authors.map((author) => {
+    const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : undefined;
     return getSchemaPerson(author.name, authorUrl);
   });
 }
