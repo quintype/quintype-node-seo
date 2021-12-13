@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite
+  getSchemaWebsite,
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -59,14 +59,14 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   );
 }
 
-function authorData(authors, authorSchema=[], publisherConfig={}) {
-  if(authorSchema.length > 0) {
-    return (authorSchema || []).map(author => getSchemaPerson(author.name, author.url));
+function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
+  if (authorSchema.length > 0) {
+    return (authorSchema || []).map((author) => getSchemaPerson(author.name, author.url));
   }
-   (authors || []).map(author => {
-     const authorUrl=`${publisherConfig['sketches-host']}/author/${author.slug}`
-    return getSchemaPerson(author.name, authorUrl)
-   });
+  authors.map((author) => {
+    const authorUrl = `${publisherConfig["sketches-host"]}/author/${author.slug}`;
+    return getSchemaPerson(author.name, authorUrl);
+  });
 }
 
 function getTextElementsOfCards(story) {
@@ -104,7 +104,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   const storyAccessType = storyAccess(story["access"]);
-  const authorSchema = structuredData.authorSchema && structuredData.authorSchema(story) || [];
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
@@ -226,7 +226,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, pageType, timezone) {
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const authorSchema = structuredData.authorSchema && structuredData.authorSchema(story) || [];
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
   return {
     headline: story.headline,
     description: story.summary || story.headline,
@@ -263,7 +263,7 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   const headline = get(story, ["headline"], "");
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const authorSchema = structuredData.authorSchema && structuredData.authorSchema(story) || [];
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType, timezone), {
     author: authorData(story.authors, authorSchema, publisherConfig),
     keywords: metaKeywords.join(","),
