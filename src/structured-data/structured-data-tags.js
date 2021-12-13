@@ -384,7 +384,7 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   return story.authors.map((author)=>{
     return {
       name: author.name,
-      url: `${config['sketches-host']}/authorsddc/${author.id}`
+      url: `${config['sketches-host']}/author/${author.id}`
     }
   })
 }
