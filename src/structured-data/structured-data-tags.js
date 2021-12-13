@@ -105,6 +105,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
