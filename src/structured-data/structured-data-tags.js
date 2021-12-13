@@ -380,6 +380,14 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
  * @property {boolean} isSubscriptionsEnabled Enable subscription based schema (default false)
  * @property {boolean} isShowcaseProduct Should product type be showcase (default false, fallback: basic)
+ * @property {function} authorSchema Should override author-url in Person schema. We have to pass an array of authors with name and URL Eg: "authorSchema" : (story)=> getAuthorWithUrl(story, config); const getAuthorWithUrl = (story, config) => {
+  return story.authors.map((author)=>{
+    return {
+      name: author.name,
+      url: `${config['sketches-host']}/authorsddc/${author.id}`
+    }
+  })
+}
  *
  */
 
