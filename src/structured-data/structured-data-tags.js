@@ -61,10 +61,10 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
 
 function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   if (authorSchema.length > 0) {
-    return (authorSchema || []).map((author) => getSchemaPerson(author.name, author.url));
+    return authorSchema.map((author) => getSchemaPerson(author.name, author.url));
   }
   return authors.map((author) => {
-    const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : undefined;
+    const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
     return getSchemaPerson(author.name, authorUrl);
   });
 }
