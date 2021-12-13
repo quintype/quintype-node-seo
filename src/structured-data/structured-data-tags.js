@@ -104,7 +104,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   const storyAccessType = storyAccess(story["access"]);
-  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
@@ -226,7 +226,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, pageType, timezone) {
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return {
     headline: story.headline,
     description: story.summary || story.headline,
@@ -263,7 +263,7 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   const headline = get(story, ["headline"], "");
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
-  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || null;
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType, timezone), {
     author: authorData(story.authors, authorSchema, publisherConfig),
     keywords: metaKeywords.join(","),
