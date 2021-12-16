@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.40.0](https://github.com/quintype/quintype-node-seo/compare/v1.38.37-fix-canonical-url.0...v1.40.0) (2021-12-16)
+
+
+### Features
+
+* generate subscription based schema for news article ([#515](https://github.com/quintype/quintype-node-seo/issues/515)) ([39b2bad](https://github.com/quintype/quintype-node-seo/commit/39b2badaaa156ed6f01e8552e0d1f120b15361c0))
+* **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
+* **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡  ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
+
+
+### Bug Fixes
+
+* **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
+
 ## [1.39.0](https://github.com/quintype/quintype-node-seo/compare/v1.38.36...v1.39.0) (2021-08-23)
 
 
