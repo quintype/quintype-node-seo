@@ -59,8 +59,14 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   );
 }
 
-function authorData(authors) {
-  return (authors || []).map((author) => getSchemaPerson(author.name));
+function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
+  if (authorSchema.length > 0) {
+    return authorSchema.map((author) => getSchemaPerson(author.name, author.url));
+  }
+  return authors.map((author) => {
+    const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
+    return getSchemaPerson(author.name, authorUrl);
+  });
 }
 
 function getTextElementsOfCards(story) {
@@ -98,11 +104,13 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
   const storyAccessType = storyAccess(story["access"]);
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
     {
-      author: authorData(authors),
+      author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
       thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
@@ -219,6 +227,7 @@ function findStoryElementField(card, type, field, defaultValue) {
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, pageType, timezone) {
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return {
     headline: story.headline,
     description: story.summary || story.headline,
@@ -229,7 +238,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
     liveBlogUpdate: story.cards.map((card) =>
       getSchemaBlogPosting(
         card,
-        authorData(story.authors),
+        authorData(story.authors, authorSchema, publisherConfig),
         findStoryElementField(card, "title", "text", story.headline),
         imageUrl(
           publisherConfig,
@@ -255,8 +264,9 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   const headline = get(story, ["headline"], "");
   const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
   const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType, timezone), {
-    author: authorData(story.authors),
+    author: authorData(story.authors, authorSchema, publisherConfig),
     keywords: metaKeywords.join(","),
     dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
@@ -370,6 +380,14 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
  * @property {Array} structuredDataTags An array of tags describing the publisher. eg: `{structuredDataTags: ["section-page", "tag-page"]}`
  * @property {boolean} isSubscriptionsEnabled Enable subscription based schema (default false)
  * @property {boolean} isShowcaseProduct Should product type be showcase (default false, fallback: basic)
+ * @property {function} authorSchema Should override author-url in Person schema. We have to pass an array of authors with name and URL Eg: "authorSchema" : (story)=> getAuthorWithUrl(story, config); const getAuthorWithUrl = (story, config) => {
+  return story.authors.map((author)=>{
+    return {
+      name: author.name,
+      url: `${config['sketches-host']}/author/${author.id}`
+    }
+  })
+}
  *
  */
 
