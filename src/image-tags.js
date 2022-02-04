@@ -35,7 +35,7 @@ function getAttribution(story) {
  * 5. logo from /api/v1/config > theme-attributes
  * 6. undefined (meta tag won't get created)
  */
-function pickImageFromStory({story, config, seoConfig}) {
+function pickImageFromStory({ story, config, seoConfig }) {
   function getAlt(type, key, fallback) {
     return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`], fallback);
   }
@@ -58,11 +58,11 @@ function pickImageFromStory({story, config, seoConfig}) {
     const metadata = get(story, ["hero-image-metadata"], {});
     return { image: new FocusedImage(storyHeroImage, metadata), alt };
   } else if (fallbackSocialImage) {
-    return { image: new FocusedImage(fallbackSocialImage, {}), alt };
+    return { image: fallbackSocialImage, alt, includesHost: true };
   } else if (logo_url) {
-    return { image: new FocusedImage(logo_url, {}), alt };
+    return { image: logo_url, alt, includesHost: true };
   } else if (logo) {
-    return { image: new FocusedImage(logo, {}), alt };
+    return { image: logo, alt, includesHost: true };
   } else {
     return { image: undefined, alt: undefined };
   }
@@ -110,7 +110,7 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
-  const { image, alt } = pickImage({ pageType, data, url, seoConfig, config });
+  const { image, alt, includesHost = false } = pickImage({ pageType, data, url, seoConfig, config });
 
   if (!image) {
     return [];
@@ -121,11 +121,13 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: `https://${config["cdn-image"]}/${image.path([16, 9], {
-        w: 1200,
-        auto: "format,compress",
-        ogImage: true,
-      })}`,
+      content: includesHost
+        ? image
+        : `https://${config["cdn-image"]}/${image.path([16, 9], {
+            w: 1200,
+            auto: "format,compress",
+            ogImage: true,
+          })}`,
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -133,11 +135,13 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: `https://${config["cdn-image"]}/${image.path([40, 21], {
-        w: 1200,
-        auto: "format,compress",
-        ogImage: true,
-      })}`,
+      content: includesHost
+        ? image
+        : `https://${config["cdn-image"]}/${image.path([40, 21], {
+            w: 1200,
+            auto: "format,compress",
+            ogImage: true,
+          })}`,
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {
