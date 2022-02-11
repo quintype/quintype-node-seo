@@ -202,6 +202,7 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
  * @param {*} seoConfig
  * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
  * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
+ * @param {string} seoConfig.fallbackSocialImage Optional. Should be full URL (i.e. include https://). This image will be shown in og:image and twitter:image meta tags for stories having no hero image or alternate hero/social images
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
