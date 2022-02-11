@@ -25,25 +25,47 @@ function getAttribution(story) {
   );
 }
 
-function pickImageFromStory(story) {
-  function getAlternateProperties(type, key) {
-    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`]);
+/**
+ * priority:
+ * 1. alternate social image
+ * 2. alternate hero image
+ * 3. hero image
+ * 4. "fallbackSocialImage" from seo config
+ * 5. logo_url from /api/v1/config > theme-attributes
+ * 5. logo from /api/v1/config > theme-attributes
+ * 6. undefined (meta tag won't get created)
+ */
+function pickImageFromStory({ story, config, seoConfig }) {
+  function getAlt(type, key, fallback) {
+    return get(story, ["alternative", `${type}`, "default", "hero-image", `${key}`], fallback);
   }
 
-  const alternateSocialMetadata = getAlternateProperties("social", "hero-image-metadata");
-  const alternateHomeMetadata = getAlternateProperties("home", "hero-image-metadata");
-  const alternateHomeS3Key = getAlternateProperties("home", "hero-image-s3-key");
-  const alternateSocialS3Key = getAlternateProperties("social", "hero-image-s3-key");
-
-  const socialAlternateHeroImageS3Metadata =
-    (alternateSocialMetadata ? alternateSocialMetadata : alternateHomeMetadata) || story["hero-image-metadata"];
-
-  const socialAlternateHeroImageS3Key =
-    (alternateSocialS3Key ? alternateSocialS3Key : alternateHomeS3Key) || story["hero-image-s3-key"];
-
   const alt = getAttribution(story);
+  const fallbackSocialImage = get(seoConfig, ["fallbackSocialImage"]);
+  const altHeroImg = getAlt("home", "hero-image-s3-key", null);
+  const altSocialHeroImg = getAlt("social", "hero-image-s3-key", null);
+  const storyHeroImage = get(story, ["hero-image-s3-key"]);
+  const logo_url = get(config, ["theme-attributes", "logo_url"]);
+  const logo = get(config, ["theme-attributes", "logo"]);
 
-  return { image: new FocusedImage(socialAlternateHeroImageS3Key, socialAlternateHeroImageS3Metadata || {}), alt };
+  if (altSocialHeroImg) {
+    const metadata = getAlt("social", "hero-image-metadata", {});
+    return { image: new FocusedImage(altSocialHeroImg, metadata), alt };
+  } else if (altHeroImg) {
+    const metadata = getAlt("home", "hero-image-metadata", {});
+    return { image: new FocusedImage(altHeroImg, metadata), alt };
+  } else if (storyHeroImage) {
+    const metadata = get(story, ["hero-image-metadata"], {});
+    return { image: new FocusedImage(storyHeroImage, metadata), alt };
+  } else if (fallbackSocialImage) {
+    return { image: fallbackSocialImage, alt, includesHost: true };
+  } else if (logo_url) {
+    return { image: logo_url, alt, includesHost: true };
+  } else if (logo) {
+    return { image: logo, alt, includesHost: true };
+  } else {
+    return { image: undefined, alt: undefined };
+  }
 }
 
 function pickImageFromCollection(collection) {
@@ -54,19 +76,19 @@ function pickImageFromCollection(collection) {
 }
 
 // The image is grabbed from the story, else from from the collection
-function pickImage(pageType, data, url) {
+function pickImage({ pageType, config, seoConfig, data, url }) {
   if (pageType === "story-page" && url.query && url.query.cardId) {
     const story = get(data, ["data", "story"]) || {};
-    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
+    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory({ story, seoConfig, config });
   } else if (pageType === "visual-story" && url.query && url.query.cardId) {
     const story = get(data, ["story"]) || {};
-    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory(story);
+    return pickImageFromCard(story, url.query.cardId) || pickImageFromStory({ story, seoConfig, config });
   } else if (pageType === "story-page" || pageType === "story-page-amp") {
     const story = get(data, ["data", "story"]) || {};
-    return pickImageFromStory(story);
+    return pickImageFromStory({ story, seoConfig, config });
   } else if (pageType === "visual-story") {
     const story = get(data, ["story"]) || {};
-    return pickImageFromStory(story);
+    return pickImageFromStory({ story, seoConfig, config });
   } else if (get(data, ["data", "collection"])) {
     return pickImageFromCollection(get(data, ["data", "collection"]));
   } else {
@@ -88,7 +110,7 @@ function pickImage(pageType, data, url) {
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
-  const { image, alt } = pickImage(pageType, data, url);
+  const { image, alt, includesHost = false } = pickImage({ pageType, data, url, seoConfig, config });
 
   if (!image) {
     return [];
@@ -99,11 +121,13 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: `https://${config["cdn-image"]}/${image.path([16, 9], {
-        w: 1200,
-        auto: "format,compress",
-        ogImage: true,
-      })}`,
+      content: includesHost
+        ? image
+        : `https://${config["cdn-image"]}/${image.path([16, 9], {
+            w: 1200,
+            auto: "format,compress",
+            ogImage: true,
+          })}`,
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -111,11 +135,13 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: `https://${config["cdn-image"]}/${image.path([40, 21], {
-        w: 1200,
-        auto: "format,compress",
-        ogImage: true,
-      })}`,
+      content: includesHost
+        ? image
+        : `https://${config["cdn-image"]}/${image.path([40, 21], {
+            w: 1200,
+            auto: "format,compress",
+            ogImage: true,
+          })}`,
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {
