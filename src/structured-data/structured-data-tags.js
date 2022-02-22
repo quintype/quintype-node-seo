@@ -44,8 +44,8 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
     Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl
       ? storyUrl
       : get(structuredData, ["organization", "url"], "");
-  const imageWidth = 1200; // This value is updated based on latest google requirement
-  const imageHeight = 675; // This value is updated based on latest google requirement
+  const imageWidth = 1200;
+  const imageHeight = 675;
   return Object.assign(
     {},
     {
@@ -101,8 +101,8 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
   const storyKeysPresence = Object.keys(story).length > 0;
-  const imageWidth = 1200; // This value is updated based on latest google requirement
-  const imageHeight = 675; // This value is updated based on latest google requirement
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
 
@@ -126,8 +126,8 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
 }
 
 function generateArticleImageData(image, publisherConfig = {}) {
-  const imageWidth = 1200; // This value is updated based on latest google requirement
-  const imageHeight = 675; // This value is updated based on latest google requirement
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
 
   return Object.assign(
@@ -225,8 +225,8 @@ function findStoryElementField(card, type, field, defaultValue) {
 }
 
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
-  const imageWidth = 1200; // This value is updated based on latest google requirement
-  const imageHeight = 675; // This value is updated based on latest google requirement
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return {
     headline: story.headline,
@@ -261,8 +261,8 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   const metaDescription = get(story, ["seo", "meta-description"], "");
   const subHeadline = get(story, ["subheadline"], "");
   const headline = get(story, ["headline"], "");
-  const imageWidth = 1200; // This value is updated based on latest google requirement
-  const imageHeight = 675; // This value is updated based on latest google requirement
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, timezone), {
     author: authorData(story.authors, authorSchema, publisherConfig),
