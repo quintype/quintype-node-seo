@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite,
+  getSchemaWebsite
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -37,15 +37,15 @@ function imageUrl(publisherConfig, s3Key, width, height) {
   return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max`;
 }
 
-function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "", timezone) {
+function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
   const mainEntityUrl =
     Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl
       ? storyUrl
       : get(structuredData, ["organization", "url"], "");
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const imageWidth = 1200;
+  const imageHeight = 675;
   return Object.assign(
     {},
     {
@@ -97,18 +97,18 @@ function articleSectionObj(story) {
   }
 }
 
-function generateArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "", timezone) {
+function generateArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
   const storyKeysPresence = Object.keys(story).length > 0;
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
 
   return Object.assign(
     {},
-    generateCommonData(structuredData, story, publisherConfig, pageType, timezone),
+    generateCommonData(structuredData, story, publisherConfig, timezone),
     {
       author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
@@ -117,17 +117,17 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
-      image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig, pageType),
+      image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
       isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfDataForArticle(story, publisherConfig, pageType),
+      isPartOf: generateIsPartOfDataForArticle(story, publisherConfig),
     },
     articleSectionObj(story)
   );
 }
 
-function generateArticleImageData(image, publisherConfig = {}, pageType = "") {
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+function generateArticleImageData(image, publisherConfig = {}) {
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
 
   return Object.assign(
@@ -148,13 +148,13 @@ function storyAccess(access) {
   }
 }
 
-function generateIsPartOfDataForArticle(story = {}, publisherConfig = {}, pageType = "") {
+function generateIsPartOfDataForArticle(story = {}, publisherConfig = {}) {
   return Object.assign(
     {},
     {
       "@type": "WebPage",
       url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-      primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig, pageType),
+      primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
     }
   );
 }
@@ -164,7 +164,7 @@ function generateIsPartOfDataForNewsArticle(story = {}, publisherConfig = {}, pa
   const productId = `${publisherConfig["publisher-name"]}${
     structuredData.isShowcaseProduct ? ".com:showcase" : ".com:basic"
   }`;
-  const isPartOfData = generateIsPartOfDataForArticle(story, publisherConfig, pageType);
+  const isPartOfData = generateIsPartOfDataForArticle(story, publisherConfig);
 
   if (structuredData.isSubscriptionsEnabled) {
     return Object.assign(isPartOfData, {
@@ -182,7 +182,7 @@ function generateIsPartOfDataForNewsArticle(story = {}, publisherConfig = {}, pa
         name: publisherName,
         productID: productId,
         url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-        primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig, pageType),
+        primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
       }
     );
   }
@@ -224,9 +224,9 @@ function findStoryElementField(card, type, field, defaultValue) {
   else return defaultValue;
 }
 
-function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, pageType, timezone) {
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   return {
     headline: story.headline,
@@ -254,18 +254,17 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   };
 }
 
-function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "", timezone) {
+function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
-  const articleSection = get(story, ["sections", "0", "display-name"], "");
   const embedUrl = get(story, ["cards", "0", "story-elements", "0", "embed-url"], "");
   const socialShareMsg = get(story, ["summary"], "");
   const metaDescription = get(story, ["seo", "meta-description"], "");
   const subHeadline = get(story, ["subheadline"], "");
   const headline = get(story, ["headline"], "");
-  const imageWidth = pageType === "story-page-amp" ? "1200" : "480";
-  const imageHeight = pageType === "story-page-amp" ? "750" : "270";
+  const imageWidth = 1200;
+  const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
-  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, pageType, timezone), {
+  return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, timezone), {
     author: authorData(story.authors, authorSchema, publisherConfig),
     keywords: metaKeywords.join(","),
     dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
@@ -412,7 +411,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
-    articleData = generateArticleData(structuredData, story, publisherConfig, pageType, timezone);
+    articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
       if (pageType === type) {
         tags.push(ldJson("Organization", structuredData.organization));
@@ -472,14 +471,14 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     if (structuredData.enableLiveBlog && story["story-template"] === "live-blog") {
       return ldJson(
         "LiveBlogPosting",
-        Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig, pageType, timezone))
+        Object.assign({}, generateLiveBlogPostingData(structuredData, story, publisherConfig, timezone))
       );
     }
 
     if (structuredData.enableVideo && story["story-template"] === "video") {
       return ldJson(
         "VideoObject",
-        generateVideoArticleData(structuredData, story, publisherConfig, pageType, timezone)
+        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
       );
     }
 
