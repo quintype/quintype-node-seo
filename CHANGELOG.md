@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.40.3](https://github.com/quintype/quintype-node-seo/compare/v1.40.2...v1.40.3) (2022-02-23)
+
+
+### Bug Fixes
+
+* Update image schema ([#522](https://github.com/quintype/quintype-node-seo/issues/522)) ([5e42cdc](https://github.com/quintype/quintype-node-seo/commit/5e42cdcbb14d587251b7a3f932a4f98dd358f188))
+
 ### [1.40.2](https://github.com/quintype/quintype-node-seo/compare/v1.40.2-ogImgFix.0...v1.40.2) (2022-02-11)
 
 ### [1.40.1](https://github.com/quintype/quintype-node-seo/compare/v1.40.0...v1.40.1) (2022-01-06)
