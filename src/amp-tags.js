@@ -6,10 +6,6 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
     return false;
   }
 
-  if (!get(story, ["is-amp-supported"])) {
-    return false;
-  }
-
   if (ampStoryPages === 'public' && !isStoryPublic(story)) {
     return false;
   }
