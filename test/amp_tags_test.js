@@ -19,12 +19,11 @@ describe('AmpTags', function () {
     assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
   });
 
-  // FIX THIS LATER -- AMOGH
-  // it("does not ampify any non supported stories", function () {
-  //   const story = { "slug": "section/slug", "is-amp-supported": false }
-  //   const string = getSeoMetadata(seoConfig, config, 'story-page', { data: { story: story } }, {})
-  //   assert.equal('', string);
-  // });
+  it("does not rely on is-amp-supported in story API", function () {
+    const story = { slug: "section/slug", "is-amp-supported": false };
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
+    assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
+  });
 
   it("does not add amphtml link tag to amp story pages", function () {
     const story = { slug: "section/slug", "is-amp-supported": true };
