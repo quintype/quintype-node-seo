@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.40.4](https://github.com/quintype/quintype-node-seo/compare/v1.40.4-amptag.0...v1.40.4) (2022-03-22)
+
 ### [1.40.3](https://github.com/quintype/quintype-node-seo/compare/v1.40.2...v1.40.3) (2022-02-23)
 
 
