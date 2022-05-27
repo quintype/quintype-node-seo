@@ -44,7 +44,7 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     return [{
       tag: 'link',
       rel: 'amphtml',
-      href: `${ampUrlAppend}/amp/story/${storySlug}`
+      href: `${ampUrlAppend}/amp/story/${storySlug.replace("ampstories/", "")}`
     }];
   } else {
     return [];
