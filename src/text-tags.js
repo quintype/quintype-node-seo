@@ -114,7 +114,7 @@ function buildCustomTags(customTags = {}, pageType = "") {
 
 function buildTagsFromStaticPage(config, page, url = {}, data) {
   const seoData = get(page, ["metadata", "seo"], {});
-  const customSeo = lodash.get(data, ["data", "customSeo"], {});
+  const customSeo = get(data, ["data", "customSeo"], {});
   if (isEmpty(seoData) && isEmpty(customSeo)) return;
 
   const { "meta-title": metaTitle, "meta-description": metaDescription, "meta-keywords": keywords } = seoData;
