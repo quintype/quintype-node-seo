@@ -217,7 +217,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       );
     case "static-page":
       return (
-        buildTagsFromStaticPage(config, lodash.get(data, ["data", "page"], {}), url, data) ||
+        buildTagsFromStaticPage(config, get(data, ["data", "page"], {}), url, data) ||
         getSeoData(config, "home-page", data, url)
       );
     case "shell":
