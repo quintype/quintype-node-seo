@@ -254,9 +254,26 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   };
 }
 
+function getEmbedUrl(story) {
+  const { cards } = story;
+
+  for (let i = 0; i < cards.length; i++) {
+    const storyElements = cards[i]["story-elements"];
+    for (let j = 0; j < storyElements.length; j++) {
+      const storyElement = storyElements[j];
+      if (storyElement["embed-url"]) {
+        return storyElement["embed-url"]
+      }
+    }
+
+  }
+
+  return ''
+}
+
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
-  const embedUrl = get(story, ["cards", "0", "story-elements", "0", "embed-url"], "");
+  const embedUrl = getEmbedUrl(story)
   const socialShareMsg = get(story, ["summary"], "");
   const metaDescription = get(story, ["seo", "meta-description"], "");
   const subHeadline = get(story, ["subheadline"], "");
