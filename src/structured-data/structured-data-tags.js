@@ -254,9 +254,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   };
 }
 
-function getEmbedUrl(story) {
-  const { cards } = story;
-
+function getEmbedUrl({cards}) {
   for (let i = 0; i < cards.length; i++) {
     const storyElements = cards[i]["story-elements"];
     for (let j = 0; j < storyElements.length; j++) {
