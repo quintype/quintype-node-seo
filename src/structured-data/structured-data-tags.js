@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite
+  getSchemaWebsite,
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -254,24 +254,24 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   };
 }
 
-function getEmbedUrl({cards}) {
+function getEmbedUrl(cards) {
   for (let i = 0; i < cards.length; i++) {
     const storyElements = cards[i]["story-elements"];
     for (let j = 0; j < storyElements.length; j++) {
       const storyElement = storyElements[j];
       if (storyElement["embed-url"]) {
-        return storyElement["embed-url"]
+        return storyElement["embed-url"];
       }
     }
-
   }
 
-  return ''
+  return "";
 }
 
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
-  const embedUrl = getEmbedUrl(story)
+  const storyCards = get(story, ["cards"], []);
+  const embedUrl = getEmbedUrl(storyCards);
   const socialShareMsg = get(story, ["summary"], "");
   const metaDescription = get(story, ["seo", "meta-description"], "");
   const subHeadline = get(story, ["subheadline"], "");
@@ -491,10 +491,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
 
     if (structuredData.enableVideo && story["story-template"] === "video") {
-      return ldJson(
-        "VideoObject",
-        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
-      );
+      return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig, timezone));
     }
 
     if (structuredData.enableNewsArticle !== "withoutArticleSchema") {
