@@ -256,6 +256,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
 function getEmbedUrl(cards) {
   // get the first story element which has the embed url
+  // one more comment
   const storyElement = cards
     .flatMap((card) => card["story-elements"])
     .find((elem) => elem["embed-url"]);
