@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite,
+  getSchemaWebsite
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -255,18 +255,16 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 }
 
 function getEmbedUrl(cards) {
-  for (let i = 0; i < cards.length; i++) {
-    const storyElements = cards[i]["story-elements"];
-    for (let j = 0; j < storyElements.length; j++) {
-      const storyElement = storyElements[j];
-      if (storyElement["embed-url"]) {
-        return storyElement["embed-url"];
-      }
-    }
+  // get the first story element which has the embed url
+  const storyElement = cards
+    .flatMap((card) => card["story-elements"])
+    .find((elem) => elem["embed-url"]);
+  if (storyElement) {
+    return  storyElement["embed-url"];
   }
-
   return "";
 }
+
 
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
