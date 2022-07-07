@@ -256,11 +256,22 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
 function getEmbedUrl(cards) {
   // get the first story element which has the embed url
-  const storyElement = cards
-    .flatMap((card) => card["story-elements"])
-    .find((elem) => elem["embed-url"]);
-  if (storyElement) {
-    return  storyElement["embed-url"];
+
+  let storyElemIndex;
+
+  const card = cards.find((card) => {
+    const storyElements = card["story-elements"];
+    return storyElements.find((elem, index) => {
+      if (elem["embed-url"]) {
+        storyElemIndex = index;
+        return elem["embed-url"];
+      }
+      return false;
+    });
+  });
+  if (card) {
+    const storyElement = card['story-elements'][storyElemIndex]
+    return storyElement["embed-url"];
   }
   return "";
 }
