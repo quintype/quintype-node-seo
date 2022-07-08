@@ -255,25 +255,23 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 }
 
 function getEmbedUrl(cards) {
-  // get the first story element which has the embed url
+  let embedUrl = "";
 
-  let storyElemIndex;
-
-  const card = cards.find((card) => {
+  // not using the return value of top level find
+  // coz we only need the embed url
+  // find is used for early exit
+  cards.find((card) => {
     const storyElements = card["story-elements"];
     return storyElements.find((elem, index) => {
       if (elem["embed-url"]) {
-        storyElemIndex = index;
-        return elem["embed-url"];
+        embedUrl = elem["embed-url"];
+        return true;
       }
       return false;
     });
   });
-  if (card) {
-    const storyElement = card['story-elements'][storyElemIndex]
-    return storyElement["embed-url"];
-  }
-  return "";
+
+  return embedUrl;
 }
 
 
