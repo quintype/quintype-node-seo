@@ -3,18 +3,18 @@ const { getSeoMetadata, assertContains } = require("./utils");
 
 const assert = require("assert");
 
-describe("ImageTags", function() {
+describe("ImageTags", function () {
   const seoConfig = {
     generators: [ImageTags],
     enableOgTags: true,
-    enableTwitterCards: true
+    enableTwitterCards: true,
   };
 
   const config = {
-    "cdn-image": "thumbor.assettype.com"
+    "cdn-image": "thumbor.assettype.com",
   };
 
-  it("gets the twitter tags", function() {
+  it("gets the twitter tags", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       alternative: {
@@ -22,51 +22,39 @@ describe("ImageTags", function() {
           default: {
             headline: null,
             "hero-image": {
-              "hero-image-s3-key": "my/socialimage.png"
-            }
-          }
+              "hero-image-s3-key": "my/socialimage.png",
+            },
+          },
         },
         home: {
           default: {
             headline: null,
             "hero-image": {
-              "hero-image-s3-key": "my/homeimage.png"
-            }
-          }
-        }
-      }
+              "hero-image-s3-key": "my/homeimage.png",
+            },
+          },
+        },
+      },
     };
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      {}
-    );
-    const ampPageString = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page-amp",
-      { data: { story: story } },
-      {}
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
+    const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       ampPageString
     );
   });
 
-  it("has facebook tags resized correctly", function() {
+  it("has facebook tags resized correctly", function () {
     const story = {
       "hero-image-s3-key": "my/images.png",
       "hero-image-metadata": {
         width: 2400,
         height: 1260,
-        "focus-point": [0, 0]
+        "focus-point": [0, 0],
       },
       alternative: {
         social: {
@@ -76,11 +64,11 @@ describe("ImageTags", function() {
               "hero-image-metadata": {
                 width: 2400,
                 height: 1260,
-                "focus-point": [0, 0]
+                "focus-point": [0, 0],
               },
-              "hero-image-s3-key": "my/socialimage.png"
-            }
-          }
+              "hero-image-s3-key": "my/socialimage.png",
+            },
+          },
         },
         home: {
           default: {
@@ -89,34 +77,22 @@ describe("ImageTags", function() {
               "hero-image-metadata": {
                 width: 2400,
                 height: 1260,
-                "focus-point": [0, 0]
+                "focus-point": [0, 0],
               },
-              "hero-image-s3-key": "my/homeimage.png"
-            }
-          }
-        }
-      }
+              "hero-image-s3-key": "my/homeimage.png",
+            },
+          },
+        },
+      },
     };
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      {}
-    );
-    const ampPageString = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page-amp",
-      { data: { story: story } },
-      {}
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
+    const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       string
     );
     assertContains(
-      '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       ampPageString
     );
     assertContains('<meta property="og:image:width" content="1200"/>', string);
@@ -125,7 +101,7 @@ describe("ImageTags", function() {
     assertContains('<meta property="og:image:height" content="630"/>', ampPageString);
   });
 
-  it("gets card image values instead of story image values on card share", function() {
+  it("gets card image values instead of story image values on card share", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       cards: [
@@ -140,38 +116,32 @@ describe("ImageTags", function() {
                 metadata: {
                   width: 1300,
                   height: 1065,
-                  "mime-type": "image/jpeg"
-                }
-              }
-            }
-          }
-        }
-      ]
+                  "mime-type": "image/jpeg",
+                },
+              },
+            },
+          },
+        },
+      ],
     };
 
     const opts = {
       url: {
         query: {
-          cardId: "sample-card-id"
-        }
-      }
+          cardId: "sample-card-id",
+        },
+      },
     };
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       string
     );
   });
 
-  it("gets story hero image attribution values instead of card attribution values on story share", function() {
+  it("gets story hero image attribution values instead of card attribution values on story share", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": "attribution test",
@@ -188,32 +158,25 @@ describe("ImageTags", function() {
                 metadata: {
                   width: 1300,
                   height: 1065,
-                  "mime-type": "image/jpeg"
-                }
-              }
-            }
-          }
-        }
-      ]
+                  "mime-type": "image/jpeg",
+                },
+              },
+            },
+          },
+        },
+      ],
     };
 
     const opts = {};
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
-    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string)
+    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string);
 
-    assertContains('<meta property="og:image:alt" content="attribution test"/>', string)
-
+    assertContains('<meta property="og:image:alt" content="attribution test"/>', string);
   });
 
-  it("gets story summary as attribution if hero image attribution is not present", function() {
+  it("gets story summary as attribution if hero image attribution is not present", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": null,
@@ -230,32 +193,25 @@ describe("ImageTags", function() {
                 metadata: {
                   width: 1300,
                   height: 1065,
-                  "mime-type": "image/jpeg"
-                }
-              }
-            }
-          }
-        }
-      ]
+                  "mime-type": "image/jpeg",
+                },
+              },
+            },
+          },
+        },
+      ],
     };
 
     const opts = {};
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
-    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string)
+    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string);
 
-    assertContains('<meta property="og:image:alt" content="attribution test"/>', string)
-
+    assertContains('<meta property="og:image:alt" content="attribution test"/>', string);
   });
 
-  it("gets story headline as attribution if hero image attribution and summary is not present", function() {
+  it("gets story headline as attribution if hero image attribution and summary is not present", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       "hero-image-attribution": null,
@@ -273,32 +229,25 @@ describe("ImageTags", function() {
                 metadata: {
                   width: 1300,
                   height: 1065,
-                  "mime-type": "image/jpeg"
-                }
-              }
-            }
-          }
-        }
-      ]
+                  "mime-type": "image/jpeg",
+                },
+              },
+            },
+          },
+        },
+      ],
     };
 
     const opts = {};
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
-    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string)
+    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string);
 
-    assertContains('<meta property="og:image:alt" content="attribution test"/>', string)
-
+    assertContains('<meta property="og:image:alt" content="attribution test"/>', string);
   });
 
-  it("gets card image attribution values instead of story attribution values on card share", function() {
+  it("gets card image attribution values instead of story attribution values on card share", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       headline: "story headline",
@@ -315,38 +264,31 @@ describe("ImageTags", function() {
                 metadata: {
                   width: 1300,
                   height: 1065,
-                  "mime-type": "image/jpeg"
-                }
-              }
-            }
-          }
-        }
-      ]
+                  "mime-type": "image/jpeg",
+                },
+              },
+            },
+          },
+        },
+      ],
     };
 
     const opts = {
       url: {
         query: {
-          cardId: "sample-card-id"
-        }
-      }
+          cardId: "sample-card-id",
+        },
+      },
     };
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
-    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string)
+    assertContains('<meta property="twitter:image:alt" content="attribution test"/>', string);
 
-    assertContains('<meta property="og:image:alt" content="attribution test"/>', string)
-
+    assertContains('<meta property="og:image:alt" content="attribution test"/>', string);
   });
 
-  it("gets story data as fallback if the card metadata is falsy", function() {
+  it("gets story data as fallback if the card metadata is falsy", function () {
     const story = {
       "hero-image-s3-key": "my/image.png",
       cards: [
@@ -355,48 +297,36 @@ describe("ImageTags", function() {
           metadata: {
             "social-share": {
               title: "share-card-title",
-              message: "share-card-description"
-            }
-          }
-        }
-      ]
+              message: "share-card-description",
+            },
+          },
+        },
+      ],
     };
 
     const opts = {
       url: {
         query: {
-          cardId: "sample-card-id"
-        }
-      }
+          cardId: "sample-card-id",
+        },
+      },
     };
 
-    const string = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page",
-      { data: { story: story } },
-      opts
-    );
-    const ampPageString = getSeoMetadata(
-      seoConfig,
-      config,
-      "story-page-amp",
-      { data: { story: story } },
-      opts
-    );
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
+    const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, opts);
 
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
       ampPageString
     );
   });
 
-  describe("for collection pages", function() {
-    it("pulls images from the collection if present", function() {
+  describe("for collection pages", function () {
+    it("pulls images from the collection if present", function () {
       const collection = {
         metadata: {
           "cover-image": {
@@ -404,33 +334,21 @@ describe("ImageTags", function() {
             "cover-image-metadata": {
               width: 2400,
               height: 1260,
-              "focus-point": [0, 0]
-            }
-          }
-        }
+              "focus-point": [0, 0],
+            },
+          },
+        },
       };
-      const string = getSeoMetadata(
-        seoConfig,
-        config,
-        "home-page",
-        { data: { collection: collection } },
-        {}
-      );
+      const string = getSeoMetadata(seoConfig, config, "home-page", { data: { collection: collection } }, {});
       assertContains(
-        '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true"/>',
+        '<meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1260&amp;w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;enlarge=true"/>',
         string
       );
-      assertContains(
-        '<meta property="og:image:width" content="1200"/>',
-        string
-      );
-      assertContains(
-        '<meta property="og:image:height" content="630"/>',
-        string
-      );
+      assertContains('<meta property="og:image:width" content="1200"/>', string);
+      assertContains('<meta property="og:image:height" content="630"/>', string);
     });
 
-    it("pulls images with alt from the collection if present", function() {
+    it("pulls images with alt from the collection if present", function () {
       const collection = {
         name: "collection name",
         summary: "collection summary",
@@ -440,41 +358,23 @@ describe("ImageTags", function() {
             "cover-image-metadata": {
               width: 2400,
               height: 1260,
-              "focus-point": [0, 0]
-            }
-          }
-        }
+              "focus-point": [0, 0],
+            },
+          },
+        },
       };
-      const string = getSeoMetadata(
-        seoConfig,
-        config,
-        "home-page",
-        { data: { collection: collection } },
-        {}
-      );
-      assertContains(
-        '<meta property="og:image:alt" content="collection summary"/>',
-        string
-      );
-      assertContains(
-        '<meta property="twitter:image:alt" content="collection summary"/>',
-        string
-      );
+      const string = getSeoMetadata(seoConfig, config, "home-page", { data: { collection: collection } }, {});
+      assertContains('<meta property="og:image:alt" content="collection summary"/>', string);
+      assertContains('<meta property="twitter:image:alt" content="collection summary"/>', string);
     });
 
-    it("does not add tags if the cover image is missing", function() {
+    it("does not add tags if the cover image is missing", function () {
       const collection = {
         metadata: {
-          "cover-image": {}
-        }
+          "cover-image": {},
+        },
       };
-      const string = getSeoMetadata(
-        seoConfig,
-        config,
-        "home-page",
-        { data: { collection: collection } },
-        {}
-      );
+      const string = getSeoMetadata(seoConfig, config, "home-page", { data: { collection: collection } }, {});
       assert.equal("", string);
     });
   });
