@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite
+  getSchemaWebsite,
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -254,9 +254,30 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   };
 }
 
+function getEmbedUrl(cards) {
+  let embedUrl = "";
+
+  // not using the return value of top level find
+  // coz we only need the embed url
+  // find is used for early exit
+  cards.find((card) => {
+    const storyElements = card["story-elements"];
+    return storyElements.find((elem, index) => {
+      if (elem["embed-url"]) {
+        embedUrl = elem["embed-url"];
+        return true;
+      }
+      return false;
+    });
+  });
+
+  return embedUrl;
+}
+
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
-  const embedUrl = get(story, ["cards", "0", "story-elements", "0", "embed-url"], "");
+  const storyCards = get(story, ["cards"], []);
+  const embedUrl = getEmbedUrl(storyCards);
   const socialShareMsg = get(story, ["summary"], "");
   const metaDescription = get(story, ["seo", "meta-description"], "");
   const subHeadline = get(story, ["subheadline"], "");
@@ -476,10 +497,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
 
     if (structuredData.enableVideo && story["story-template"] === "video") {
-      return ldJson(
-        "VideoObject",
-        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
-      );
+      return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig, timezone));
     }
 
     if (structuredData.enableNewsArticle !== "withoutArticleSchema") {
