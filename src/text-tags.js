@@ -112,6 +112,33 @@ function buildCustomTags(customTags = {}, pageType = "") {
   return {};
 }
 
+function buildTagsFromStaticPage(config, page, url = {}, data) {
+  const seoData = get(page, ["metadata", "seo"], {});
+  const customSeo = get(data, ["data", "customSeo"], {});
+  if (isEmpty(seoData) && isEmpty(customSeo)) return;
+
+  const { "meta-title": metaTitle, "meta-description": metaDescription, "meta-keywords": keywords } = seoData;
+
+  const title = customSeo.title || metaTitle || page.title;
+  const pageTitle = customSeo["page-title"] || title;
+  const description = customSeo.description || metaDescription;
+  const ogTitle = customSeo.ogTitle || title;
+  const staticPageUrl = `${config["sketches-host"]}${url.pathname}`;
+  const ogDescription = customSeo.ogDescription || description;
+
+  return {
+    title,
+    "page-title": pageTitle,
+    description,
+    keywords: `${title},${config["publisher-name"]}`,
+    canonicalUrl: staticPageUrl,
+    ogUrl: staticPageUrl,
+    ogTitle,
+    ogDescription,
+    keywords: customSeo.keywords || keywords,
+  };
+}
+
 // The findRelevantConfig method call has no ownerId for home page.
 // This causes the seoMetadata to be undefined.
 // So the default value for the ownerId is set to null.
@@ -186,6 +213,11 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     case "author-page":
       return (
         buildTagsFromAuthor(config, get(data, ["data", "author"], {}), url, data) ||
+        getSeoData(config, "home-page", data, url)
+      );
+    case "static-page":
+      return (
+        buildTagsFromStaticPage(config, get(data, ["data", "page"], {}), url, data) ||
         getSeoData(config, "home-page", data, url)
       );
     case "shell":
