@@ -11,7 +11,7 @@ import {
   getSchemaPerson,
   getSchemaPublisher,
   getSchemaType,
-  getSchemaWebsite
+  getSchemaWebsite,
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
@@ -262,6 +262,7 @@ function getEmbedUrl(cards) {
   // find is used for early exit
   cards.find((card) => {
     const storyElements = card["story-elements"];
+
     return storyElements.find((elem, index) => {
       if (elem["embed-url"]) {
         embedUrl = elem["embed-url"];
@@ -273,7 +274,6 @@ function getEmbedUrl(cards) {
 
   return embedUrl;
 }
-
 
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
