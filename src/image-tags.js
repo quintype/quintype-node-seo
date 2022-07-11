@@ -128,6 +128,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
             w: 1200,
             auto: "format,compress",
             ogImage: true,
+            enlarge: true,
           })}`,
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
@@ -142,6 +143,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
             w: 1200,
             auto: "format,compress",
             ogImage: true,
+            enlarge: true,
           })}`,
     });
     tags.push({ property: "og:image:width", content: 1200 });
