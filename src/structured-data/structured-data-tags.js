@@ -262,7 +262,6 @@ function getEmbedUrl(cards) {
   // find is used for early exit
   cards.find((card) => {
     const storyElements = card["story-elements"];
-
     return storyElements.find((elem, index) => {
       if (elem["embed-url"]) {
         embedUrl = elem["embed-url"];
