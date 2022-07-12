@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.40.9](https://github.com/quintype/quintype-node-seo/compare/v1.40.8...v1.40.9) (2022-07-12)
+
+
+### Bug Fixes
+
+* **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
+
 ### [1.40.8](https://github.com/quintype/quintype-node-seo/compare/v1.40.5...v1.40.8) (2022-07-11)
 
 
