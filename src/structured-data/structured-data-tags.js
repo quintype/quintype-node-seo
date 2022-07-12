@@ -261,8 +261,8 @@ function getEmbedUrl(cards) {
   // coz we only need the embed url
   // find is used for early exit
   cards.find((card) => {
-    const storyElements = card["story-elements"];
-    return storyElements.find((elem, index) => {
+    const storyElements = get(card, ["story-elements"], []);
+    return storyElements.find((elem) => {
       if (elem["embed-url"]) {
         embedUrl = elem["embed-url"];
         return true;
