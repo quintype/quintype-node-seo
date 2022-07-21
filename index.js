@@ -1,20 +1,20 @@
-import {omit, flatMap, get, uniqBy} from "lodash";
+import { flatMap, get, omit, uniqBy } from "lodash";
 import React from "react";
-import ReactDomServer from"react-dom/server";
+import ReactDomServer from "react-dom/server";
+import { StoryAmpTags } from './src/amp-tags.js';
+import { AuthorTags } from './src/author-tags.js';
+import { generateStaticData, generateStructuredData } from './src/generate-common-seo';
+import { ImageTags } from './src/image-tags.js';
+import { StaticTags } from './src/static-tags.js';
+import { StructuredDataTags } from './src/structured-data/structured-data-tags.js';
+import { getTitle, TextTags } from './src/text-tags.js';
 
-import {TextTags, getTitle} from './src/text-tags.js';
-import {StaticTags} from './src/static-tags.js';
-import {AuthorTags} from './src/author-tags.js';
-import {ImageTags} from './src/image-tags.js';
-import {StructuredDataTags} from './src/structured-data/structured-data-tags.js';
-import {StoryAmpTags} from './src/amp-tags.js';
-import {generateStaticData, generateStructuredData} from './src/generate-common-seo';
 
-export {TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags, generateStaticData, generateStructuredData};
+export { TextTags, StaticTags, AuthorTags, ImageTags, StructuredDataTags, StoryAmpTags, generateStaticData, generateStructuredData };
 
 function tagToKey(tag) {
-  switch(tag.tag || "meta") {
-    case "meta": return `meta-${tag.name || "name"}-${tag.property || "property"}`;
+  switch (tag.tag || "meta") {
+    case "meta": return `meta-${tag.name || tag.itemprop || "name"}-${tag.property || "property"}`;
     case "link": return `link-${tag.rel}`;
     case "title": return `title`;
     default: return Math.random().toString();
@@ -28,7 +28,7 @@ export class MetaTagList {
 
   toString() {
     const uniqueTags = uniqBy(this.tags.reverse(), tagToKey).reverse();
-    return ReactDomServer.renderToStaticMarkup(uniqueTags.map(tag => React.createElement(tag.tag || "meta", omit(tag, "tag"))))
+    return ReactDomServer.renderToStaticMarkup(uniqueTags.map(tag => React.createElement(tag.tag || "meta", omit(tag, "tag"))));
   }
 
   addTag() {
@@ -102,6 +102,6 @@ export class SEO {
   }
 
   getTitle(config, pageType, data, params = {}) {
-    return getTitle(this.seoConfig, config, pageType, data, params)
+    return getTitle(this.seoConfig, config, pageType, data, params);
   }
 }
