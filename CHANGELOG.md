@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.40.10](https://github.com/quintype/quintype-node-seo/compare/v1.40.5...v1.40.10) (2022-07-29)
+
+
+### Bug Fixes
+
+* Amphtml error  ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
+* **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
+* **video-structured-data:** use correct embed url ([#528](https://github.com/quintype/quintype-node-seo/issues/528)) ([abe449f](https://github.com/quintype/quintype-node-seo/commit/abe449fd7e75d45f9b9896444f3ef644ca2cf497))
+
 ### [1.40.9](https://github.com/quintype/quintype-node-seo/compare/v1.40.8...v1.40.9) (2022-07-12)
 
 
