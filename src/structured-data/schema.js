@@ -41,7 +41,8 @@ export function getSchemaBlogPosting(
   image = "",
   structuredData = {},
   story = {},
-  timezone
+  timezone,
+  articleBody
 ) {
   const { website: { url = "" } = {} } = structuredData;
   const orgUrl = get(structuredData, ["organization", "url"], "");
@@ -51,6 +52,7 @@ export function getSchemaBlogPosting(
     getSchemaMainEntityOfPage(`${url}/${story.slug}`),
     getSchemaPublisher(structuredData.organization, orgUrl),
     {
+      articleBody: articleBody,
       dateModified: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
       dateCreated: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
       datePublished: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
