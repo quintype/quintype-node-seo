@@ -228,6 +228,8 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   const imageWidth = 1200;
   const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+  const storyKeysPresence = Object.keys(story).length > 0;
+  const articleBody = (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "";
   return {
     headline: story.headline,
     description: story.summary || story.headline,
@@ -235,6 +237,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+
     liveBlogUpdate: story.cards.map((card) =>
       getSchemaBlogPosting(
         card,
@@ -248,7 +251,8 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
         ),
         structuredData,
         story,
-        timezone
+        timezone,
+        articleBody
       )
     ),
   };
