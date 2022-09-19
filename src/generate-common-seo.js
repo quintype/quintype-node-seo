@@ -47,7 +47,8 @@ export function generateStructuredData(config = {}) {
   const title = getTitle(config);
   const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
   const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
-  const { "page-title":pageTitle = "", description = "", keywords  =  "" } = get(homePageSeo, ["data"], {});
+  const storyPageSeo = seoMetadata.find(page => page["owner-type"] === "story") || {};
+  const { "page-title":pageTitle = "", description = "", keywords  =  "" } = storyPageSeo ? get(storyPageSeo, ["data"], {}) : get(homePageSeo, ["data"], {});
   if(!themeConfig || !themeConfig.logo) {
     return {};
   }
