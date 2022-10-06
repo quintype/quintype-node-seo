@@ -8,8 +8,8 @@
   "license": "MIT",
   "peerDependencies": {
     "lodash": "^4.0.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "build": "rollup -c",
@@ -44,8 +44,8 @@
     "nyc": "^15.0.0",
     "onchange": "^7.0.2",
     "prettier": "^2.2.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.0.0",
     "rollup-plugin-babel": "^3.0.2",
