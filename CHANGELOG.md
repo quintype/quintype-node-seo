@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.40.12](https://github.com/quintype/quintype-node-seo/compare/v1.40.11...v1.40.12) (2022-10-19)
+
+
+### Bug Fixes
+
+* **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
+
 ### [1.40.11](https://github.com/quintype/quintype-node-seo/compare/v1.40.8...v1.40.11) (2022-09-06)
 
 
