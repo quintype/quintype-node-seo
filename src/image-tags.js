@@ -119,6 +119,10 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
 
   const tags = [];
 
+  if (pageType == "story-page") {
+    tags.push({ name: "robots", content: "max-image-preview:large" });
+  }
+
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",

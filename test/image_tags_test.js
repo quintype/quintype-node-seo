@@ -48,6 +48,33 @@ describe("ImageTags", function () {
     );
   });
 
+  it("adds image max size tag for story page", function () {
+    const story = {
+      "hero-image-s3-key": "my/image.png",
+      alternative: {
+        social: {
+          default: {
+            headline: null,
+            "hero-image": {
+              "hero-image-s3-key": "my/socialimage.png",
+            },
+          },
+        },
+        home: {
+          default: {
+            headline: null,
+            "hero-image": {
+              "hero-image-s3-key": "my/homeimage.png",
+            },
+          },
+        },
+      },
+    };
+    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
+    const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
+    assertContains('<meta name="robots" content="max-image-preview:large"/>', string);
+  });
+
   it("has facebook tags resized correctly", function () {
     const story = {
       "hero-image-s3-key": "my/images.png",
