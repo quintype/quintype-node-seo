@@ -81,6 +81,33 @@ function buildTagsFromTopic(config, tag, url = {}, data) {
   return topicMetaData;
 }
 
+function buildTagsFromNotfoundPage(config, url = {}, data) {
+  const homeSeoData = config["seo-metadata"].find((page) => page["owner-type"] === "home") || {
+    data: { description: "" },
+  };
+  const customSeo = get(data, ["data", "customSeo"], {});
+  const title = customSeo.title || "404 - Page not found  ";
+  const pageTitle = customSeo["page-title"] || title;
+  const description = customSeo.description || homeSeoData.data.description || "404 - Page not found";
+  const tagUrl = `${config["sketches-host"]}${url.pathname}`;
+  const canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const canonicalUrl = `${config["sketches-host"]}${canonicalSlug}`;
+  const ogTitle = customSeo.ogTitle || title;
+  const ogDescription = customSeo.ogDescription || description;
+  const topicMetaData = {
+    title: title,
+    "page-title": pageTitle,
+    description: description,
+    keywords: title,
+    canonicalUrl,
+    ogUrl: tagUrl,
+    ogTitle,
+    ogDescription,
+  };
+
+  return topicMetaData;
+}
+
 function buildTagsFromAuthor(config, author, url = {}, data) {
   if (isEmpty(author)) return;
 
@@ -220,6 +247,8 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
         buildTagsFromStaticPage(config, get(data, ["data", "page"], {}), url, data) ||
         getSeoData(config, "home-page", data, url)
       );
+    case "not-found":
+      return buildTagsFromNotfoundPage(config, url, data) || getSeoData(config, "home-page", data, url);
     case "shell":
       return getShellSeoData(config);
     default:
