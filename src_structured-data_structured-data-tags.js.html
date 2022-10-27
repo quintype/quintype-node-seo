@@ -129,7 +129,7 @@ function imageUrl(publisherConfig, s3Key, width, height) {
     : `https://${publisherConfig["cdn-image"]}`;
   width = width || "";
   height = height || "";
-  return `${imageSrc}/${s3Key}?w=${width}&amp;h=${height}&amp;auto=format%2Ccompress&amp;fit=max`;
+  return `${imageSrc}/${s3Key}?w=${width}&amp;h=${height}&amp;auto=format%2Ccompress&amp;fit=max&amp;enlarge=true`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
