@@ -89,23 +89,23 @@ function buildTagsFromNotfoundPage(config, url = {}, data) {
   const title = customSeo.title || "404 - Page not found  ";
   const pageTitle = customSeo["page-title"] || title;
   const description = customSeo.description || homeSeoData.data.description || "404 - Page not found";
-  const tagUrl = `${config["sketches-host"]}${url.pathname}`;
-  const canonicalSlug = tag["canonical-slug"] || url.pathname;
+  const pageUrl = `${config["sketches-host"]}${url.pathname}`;
+  const canonicalSlug = url.pathname;
   const canonicalUrl = `${config["sketches-host"]}${canonicalSlug}`;
   const ogTitle = customSeo.ogTitle || title;
   const ogDescription = customSeo.ogDescription || description;
-  const topicMetaData = {
+  const notFoundMetaData = {
     title: title,
     "page-title": pageTitle,
     description: description,
     keywords: title,
     canonicalUrl,
-    ogUrl: tagUrl,
+    ogUrl: pageUrl,
     ogTitle,
     ogDescription,
   };
 
-  return topicMetaData;
+  return notFoundMetaData;
 }
 
 function buildTagsFromAuthor(config, author, url = {}, data) {
