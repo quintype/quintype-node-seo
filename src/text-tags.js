@@ -28,7 +28,7 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
   const authors = get(story, ["authors"], []).map((author) => author.name);
   const title = customSeo.title || seo["meta-title"] || story.headline;
   const pageTitle = customSeo["page-title"] || seo["meta-title"] || story.headline;
-  const description = customSeo.description || seo["meta-description"] || story.summary;
+  const description = customSeo.description || seo["meta-description"] || story.summary || story.subheadline;
   const keywords = (customSeo.keywords || seo["meta-keywords"] || (story.tags || []).map((tag) => tag.name)).join(",");
   const ogUrl = customSeo.ogUrl || get(seo, ["og", "url"]) || storyUrl;
   const getOgTitle =
