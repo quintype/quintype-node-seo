@@ -44,7 +44,8 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     story["story-template"] === "visual-story"
       ? `${ampUrlAppend}/${storySlug}`
       : `${ampUrlAppend}/amp/story/${storySlug}`;
-  const ignoreStoryTemplate = seoConfig.ignoreAmpHtmlStoryTemplates.includes(story["story-template"]);
+  const ignoreStoryTemplate =
+    seoConfig.ignoreAmpHtmlStoryTemplates && seoConfig.ignoreAmpHtmlStoryTemplates.includes(story["story-template"]);
   if (showAmpTag(seoConfig, pageType, story) && !ignoreStoryTemplate) {
     return [
       {
