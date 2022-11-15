@@ -108,7 +108,7 @@ export class SEO {
   constructor(seoConfig = {}) {
     this.seoConfig = seoConfig;
     this.generators = (
-      seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags]
+      seoConfig.generators || [TextTags, ImageTags, AuthorTags, StaticTags, StructuredDataTags, StoryAmpTags]
     ).concat(seoConfig.extraGenerators || []);
   }
 
