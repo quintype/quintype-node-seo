@@ -116,6 +116,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+      datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
       image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
       isAccessibleForFree: storyAccessType,
