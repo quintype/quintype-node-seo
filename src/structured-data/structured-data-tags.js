@@ -34,7 +34,7 @@ function imageUrl(publisherConfig, s3Key, width, height) {
     : `https://${publisherConfig["cdn-image"]}`;
   width = width || "";
   height = height || "";
-  return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max`;
+  return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
@@ -116,6 +116,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+      datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
       image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
       isAccessibleForFree: storyAccessType,

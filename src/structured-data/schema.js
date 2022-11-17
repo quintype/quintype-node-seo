@@ -55,7 +55,7 @@ export function getSchemaBlogPosting(
       articleBody: articleBody,
       dateModified: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
       dateCreated: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
-      datePublished: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
+      datePublished: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
       author: author,
       headline: headline,
       image: image,
