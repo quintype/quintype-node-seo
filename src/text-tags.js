@@ -15,6 +15,7 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
         ogUrl: urlWithCardId,
         ogTitle: metadata["social-share"].title || story.headline,
         ogDescription: metadata["social-share"].message || story.summary,
+        canonicalUrl: SKIP_CANONICAL,
       };
     }
     return metadata;
@@ -45,6 +46,7 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
     ogDescription,
     storyUrl,
     author: authors,
+    canonicalUrl: SKIP_CANONICAL,
   };
 
   if (url.query && url.query.cardId) {
@@ -76,6 +78,7 @@ function buildTagsFromTopic(config, tag, url = {}, data) {
     ogUrl: tagUrl,
     ogTitle,
     ogDescription,
+    canonicalUrl: SKIP_CANONICAL,
   };
 
   return topicMetaData;
@@ -128,6 +131,7 @@ function buildTagsFromAuthor(config, author, url = {}, data) {
     ogUrl: authorUrl,
     ogTitle,
     ogDescription,
+    canonicalUrl: SKIP_CANONICAL
   };
 }
 
@@ -163,6 +167,7 @@ function buildTagsFromStaticPage(config, page, url = {}, data) {
     ogTitle,
     ogDescription,
     keywords: customSeo.keywords || keywords,
+    canonicalUrl: SKIP_CANONICAL
   };
 }
 
@@ -175,7 +180,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     const seoMetadata =
       config["seo-metadata"].find((page) => page["owner-type"] === ownerType && page["owner-id"] === ownerId) || {};
     const { sections = [] } = config;
-    const section = sections.find((section) => ownerType == "section" && section.id === ownerId) || {};
+    const section = sections.find((section) => ownerType === "section" && section.id === ownerId) || {};
     const customSeo = get(data, ["data", "customSeo"], {});
     if (seoMetadata.data || section.id || !isEmpty(customSeo)) {
       const result = Object.assign(
@@ -335,7 +340,7 @@ export function TextTags(seoConfig, config, pageType, data, { url }) {
   const commonTags = [{ tag: "title", children: customSeo.title || data.title || seoData["page-title"] }];
 
   const canonical = seoData.canonicalUrl || currentUrl;
-  if (canonical != SKIP_CANONICAL) {
+  if (canonical !== SKIP_CANONICAL) {
     commonTags.push({ tag: "link", rel: "canonical", href: canonical });
   }
 
