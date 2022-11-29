@@ -1,12 +1,12 @@
-import get from 'lodash/get';
-import { isStoryPublic } from './utils';
+import get from "lodash/get";
+import { isStoryPublic } from "./utils";
 
 function showAmpTag({ ampStoryPages = true }, pageType, story) {
-  if (!ampStoryPages || pageType !== 'story-page') {
+  if (!ampStoryPages || pageType !== "story-page") {
     return false;
   }
 
-  if (ampStoryPages === 'public' && !isStoryPublic(story)) {
+  if (ampStoryPages === "public" && !isStoryPublic(story)) {
     return false;
   }
 
@@ -14,14 +14,13 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
 }
 
 const getDomain = (url, domainSlug) => {
-  const domain = domainSlug ? new URL(url).origin : '';
+  const domain = domainSlug ? new URL(url).origin : "";
   try {
     return domain;
+  } catch (err) {
+    return "";
   }
-  catch (err) {
-    return ""
-  }
-}
+};
 
 /**
  * StoryAmpTags adds the amphref to stories which support amp.
@@ -34,20 +33,27 @@ const getDomain = (url, domainSlug) => {
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
-
   const story = get(data, ["data", "story"], {});
-  const { currentHostUrl = '', domainSlug } = data;
+  const { currentHostUrl = "", domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
-  const ampUrlAppend = seoConfig.appendHostToAmpUrl ? getDomain(currentHostUrl, domainSlug) || config['sketches-host'] : '';
-  const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug): encodeURIComponent(story.slug);
-  const ampUrl = story["story-template"] === "visual-story" ? `${ampUrlAppend}/${storySlug}` : `${ampUrlAppend}/amp/story/${storySlug}`;
-
-  if (showAmpTag(seoConfig, pageType, story)) {
-    return [{
-      tag: 'link',
-      rel: 'amphtml',
-      href: ampUrl
-    }];
+  const ampUrlAppend = seoConfig.appendHostToAmpUrl
+    ? getDomain(currentHostUrl, domainSlug) || config["sketches-host"]
+    : "";
+  const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug) : encodeURIComponent(story.slug);
+  const ampUrl =
+    story["story-template"] === "visual-story"
+      ? `${ampUrlAppend}/${storySlug}`
+      : `${ampUrlAppend}/amp/story/${storySlug}`;
+  const ignoreStoryTemplate =
+    seoConfig.ignoreAmpHtmlStoryTemplates && seoConfig.ignoreAmpHtmlStoryTemplates.includes(story["story-template"]);
+  if (showAmpTag(seoConfig, pageType, story) && !ignoreStoryTemplate) {
+    return [
+      {
+        tag: "link",
+        rel: "amphtml",
+        href: ampUrl,
+      },
+    ];
   } else {
     return [];
   }
