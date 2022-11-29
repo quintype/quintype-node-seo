@@ -34,12 +34,13 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
   const getOgTitle =
     customSeo.ogTitle || get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
   const ogDescription = customSeo.ogDescription || story.summary;
+  const canonicalUrl = customSeo.canonicalUrl || story["canonical-url"] || storyUrl;
   const storyMetaData = {
     title,
     "page-title": pageTitle,
     description,
     keywords,
-    canonicalUrl: story["canonical-url"] || storyUrl,
+    canonicalUrl,
     ogUrl,
     ogTitle: getOgTitle,
     ogDescription,
@@ -64,7 +65,7 @@ function buildTagsFromTopic(config, tag, url = {}, data) {
   const description = `Read stories listed under on ${tag.name}`;
   const tagUrl = `${config["sketches-host"]}${url.pathname}`;
   const canonicalSlug = tag["canonical-slug"] || url.pathname;
-  const canonicalUrl = `${config["sketches-host"]}${canonicalSlug}`;
+  const canonicalUrl = customSeo.canonicalUrl || `${config["sketches-host"]}${canonicalSlug}`;
   const ogTitle = customSeo.ogTitle || tagName;
   const ogDescription = customSeo.ogDescription || description;
   const topicMetaData = {
@@ -81,6 +82,33 @@ function buildTagsFromTopic(config, tag, url = {}, data) {
   return topicMetaData;
 }
 
+function buildTagsFromNotfoundPage(config, url = {}, data) {
+  const homeSeoData = config["seo-metadata"].find((page) => page["owner-type"] === "home") || {
+    data: { description: "" },
+  };
+  const customSeo = get(data, ["data", "customSeo"], {});
+  const title = customSeo.title || "404 - Page not found  ";
+  const pageTitle = customSeo["page-title"] || title;
+  const description = customSeo.description || homeSeoData.data.description || "404 - Page not found";
+  const pageUrl = `${config["sketches-host"]}${url.pathname}`;
+  const canonicalSlug = url.pathname;
+  const canonicalUrl = customSeo.canonicalUrl || `${config["sketches-host"]}${canonicalSlug}`;
+  const ogTitle = customSeo.ogTitle || title;
+  const ogDescription = customSeo.ogDescription || description;
+  const notFoundMetaData = {
+    title: title,
+    "page-title": pageTitle,
+    description: description,
+    keywords: title,
+    canonicalUrl,
+    ogUrl: pageUrl,
+    ogTitle,
+    ogDescription,
+  };
+
+  return notFoundMetaData;
+}
+
 function buildTagsFromAuthor(config, author, url = {}, data) {
   if (isEmpty(author)) return;
 
@@ -91,13 +119,14 @@ function buildTagsFromAuthor(config, author, url = {}, data) {
   const ogTitle = customSeo.ogTitle || author.name;
   const authorUrl = `${config["sketches-host"]}${url.pathname}`;
   const ogDescription = customSeo.ogDescription || description;
+  const canonicalUrl = customSeo.canonicalUrl || authorUrl;
 
   return {
     title,
     "page-title": pageTitle,
     description,
     keywords: `${title},${config["publisher-name"]}`,
-    canonicalUrl: authorUrl,
+    canonicalUrl,
     ogUrl: authorUrl,
     ogTitle,
     ogDescription,
@@ -125,13 +154,14 @@ function buildTagsFromStaticPage(config, page, url = {}, data) {
   const ogTitle = customSeo.ogTitle || title;
   const staticPageUrl = `${config["sketches-host"]}${url.pathname}`;
   const ogDescription = customSeo.ogDescription || description;
+  const canonicalUrl = customSeo.canonicalUrl || staticPageUrl;
 
   return {
     title,
     "page-title": pageTitle,
     description,
     keywords: `${title},${config["publisher-name"]}`,
-    canonicalUrl: staticPageUrl,
+    canonicalUrl,
     ogUrl: staticPageUrl,
     ogTitle,
     ogDescription,
@@ -220,6 +250,8 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
         buildTagsFromStaticPage(config, get(data, ["data", "page"], {}), url, data) ||
         getSeoData(config, "home-page", data, url)
       );
+    case "not-found":
+      return buildTagsFromNotfoundPage(config, url, data) || getSeoData(config, "home-page", data, url);
     case "shell":
       return getShellSeoData(config);
     default:
