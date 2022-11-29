@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.41.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.15...v1.41.0) (2022-11-29)
+
+
+### Features
+
+* **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
+
+
+### Bug Fixes
+
+* **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
+
 ### [1.40.15](https://github.com/quintype/quintype-node-seo/compare/v1.40.14...v1.40.15) (2022-11-17)
 
 ### [1.40.14](https://github.com/quintype/quintype-node-seo/compare/v1.40.11...v1.40.14) (2022-11-16)
