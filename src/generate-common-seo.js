@@ -1,6 +1,6 @@
-import get from 'lodash/get';
-import isUndefined from 'lodash/isUndefined';
-import omitBy from 'lodash/omitBy';
+import get from "lodash/get";
+import isUndefined from "lodash/isUndefined";
+import omitBy from "lodash/omitBy";
 import { getQueryParams } from "./utils";
 
 export function getTitle(config) {
@@ -10,9 +10,10 @@ export function getTitle(config) {
 export function generateStaticData(config) {
   const title = getTitle(config);
   const themeConfig = config["theme-attributes"] || {};
-  const publicIntegrations = get(config, ['public-integrations'], {});
+  const publicIntegrations = get(config, ["public-integrations"], {});
+  const siteTwitterHandle = getSiteTwitterHandle(config, title);
   const staticData = {
-    "twitter:site": title,
+    "twitter:site": siteTwitterHandle,
     "twitter:domain": config["sketches-host"],
     "twitter:app:name:ipad": themeConfig["twitter_app_name_ipad"],
     "twitter:app:name:googleplay": themeConfig["twitter_app_name_googleplay"],
@@ -21,38 +22,41 @@ export function generateStaticData(config) {
     "twitter:app:id:iphone": themeConfig["twitter_app_id_iphone"],
     "apple-itunes-app": themeConfig["apple_itunes_app"],
     "google-play-app": themeConfig["google_play_app"],
-    "fb:app_id": get(publicIntegrations, ['facebook', 'app-id']) || get(themeConfig, ["fb_app_id"]),
+    "fb:app_id": get(publicIntegrations, ["facebook", "app-id"]) || get(themeConfig, ["fb_app_id"]),
     "fb:pages": themeConfig["fb_pages"],
-    "og:site_name": title
+    "og:site_name": title,
   };
 
   return omitBy(staticData, isUndefined);
 }
 
 export function generateImageObject(config = {}) {
-  const {"theme-attributes": themeConfig = {}} = config;
-  return ({
+  const { "theme-attributes": themeConfig = {} } = config;
+  return {
     "@context": "http://schema.org",
     "@type": "ImageObject",
-    "author": config['publisher-name'],
-    "contentUrl": themeConfig.logo,
-    "url": themeConfig.logo,
-    "name": "logo",
-    "width": themeConfig.logo && getQueryParams(themeConfig.logo).width,
-    "height": themeConfig.logo && getQueryParams(themeConfig.logo).height
-  });
+    author: config["publisher-name"],
+    contentUrl: themeConfig.logo,
+    url: themeConfig.logo,
+    name: "logo",
+    width: themeConfig.logo && getQueryParams(themeConfig.logo).width,
+    height: themeConfig.logo && getQueryParams(themeConfig.logo).height,
+  };
 }
 
 export function generateStructuredData(config = {}) {
   const title = getTitle(config);
-  const { "theme-attributes":themeConfig, "social-links":socialLinks, "seo-metadata":seoMetadata = [] } = config;
-  const homePageSeo = seoMetadata.find(page => page["owner-type"] === "home") || {};
-  const { "page-title":pageTitle = "", description = "", keywords  =  "" } = get(homePageSeo, ["data"], {});
-  if(!themeConfig || !themeConfig.logo) {
+  const { "theme-attributes": themeConfig, "social-links": socialLinks, "seo-metadata": seoMetadata = [] } = config;
+  const homePageSeo = seoMetadata.find((page) => page["owner-type"] === "home") || {};
+  const { "page-title": pageTitle = "", description = "", keywords = "" } = get(homePageSeo, ["data"], {});
+  if (!themeConfig || !themeConfig.logo) {
     return {};
   }
-  let enableStructuredDataForNewsArticle = themeConfig['structured_data_news_article'] || false;
-  if(config.hasOwnProperty('enableStructuredDataForNewsArticle') && typeof config.enableStructuredDataForNewsArticle !== "undefined"){
+  let enableStructuredDataForNewsArticle = themeConfig["structured_data_news_article"] || false;
+  if (
+    config.hasOwnProperty("enableStructuredDataForNewsArticle") &&
+    typeof config.enableStructuredDataForNewsArticle !== "undefined"
+  ) {
     enableStructuredDataForNewsArticle = config.enableStructuredDataForNewsArticle;
   }
 
@@ -61,19 +65,29 @@ export function generateStructuredData(config = {}) {
       name: title,
       url: config["sketches-host"],
       logo: generateImageObject(config),
-      sameAs: socialLinks ? Object.values(socialLinks) : []
+      sameAs: socialLinks ? Object.values(socialLinks) : [],
     },
-		enableNewsArticle: !!enableStructuredDataForNewsArticle,
-		storyUrlAsMainEntityUrl: !!enableStructuredDataForNewsArticle,
-    enableVideo: !themeConfig['structured_data_enable_video'],
-    enableLiveBlog: !themeConfig['structured_data_enable_live_blog'],
+    enableNewsArticle: !!enableStructuredDataForNewsArticle,
+    storyUrlAsMainEntityUrl: !!enableStructuredDataForNewsArticle,
+    enableVideo: !themeConfig["structured_data_enable_video"],
+    enableLiveBlog: !themeConfig["structured_data_enable_live_blog"],
     website: {
       url: config["sketches-host"],
       searchpath: "search?q={query}",
       queryinput: "required name=query",
       name: pageTitle || title,
       headline: description,
-      keywords
+      keywords,
     },
+  };
+}
+
+function getSiteTwitterHandle(config, fallback) {
+  const twitterUrl = get(config, ["social-links", "twitter-url"], "");
+  const twitterHandleFromUrl = twitterUrl.split("/").pop();
+  if (twitterHandleFromUrl) {
+    if (twitterHandleFromUrl.startsWith("@")) return twitterHandleFromUrl;
+    return `@${twitterHandleFromUrl}`;
   }
+  return fallback;
 }
