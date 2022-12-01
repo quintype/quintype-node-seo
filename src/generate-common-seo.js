@@ -83,7 +83,7 @@ export function generateStructuredData(config = {}) {
 }
 
 function getSiteTwitterHandle(config, fallback) {
-  const twitterUrl = get(config, ["social-links", "twitter-url"], "");
+  const twitterUrl = get(config, ["social-links", "twitter-url"], "") || "";
   const twitterHandleFromUrl = twitterUrl.split("/").pop();
   if (twitterHandleFromUrl) {
     if (twitterHandleFromUrl.startsWith("@")) return twitterHandleFromUrl;
