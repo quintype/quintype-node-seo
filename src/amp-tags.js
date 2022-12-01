@@ -33,6 +33,7 @@ const getDomain = (url, domainSlug) => {
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
+  const templatesToIgnore = seoConfig.ignoreAmpHtmlStoryTemplates || ["visual-story"];
   const story = get(data, ["data", "story"], {});
   const { currentHostUrl = "", domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
@@ -44,8 +45,7 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     story["story-template"] === "visual-story"
       ? `${ampUrlAppend}/${storySlug}`
       : `${ampUrlAppend}/amp/story/${storySlug}`;
-  const ignoreStoryTemplate =
-    seoConfig.ignoreAmpHtmlStoryTemplates && seoConfig.ignoreAmpHtmlStoryTemplates.includes(story["story-template"]);
+  const ignoreStoryTemplate = templatesToIgnore.includes(story["story-template"]);
   if (showAmpTag(seoConfig, pageType, story) && !ignoreStoryTemplate) {
     return [
       {
