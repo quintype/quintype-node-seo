@@ -1,9 +1,9 @@
 const { StoryAmpTags } = require("..");
 const { getSeoMetadata, assertContains } = require("./utils");
 
-const assert = require('assert');
+const assert = require("assert");
 
-describe('AmpTags', function () {
+describe("AmpTags", function () {
   const seoConfig = {
     generators: [StoryAmpTags],
     ampStoryPages: true,
@@ -17,12 +17,6 @@ describe('AmpTags', function () {
     const story = { slug: "section/slug", "is-amp-supported": true };
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     assertContains('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);
-  });
-
-  it("it does not append `/amp/story` to the amp tag when it's a visual story", function () {
-    const story = { slug: "section/slug", "is-amp-supported": true };
-    const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: { ...story, "story-template": "visual-story" } } }, {});
-    assertContains('<link rel="amphtml" href="/section%2Fslug"/>', string);
   });
 
   it("does not rely on is-amp-supported in story API", function () {
