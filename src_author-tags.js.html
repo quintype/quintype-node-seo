@@ -116,7 +116,7 @@ export function AuthorTags(seoConfig, config, pageType, data, { url }) {
 }
 
 function getTwitterCreator(storyData) {
-  const twitterData = get(storyData, ["data", "story", "authors", 0, "social", "twitter"], {});
+  const twitterData = get(storyData, ["data", "story", "authors", 0, "social", "twitter"], {}) || {};
   const twitterUrl = twitterData.url || "";
   const twitterHandle = twitterData.handle || "";
   if (twitterHandle.startsWith("@")) return twitterHandle;
