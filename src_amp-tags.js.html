@@ -125,9 +125,11 @@ const getDomain = (url, domainSlug) => {
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
  * @param {(boolean)} seoConfig.appendHostToAmpUrl If set to true, the url to be appended to the slug is computed based on the currentHostUrl and the domain slug, else the url is taken as the sketches host. Default: false
  * @param {(boolean)} seoConfig.decodeAmpUrl If set to true, the storySlug that goes as the amp href url is decoded, else the storyslug is encoded. Default: false
+ * @param {(boolean)} seoConfig.ignoreAmpHtmlStoryTemplates pass all the story templates you want to ignore from add rel="amphtml" tag. Default: ["visual story"]
  * @param {...*} params See {@link Generator} for other Parameters
  */
 export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
+  const templatesToIgnore = seoConfig.ignoreAmpHtmlStoryTemplates || ["visual-story"];
   const story = get(data, ["data", "story"], {});
   const { currentHostUrl = "", domainSlug } = data;
   // TODO: Remove this condition and always make absolute URL if that's better for AMP discoverability.
@@ -139,8 +141,7 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     story["story-template"] === "visual-story"
       ? `${ampUrlAppend}/${storySlug}`
       : `${ampUrlAppend}/amp/story/${storySlug}`;
-  const ignoreStoryTemplate =
-    seoConfig.ignoreAmpHtmlStoryTemplates &amp;&amp; seoConfig.ignoreAmpHtmlStoryTemplates.includes(story["story-template"]);
+  const ignoreStoryTemplate = templatesToIgnore.includes(story["story-template"]);
   if (showAmpTag(seoConfig, pageType, story) &amp;&amp; !ignoreStoryTemplate) {
     return [
       {
