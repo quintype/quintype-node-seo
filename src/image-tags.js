@@ -112,6 +112,10 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
  */
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const { image, alt, includesHost = false } = pickImage({ pageType, data, url, seoConfig, config });
+  const story = get(data, ["data", "story"]);
+  const fallbackValue = story ? false : true;
+  const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], fallbackValue);
+  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], "");
 
   if (!image) {
     return [];
@@ -123,17 +127,36 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
     tags.push({ name: "robots", content: "max-image-preview:large" });
   }
 
+  const watermarkImage = (imageRatio) => {
+    const imageContentParamsObj = {
+      w: 1200,
+      ar: imageRatio.join(":"),
+      auto: "format,compress",
+      ogImage: true,
+      mode: "crop",
+      overlay: watermarkImageS3Key,
+      overlay_position: "bottom",
+      overlay_width: 100,
+    };
+
+    return `https://${config["cdn-image"]}/${image.path(imageRatio, imageContentParamsObj)}`;
+  };
+
+  const actualImage = (imageRatio) => {
+    const imageUrl = includesHost
+      ? image
+      : `https://${config["cdn-image"]}/${image.path(imageRatio, {
+          w: 1200,
+          auto: "format,compress",
+          ogImage: true,
+          enlarge: true,
+        })}`;
+    return imageUrl;
+  };
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: includesHost
-        ? image
-        : `https://${config["cdn-image"]}/${image.path([16, 9], {
-            w: 1200,
-            auto: "format,compress",
-            ogImage: true,
-            enlarge: true,
-          })}`,
+      content: isWatermarkDisabled ? actualImage([16, 9]) : watermarkImage([40, 21]),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -141,14 +164,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: includesHost
-        ? image
-        : `https://${config["cdn-image"]}/${image.path([40, 21], {
-            w: 1200,
-            auto: "format,compress",
-            ogImage: true,
-            enlarge: true,
-          })}`,
+      content: isWatermarkDisabled ? actualImage([40, 21]) : watermarkImage([40, 21]),
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {
