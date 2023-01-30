@@ -139,7 +139,10 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       overlay_width: 100,
     };
 
-    return `https://${config["cdn-image"]}/${image.path(imageRatio, imageContentParamsObj)}`;
+    const imageUrl = includesHost
+      ? image
+      : `https://${config["cdn-image"]}/${image.path(imageRatio, imageContentParamsObj)}`;
+    return imageUrl;
   };
 
   const actualImage = (imageRatio) => {
