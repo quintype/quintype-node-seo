@@ -126,40 +126,32 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (pageType == "story-page") {
     tags.push({ name: "robots", content: "max-image-preview:large" });
   }
+  const imageProp = { w: 1200, auto: "format,compress", ogImage: true, enlarge: true };
 
-  const watermarkImage = (imageRatio) => {
-    const imageContentParamsObj = {
-      w: 1200,
-      ar: imageRatio.join(":"),
-      auto: "format,compress",
-      ogImage: true,
-      mode: "crop",
-      overlay: watermarkImageS3Key,
-      overlay_position: "bottom",
-      overlay_width: 100,
-    };
-
-    const imageUrl = includesHost
-      ? image
-      : `https://${config["cdn-image"]}/${image.path(imageRatio, imageContentParamsObj)}`;
-    return imageUrl;
+  const watermarkImageProp = {
+    w: 1200,
+    auto: "format,compress",
+    ogImage: true,
+    mode: "crop",
+    overlay: watermarkImageS3Key,
+    overlay_position: "bottom",
+    overlay_width: 100,
   };
 
-  const actualImage = (imageRatio) => {
-    const imageUrl = includesHost
-      ? image
-      : `https://${config["cdn-image"]}/${image.path(imageRatio, {
-          w: 1200,
-          auto: "format,compress",
-          ogImage: true,
-          enlarge: true,
-        })}`;
-    return imageUrl;
+  const getImageUrl = (imageRatio, imageProp) => {
+    return includesHost ? image : `https://${config["cdn-image"]}/${image.path(imageRatio, imageProp)}`;
   };
+
+  const getContent = (actualImageAR, watermarkImageAR) => {
+    return isWatermarkDisabled
+      ? getImageUrl(actualImageAR, imageProp)
+      : getImageUrl(watermarkImageAR, watermarkImageProp);
+  };
+
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: isWatermarkDisabled ? actualImage([16, 9]) : watermarkImage([40, 21]),
+      content: getContent([16, 9], [40, 21]),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -167,7 +159,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: isWatermarkDisabled ? actualImage([40, 21]) : watermarkImage([40, 21]),
+      content: getContent([40, 21], [40, 21]),
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {

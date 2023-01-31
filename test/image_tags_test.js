@@ -93,11 +93,11 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/>',
       ampPageString
     );
   });
