@@ -1,7 +1,7 @@
 import { get, isEmpty } from "lodash";
-import { objectToTags } from "./utils";
+import { getTextOfCards, objectToTags } from "./utils";
 
-function buildTagsFromStory(config, story, url = {}, data = {}) {
+function buildTagsFromStory(config, story, url = {}, data = {}, seoConfig = {}) {
   if (!story) return;
 
   function getStoryCardMetadata(cardId) {
@@ -22,19 +22,32 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
 
   const seo = story.seo || {};
 
-  const storyUrl = story.url || `${config["sketches-host"]}/${story.slug}`;
+  let descriptionWithExtraFallback = "";
+  let ogDescriptionWithExtraFallback = "";
+  if (seoConfig.enableMetaDescriptionFallback) {
+    const fetch160Characters = (data) => (data ? data.substring(0, 160) : null);
+    const fullStoryTextElementContent = getTextOfCards(story);
+    descriptionWithExtraFallback =
+      fetch160Characters(story.subheadline) || fetch160Characters(fullStoryTextElementContent);
+    ogDescriptionWithExtraFallback =
+      fetch160Characters(fullStoryTextElementContent) ||
+      fetch160Characters(story.subheadline) ||
+      seo["meta-description"];
+  }
 
+  const storyUrl = story.url || `${config["sketches-host"]}/${story.slug}`;
   const customSeo = get(data, ["data", "customSeo"], {});
   const authors = get(story, ["authors"], []).map((author) => author.name);
   const title = customSeo.title || seo["meta-title"] || story.headline;
   const pageTitle = customSeo["page-title"] || seo["meta-title"] || story.headline;
-  const description = customSeo.description || seo["meta-description"] || story.summary;
+  const description = customSeo.description || seo["meta-description"] || story.summary || descriptionWithExtraFallback;
   const keywords = (customSeo.keywords || seo["meta-keywords"] || (story.tags || []).map((tag) => tag.name)).join(",");
   const ogUrl = customSeo.ogUrl || get(seo, ["og", "url"]) || storyUrl;
   const getOgTitle =
     customSeo.ogTitle || get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
-  const ogDescription = customSeo.ogDescription || story.summary;
+  const ogDescription = customSeo.ogDescription || story.summary || ogDescriptionWithExtraFallback;
   const canonicalUrl = customSeo.canonicalUrl || story["canonical-url"] || storyUrl;
+
   const storyMetaData = {
     title,
     "page-title": pageTitle,
@@ -230,14 +243,17 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
       );
     case "story-page":
       return (
-        buildTagsFromStory(config, get(data, ["data", "story"]), url, data) ||
+        buildTagsFromStory(config, get(data, ["data", "story"]), url, data, seoConfig) ||
         getSeoData(config, "home-page", data, url)
       );
     case "visual-story":
-      return buildTagsFromStory(config, get(data, ["story"]), url, data) || getSeoData(config, "home-page", data, url);
+      return (
+        buildTagsFromStory(config, get(data, ["story"]), url, data, seoConfig) ||
+        getSeoData(config, "home-page", data, url)
+      );
     case "story-page-amp":
       return (
-        buildTagsFromStory(config, get(data, ["data", "story"]), url, data) ||
+        buildTagsFromStory(config, get(data, ["data", "story"]), url, data, seoConfig) ||
         getSeoData(config, "home-page", data, url)
       );
     case "author-page":
@@ -298,6 +314,7 @@ const SKIP_CANONICAL = "__SKIP__CANONICAL__";
  * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
  * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
  * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
+ * @param {boolean} seoConfig.enableMetaDescriptionsFallback Add extra fallbacks for meta description, og:description and twitter:description
  * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
  * @param {...*} params See {@link Generator} for other Parameters
  */

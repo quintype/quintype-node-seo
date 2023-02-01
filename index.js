@@ -93,7 +93,8 @@ export class MetaTagList {
  *     },
  *     enableNewsArticle: true
  *   },
- *   ampStoryPages: true
+ *   ampStoryPages: true,
+ *   enableMetaDescriptionsFallback: true
  * });
  * ```
  */

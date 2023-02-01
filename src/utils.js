@@ -33,3 +33,20 @@ export function getQueryParams(url) {
 export function isStoryPublic(story) {
   return story.access === undefined || story.access === null || story.access === 'public';
 }
+
+export function getTextOfCards(story) {
+  if (story && story.cards) {
+    story.cards
+      .map((item) => {
+        return item['story-elements'].reduce((acc, currentItem) => {
+          const elementType = currentItem.subtype || currentItem.type || '';
+          if (elementType === 'text') {
+            acc.push(currentItem.text);
+          }
+          return acc;
+        }, []);
+      })
+      .join(' ')
+      .replace(/(<([^>]+)>)/gi, '');
+  }
+}
