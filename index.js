@@ -94,7 +94,7 @@ export class MetaTagList {
  *     enableNewsArticle: true
  *   },
  *   ampStoryPages: true,
- *   enableMetaDescriptionsFallback: true
+ *   enableMetaDescriptionFallback: true
  * });
  * ```
  */

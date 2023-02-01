@@ -314,7 +314,7 @@ const SKIP_CANONICAL = "__SKIP__CANONICAL__";
  * @param {boolean} seoConfig.enableOgTags Add og tags for Facebook
  * @param {boolean} seoConfig.enableTwitterCards Add twitter tags
  * @param {boolean} seoConfig.enableNews Add tags for Google News, like news_keywords
- * @param {boolean} seoConfig.enableMetaDescriptionsFallback Add extra fallbacks for meta description, og:description and twitter:description
+ * @param {boolean} seoConfig.enableMetaDescriptionFallback Add extra fallbacks for meta description, og:description and twitter:description
  * @param {Object} seoConfig.customTags Add tags for a custom page type. Usually looks like `{"custom-page": {"title": "value", "canonicalUrl": "value"}}`
  * @param {...*} params See {@link Generator} for other Parameters
  */
