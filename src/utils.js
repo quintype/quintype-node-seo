@@ -1,6 +1,6 @@
-import {entries} from 'lodash';
-import { URL, URLSearchParams } from 'url';
 import { format, utcToZonedTime } from 'date-fns-tz';
+import { entries } from 'lodash';
+import { URL, URLSearchParams } from 'url';
 
 export function objectToTags(object) {
   return entries(object)
@@ -36,7 +36,7 @@ export function isStoryPublic(story) {
 
 export function getTextOfCards(story) {
   if (story && story.cards) {
-    story.cards
+   return story.cards
       .map((item) => {
         return item['story-elements'].reduce((acc, currentItem) => {
           const elementType = currentItem.subtype || currentItem.type || '';

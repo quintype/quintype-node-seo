@@ -24,15 +24,16 @@ function buildTagsFromStory(config, story, url = {}, data = {}, seoConfig = {}) 
 
   let descriptionWithExtraFallback = "";
   let ogDescriptionWithExtraFallback = "";
-  if (seoConfig.enableMetaDescriptionFallback) {
+  const enableMetaDescriptionFallback = get(seoConfig, ["enableMetaDescriptionFallback"], false);
+  if (enableMetaDescriptionFallback) {
+    const subHeadline = get(story, ["subheadline"]);
     const fetch160Characters = (data) => (data ? data.substring(0, 160) : null);
     const fullStoryTextElementContent = getTextOfCards(story);
-    descriptionWithExtraFallback =
-      fetch160Characters(story.subheadline) || fetch160Characters(fullStoryTextElementContent);
+    descriptionWithExtraFallback = fetch160Characters(subHeadline) || fetch160Characters(fullStoryTextElementContent);
     ogDescriptionWithExtraFallback =
       fetch160Characters(fullStoryTextElementContent) ||
-      fetch160Characters(story.subheadline) ||
-      seo["meta-description"];
+      fetch160Characters(subHeadline) ||
+      get(seo, ["meta-description"]);
   }
 
   const storyUrl = story.url || `${config["sketches-host"]}/${story.slug}`;
