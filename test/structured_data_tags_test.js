@@ -136,9 +136,6 @@ function sampleStoryData(template, cards, authors, access, opts) {
           "card-share": {
             shareable: true,
           },
-          "watermark-image": {
-            disabled: true,
-          },
         },
         "publish-at": null,
         ...opts,
