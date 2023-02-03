@@ -113,9 +113,12 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const { image, alt, includesHost = false } = pickImage({ pageType, data, url, seoConfig, config });
   const story = get(data, ["data", "story"]);
+  const publisherConfig = get(data, ["config", "publisher-attributes"], {});
   const fallbackValue = story ? false : true;
   const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], fallbackValue);
   const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], "");
+  const imageCdnSrc = publisherConfig.cdn_src;
+  const imageCdnUrl = publisherConfig.cdn_image || config["cdn-image"];
 
   if (!image) {
     return [];
@@ -126,25 +129,32 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (pageType == "story-page") {
     tags.push({ name: "robots", content: "max-image-preview:large" });
   }
-  const imageProp = { w: 1200, auto: "format,compress", ogImage: true, enlarge: true };
+  const actualImageProp = { w: 1200, auto: "format,compress", ogImage: true, enlarge: true };
+
+  const renderWatermarkImage = (cdnSrc, cdnURL) => {
+    if (cdnSrc && cdnSrc.includes("gumlet") && watermarkImageS3Key.length > 0) {
+      return `https://${cdnURL}/${watermarkImageS3Key}`;
+    }
+    return watermarkImageS3Key;
+  };
 
   const watermarkImageProp = {
     w: 1200,
     auto: "format,compress",
     ogImage: true,
     mode: "crop",
-    overlay: watermarkImageS3Key,
+    overlay: renderWatermarkImage(imageCdnSrc, imageCdnUrl),
     overlay_position: "bottom",
     overlay_width: 100,
   };
 
   const getImageUrl = (imageRatio, imageProp) => {
-    return includesHost ? image : `https://${config["cdn-image"]}/${image.path(imageRatio, imageProp)}`;
+    return includesHost ? image : `https://${imageCdnUrl}/${image.path(imageRatio, imageProp)}`;
   };
 
   const getContent = (actualImageAR, watermarkImageAR) => {
     return isWatermarkDisabled
-      ? getImageUrl(actualImageAR, imageProp)
+      ? getImageUrl(actualImageAR, actualImageProp)
       : getImageUrl(watermarkImageAR, watermarkImageProp);
   };
 
