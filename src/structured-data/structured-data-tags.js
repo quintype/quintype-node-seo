@@ -28,13 +28,19 @@ function ldJson(type, fields) {
   };
 }
 
-function imageUrl(publisherConfig, s3Key, width, height) {
+function imageUrl(story, publisherConfig, s3Key, width, height) {
+  const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], false);
+  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], "");
   const imageSrc = /^https?.*/.test(publisherConfig["cdn-image"])
     ? publisherConfig["cdn-image"]
     : `https://${publisherConfig["cdn-image"]}`;
   width = width || "";
   height = height || "";
-  return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
+  // return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
+  const url = isWatermarkDisabled
+    ? `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`
+    : `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&overlay=${watermarkImageS3Key}&overlay_position=bottom&overlay_width=100`;
+  return url;
 }
 
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
@@ -50,7 +56,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
     {},
     {
       headline: story.headline,
-      image: [imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight)],
+      image: [imageUrl(story, publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight)],
       url: `${publisherConfig["sketches-host"]}/${story.slug}`,
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     },
@@ -112,13 +118,13 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
     {
       author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
-      thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
+      thumbnailUrl: imageUrl(story, publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
-      image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
+      image: generateArticleImageData(story, story["hero-image-s3-key"], publisherConfig),
       isAccessibleForFree: storyAccessType,
       isPartOf: generateIsPartOfDataForArticle(story, publisherConfig),
     },
@@ -126,10 +132,11 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   );
 }
 
-function generateArticleImageData(image, publisherConfig = {}) {
+function generateArticleImageData(story, image, publisherConfig = {}) {
   const imageWidth = 1200;
   const imageHeight = 675;
-  const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
+
+  const articleImage = imageUrl(story, publisherConfig, image, imageWidth, imageHeight);
 
   return Object.assign(
     {},
@@ -155,7 +162,7 @@ function generateIsPartOfDataForArticle(story = {}, publisherConfig = {}) {
     {
       "@type": "WebPage",
       url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-      primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
+      primaryImageOfPage: generateArticleImageData(story, story["hero-image-s3-key"], publisherConfig),
     }
   );
 }
@@ -183,7 +190,7 @@ function generateIsPartOfDataForNewsArticle(story = {}, publisherConfig = {}, pa
         name: publisherName,
         productID: productId,
         url: `${publisherConfig["sketches-host"]}/${story.slug}`,
-        primaryImageOfPage: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
+        primaryImageOfPage: generateArticleImageData(story, story["hero-image-s3-key"], publisherConfig),
       }
     );
   }
@@ -245,6 +252,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
         authorData(story.authors, authorSchema, publisherConfig),
         findStoryElementField(card, "title", "text", story.headline),
         imageUrl(
+          story,
           publisherConfig,
           findStoryElementField(card, "image", "image-s3-key", story["hero-image-s3-key"]),
           imageWidth,
@@ -297,7 +305,7 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     description: socialShareMsg || metaDescription || subHeadline || headline,
     name: story.headline,
-    thumbnailUrl: [imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight)],
+    thumbnailUrl: [imageUrl(story, publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight)],
     uploadDate: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     embedUrl: embedUrl,
   });
