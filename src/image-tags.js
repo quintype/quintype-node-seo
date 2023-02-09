@@ -113,9 +113,10 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
  */
 export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const { image, alt, includesHost = false } = pickImage({ pageType, data, url, seoConfig, config });
-  const story = get(data, ["data", "story"]);
+  const dataObj = get(data, ["data"], {});
+  const story = get(dataObj, ["story"], {});
   const publisherConfig = get(data, ["config", "publisher-attributes"], {});
-  const fallbackValue = story ? false : true;
+  const fallbackValue = dataObj.hasOwnProperty("collection") ? true : false;
   const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], fallbackValue);
   const imageCdnSrc = publisherConfig.cdn_src;
   const imageCdnUrl = publisherConfig.cdn_image || config["cdn-image"];
