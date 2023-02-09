@@ -1,5 +1,6 @@
 import { get, isEmpty } from "lodash";
 import { FocusedImage } from "quintype-js";
+import { getWatermarkImage } from "./utils";
 
 function pickImageFromCard(story, cardId) {
   const { metadata = {} } = story.cards.find((card) => card.id === cardId) || {};
@@ -116,7 +117,6 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const publisherConfig = get(data, ["config", "publisher-attributes"], {});
   const fallbackValue = story ? false : true;
   const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], fallbackValue);
-  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], "");
   const imageCdnSrc = publisherConfig.cdn_src;
   const imageCdnUrl = publisherConfig.cdn_image || config["cdn-image"];
 
@@ -131,19 +131,12 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   }
   const actualImageProp = { w: 1200, auto: "format,compress", ogImage: true, enlarge: true };
 
-  const renderWatermarkImage = (cdnSrc, cdnURL) => {
-    if (cdnSrc && cdnSrc.includes("gumlet") && watermarkImageS3Key.length > 0) {
-      return `https://${cdnURL}/${watermarkImageS3Key}`;
-    }
-    return watermarkImageS3Key;
-  };
-
   const watermarkImageProp = {
     w: 1200,
     auto: "format,compress",
     ogImage: true,
     mode: "crop",
-    overlay: renderWatermarkImage(imageCdnSrc, imageCdnUrl),
+    overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
     overlay_position: "bottom",
     overlay_width: 100,
   };
