@@ -130,23 +130,30 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (pageType == "story-page") {
     tags.push({ name: "robots", content: "max-image-preview:large" });
   }
-  const actualImageProp = { w: 1200, auto: "format,compress", ogImage: true, enlarge: true };
-
-  const watermarkImageProp = {
-    w: 1200,
-    auto: "format,compress",
-    ogImage: true,
-    mode: "crop",
-    overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
-    overlay_position: "bottom",
-    overlay_width: 100,
-  };
 
   const getImageUrl = (imageRatio, imageProp) => {
     return includesHost ? image : `https://${imageCdnUrl}/${image.path(imageRatio, imageProp)}`;
   };
 
   const getContent = (actualImageAR, watermarkImageAR) => {
+    const imageProps = {
+      w: 1200,
+      auto: "format,compress",
+      ogImage: true,
+      mode: "crop",
+      enlarge: true,
+    };
+    const actualImageProp = Object.assign({}, imageProps, {
+      ar: actualImageAR.join(":"),
+    });
+
+    const watermarkImageProp = Object.assign({}, imageProps, {
+      ar: watermarkImageAR.join(":"),
+      overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
+      overlay_position: "bottom",
+      overlay_width: 100,
+    });
+
     return isWatermarkDisabled
       ? getImageUrl(actualImageAR, actualImageProp)
       : getImageUrl(watermarkImageAR, watermarkImageProp);
