@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.42.0-watermark-feature.8",
+  "version": "1.42.0-watermark-feature.9",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
