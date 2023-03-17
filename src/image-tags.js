@@ -150,7 +150,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
     const watermarkImageProp = Object.assign({}, imageProps, {
       ar: watermarkImageAR.join(":"),
       overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
-      overlay_position: "bottom",
+      overlay_position: "center",
       overlay_width: 100,
     });
 
