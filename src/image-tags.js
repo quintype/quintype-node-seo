@@ -136,7 +136,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   };
 
   const getContent = (actualImageAR, watermarkImageAR) => {
-    const actualImageProp = {
+    /* const actualImageProp = {
       w: 1200,
       ar: actualImageAR.join(":"),
       auto: "format,compress",
@@ -151,16 +151,22 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       ogImage: true,
       mode: "crop",
       enlarge: true,
+    };*/
+    const imageProp = {
+      w: 1200,
+      auto: "format,compress",
+      ogImage: true,
+      mode: "crop",
+      enlarge: true,
     };
-
-    const overlayWatermarkProp = Object.assign({}, watermarkImageProp, {
+    const overlayWatermarkProp = Object.assign({}, imageProp, {
       overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
       overlay_position: "bottom",
       overlay_width: 100,
     });
 
     return isWatermarkDisabled
-      ? getImageUrl(actualImageAR, actualImageProp)
+      ? getImageUrl(actualImageAR, imageProp)
       : getImageUrl(watermarkImageAR, overlayWatermarkProp);
   };
 
