@@ -136,27 +136,32 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   };
 
   const getContent = (actualImageAR, watermarkImageAR) => {
-    const imageProps = {
+    const actualImageProp = {
       w: 1200,
+      ar: actualImageAR.join(":"),
       auto: "format,compress",
       ogImage: true,
       mode: "crop",
       enlarge: true,
     };
-    const actualImageProp = Object.assign({}, imageProps, {
-      ar: actualImageAR.join(":"),
-    });
-
-    const watermarkImageProp = Object.assign({}, imageProps, {
+    const watermarkImageProp = {
+      w: 1200,
       ar: watermarkImageAR.join(":"),
+      auto: "format,compress",
+      ogImage: true,
+      mode: "crop",
+      enlarge: true,
+    };
+
+    const overlayWatermarkProp = Object.assign({}, watermarkImageProp, {
       overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
-      overlay_position: "center",
+      overlay_position: "bottom",
       overlay_width: 100,
     });
 
     return isWatermarkDisabled
       ? getImageUrl(actualImageAR, actualImageProp)
-      : getImageUrl(watermarkImageAR, watermarkImageProp);
+      : getImageUrl(watermarkImageAR, overlayWatermarkProp);
   };
 
   if (seoConfig.enableTwitterCards) {
