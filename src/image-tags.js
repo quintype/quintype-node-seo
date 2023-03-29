@@ -120,6 +120,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const isWatermarkDisabled = get(story, ["metadata", "watermark-image", "disabled"], fallbackValue);
   const imageCdnSrc = publisherConfig.cdn_src;
   const imageCdnUrl = publisherConfig.cdn_image || config["cdn-image"];
+  const fallbackSocialImage = get(seoConfig, ["fallbackSocialImage"]);
 
   if (!image) {
     return [];
@@ -130,50 +131,55 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (pageType == "story-page") {
     tags.push({ name: "robots", content: "max-image-preview:large" });
   }
-
-  const getImageUrl = (imageRatio, imageProp) => {
+  const getHeroImage = (imageRatio, imageProp) => {
     return includesHost ? image : `https://${imageCdnUrl}/${image.path(imageRatio, imageProp)}`;
   };
 
-  const getContent = (actualImageAR, watermarkImageAR) => {
-    const actualImageProp = {
-      w: 1200,
-      ar: actualImageAR.join(":"),
-      auto: "format,compress",
-      ogImage: true,
-      mode: "crop",
-      enlarge: true,
-    };
-    const watermarkImageProp = {
-      w: 1200,
-      ar: watermarkImageAR.join(":"),
-      auto: "format,compress",
-      ogImage: true,
-      mode: "crop",
-      enlarge: true,
-    };
-
-    const overlayWatermarkProp = Object.assign({}, watermarkImageProp, {
+  const getWatermarkHeroImage = (imageRatio, imageProp) => {
+    const overlayWatermarkProps = Object.assign({}, imageProp, {
       overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
       overlay_position: "bottom",
     });
-    const updatedOverlay =
+
+    const watermarkImageProps =
       imageCdnSrc && imageCdnSrc.includes("gumlet")
-        ? Object.assign({}, overlayWatermarkProp, {
+        ? Object.assign({}, overlayWatermarkProps, {
             overlay_width_pct: 1,
           })
-        : Object.assign({}, overlayWatermarkProp, {
+        : Object.assign({}, overlayWatermarkProps, {
             overlay_width: 100,
           });
-    return isWatermarkDisabled
-      ? getImageUrl(actualImageAR, actualImageProp)
-      : getImageUrl(watermarkImageAR, updatedOverlay);
+
+    const getFallbackImage = () => {
+      if (fallbackSocialImage) {
+        const fbUrl = new URL(fallbackSocialImage);
+        const fbImageSlug = new FocusedImage(fbUrl.href.slice(fbUrl.origin.length + 1));
+        const fbHost = new URL(fallbackSocialImage).origin;
+        return `${fbHost}/${fbImageSlug.path(imageRatio, watermarkImageProps)}`;
+      } else {
+        return image;
+      }
+    };
+
+    return includesHost ? getFallbackImage() : `https://${imageCdnUrl}/${image.path(imageRatio, watermarkImageProps)}`;
+  };
+
+  const getImageContent = (imageRatio) => {
+    const imageProp = {
+      w: 1200,
+      ar: imageRatio.join(":"),
+      auto: "format,compress",
+      ogImage: true,
+      mode: "crop",
+      enlarge: true,
+    };
+    return isWatermarkDisabled ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
   };
 
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: getContent([16, 9], [40, 21]),
+      content: getImageContent([40, 21]),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -181,7 +187,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: getContent([40, 21], [40, 21]),
+      content: getImageContent([40, 21]),
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {

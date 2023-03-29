@@ -49,11 +49,11 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
       ampPageString
     );
   });
@@ -227,7 +227,7 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
 
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
       string
     );
   });
@@ -412,11 +412,11 @@ describe("ImageTags", function () {
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, opts);
 
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=16%3A9&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=40%3A21&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/>',
       ampPageString
     );
   });
