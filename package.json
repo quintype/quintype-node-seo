@@ -1,15 +1,13 @@
 {
   "name": "@quintype/seo",
-  "version": "1.41.4",
+  "version": "1.42.0-peer-deps-removal.2",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
   "author": "Quintype Developers <dev-core@quintype.com>",
   "license": "MIT",
   "peerDependencies": {
-    "lodash": "^4.0.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "lodash": "^4.0.0"
   },
   "scripts": {
     "build": "rollup -c",
