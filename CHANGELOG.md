@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.42.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.10...v1.42.0) (2023-04-06)
+
+
+### Features
+
+* **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
+
+
+### Bug Fixes
+
+* **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
+* **dates:**  update  datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
+* **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
+* **live-blog:** Support articleBody in BlogPosting schema ([#532](https://github.com/quintype/quintype-node-seo/issues/532)) ([4389509](https://github.com/quintype/quintype-node-seo/commit/43895094aa2d7c1cafb347a539ad70a16b06727e))
+
 ## [1.42.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.13...v1.42.0) (2023-04-03)
 
 
