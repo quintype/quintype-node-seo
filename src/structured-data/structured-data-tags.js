@@ -129,6 +129,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
 function generateArticleImageData(image, publisherConfig = {}) {
   const imageWidth = 1200;
   const imageHeight = 675;
+
   const articleImage = imageUrl(publisherConfig, image, imageWidth, imageHeight);
 
   return Object.assign(
