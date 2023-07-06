@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.42.2](https://github.com/quintype/quintype-node-seo/compare/v1.42.1...v1.42.2) (2023-07-06)
+
+
+### Bug Fixes
+
+* Add fallback for watermark image ([#547](https://github.com/quintype/quintype-node-seo/issues/547)) ([f59206d](https://github.com/quintype/quintype-node-seo/commit/f59206d34e24e8e1c0c22d7e4baaa8544291ee4e))
+
 ### [1.42.1](https://github.com/quintype/quintype-node-seo/compare/v1.42.0...v1.42.1) (2023-04-06)
 
 ## [1.42.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.10...v1.42.0) (2023-04-06)
