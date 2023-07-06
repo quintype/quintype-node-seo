@@ -34,8 +34,8 @@ export function isStoryPublic(story) {
 }
 
 export function getWatermarkImage(story, cdnSrc, cdnURL) {
-  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], "");
-  if (cdnSrc && cdnSrc.includes("gumlet") && watermarkImageS3Key.length > 0) {
+  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], false);
+  if (cdnSrc && cdnSrc.includes("gumlet") && watermarkImageS3Key) {
     return `https://${cdnURL}/${watermarkImageS3Key}`;
   }
   return watermarkImageS3Key;
