@@ -138,7 +138,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
 
   const getWatermarkHeroImage = (imageRatio, imageProp) => {
     const overlayWatermarkProps = Object.assign({}, imageProp, {
-      overlay: getWatermarkImage(story, imageCdnSrc, imageCdnUrl),
+      overlay: getWatermarkImage(imageCdnSrc, imageCdnUrl, watermarkImageS3Key),
       overlay_position: "bottom",
     });
 
@@ -174,7 +174,9 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       mode: "crop",
       enlarge: true,
     };
-    return ( !watermarkImageS3Key || isWatermarkDisabled ) ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
+    return !watermarkImageS3Key || isWatermarkDisabled
+      ? getHeroImage(imageRatio, imageProp)
+      : getWatermarkHeroImage(imageRatio, imageProp);
   };
 
   if (seoConfig.enableTwitterCards) {
