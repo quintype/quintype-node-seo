@@ -121,6 +121,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   const imageCdnSrc = publisherConfig.cdn_src;
   const imageCdnUrl = publisherConfig.cdn_image || config["cdn-image"];
   const fallbackSocialImage = get(seoConfig, ["fallbackSocialImage"]);
+  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], false);
 
   if (!image) {
     return [];
@@ -173,7 +174,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       mode: "crop",
       enlarge: true,
     };
-    return isWatermarkDisabled ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
+    return ( !watermarkImageS3Key || isWatermarkDisabled ) ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
   };
 
   if (seoConfig.enableTwitterCards) {
