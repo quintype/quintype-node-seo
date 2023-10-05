@@ -174,7 +174,6 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       mode: "crop",
       enlarge: true,
     };
-    console.log("INSIDE LOGS >>>:", watermarkImageS3Key, isWatermarkDisabled);
     return !watermarkImageS3Key || isWatermarkDisabled
       ? getHeroImage(imageRatio, imageProp)
       : getWatermarkHeroImage(imageRatio, imageProp);
