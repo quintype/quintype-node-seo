@@ -27,7 +27,7 @@ function getAttribution(story) {
 }
 
 /**
- * priority:
+ * pickImageFromStory priority:
  * 1. alternate social image
  * 2. alternate hero image
  * 3. hero image
@@ -76,6 +76,12 @@ function pickImageFromCollection(collection) {
   return { image: new FocusedImage(coverImage["cover-image-s3-key"], coverImage["cover-image-metadata"] || {}), alt };
 }
 
+function pickImageForSubscriptionPage(config) {
+  const logo = get(config, ["theme-attributes", "logo"]);
+  if (logo) return { image: logo, alt: undefined, includesHost: true };
+  return { image: undefined, alt: undefined };
+}
+
 // The image is grabbed from the story, else from from the collection
 function pickImage({ pageType, config, seoConfig, data, url }) {
   if (pageType === "story-page" && url.query && url.query.cardId) {
@@ -92,6 +98,8 @@ function pickImage({ pageType, config, seoConfig, data, url }) {
     return pickImageFromStory({ story, seoConfig, config });
   } else if (get(data, ["data", "collection"])) {
     return pickImageFromCollection(get(data, ["data", "collection"]));
+  } else if (pageType === "subscription") {
+    return pickImageForSubscriptionPage(config);
   } else {
     return { image: undefined, alt: undefined };
   }
