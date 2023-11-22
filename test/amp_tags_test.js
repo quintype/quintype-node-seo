@@ -29,17 +29,17 @@ describe("AmpTags", function () {
     const story = {
       slug: "section/slug",
       "is-amp-supported": true,
-      metadata: { "story-attributes": { disableamp: ["true"] } },
+      metadata: { "story-attributes": { "disable-amp-for-single-story": ["true"] } },
     };
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     assert.equal("", string);
   });
 
-  it("does not add amphtml link tag to story pages which has disableamp attribute set to true", function () {
+  it("does not add amphtml link tag to story pages which has disableamp attribute set to false", function () {
     const story = {
       slug: "section/slug",
       "is-amp-supported": true,
-      metadata: { "story-attributes": { disableamp: ["false"] } },
+      metadata: { "story-attributes": { "disable-amp-for-single-story": ["false"] } },
     };
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     assert.equal('<link rel="amphtml" href="/amp/story/section%2Fslug"/>', string);

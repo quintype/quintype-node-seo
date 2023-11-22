@@ -6,7 +6,7 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
     return false;
   }
 
-  const isAmpDisabled = get(story, ["metadata", "story-attributes", "disableamp", "0"], "false");
+  const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
 
   if (isAmpDisabled === "true") {
     return false;
