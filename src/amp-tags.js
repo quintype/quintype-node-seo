@@ -6,6 +6,12 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
     return false;
   }
 
+  const isAmpDisabled = get(story, ["metadata", "story-attributes", "disableamp", "0"], "false");
+
+  if (isAmpDisabled === "true") {
+    return false;
+  }
+
   if (ampStoryPages === "public" && !isStoryPublic(story)) {
     return false;
   }
