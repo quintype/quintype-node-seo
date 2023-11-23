@@ -31,6 +31,9 @@ const getDomain = (url, domainSlug) => {
 /**
  * StoryAmpTags adds the amphref to stories which support amp.
  *
+ * To disable adding amphref for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
+ * attribute slug: "disable-amp-for-single-story" values: "true" , "false"
+ *
  * @extends Generator
  * @param {*} seoConfig
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
