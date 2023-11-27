@@ -141,7 +141,13 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       overlay: getWatermarkImage(imageCdnSrc, imageCdnUrl, watermarkImageS3Key),
       overlay_position: "bottom",
     });
-
+    console.log(
+      "getWatermarkHeroImage LOGS 222:",
+      imageCdnSrc,
+      imageCdnUrl,
+      watermarkImageS3Key,
+      overlayWatermarkProps
+    );
     const watermarkImageProps =
       imageCdnSrc && imageCdnSrc.includes("gumlet")
         ? Object.assign({}, overlayWatermarkProps, {
@@ -161,7 +167,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
         return image;
       }
     };
-
+    console.log("includesHost LOGS 333:", fallbackSocialImage, getFallbackImage());
     return includesHost ? getFallbackImage() : `https://${imageCdnUrl}/${image.path(imageRatio, watermarkImageProps)}`;
   };
 
@@ -174,6 +180,12 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       mode: "crop",
       enlarge: true,
     };
+    console.log(
+      "getImageContent LOGS 111:",
+      watermarkImageS3Key,
+      isWatermarkDisabled,
+      !watermarkImageS3Key || isWatermarkDisabled
+    );
     return !watermarkImageS3Key || isWatermarkDisabled
       ? getHeroImage(imageRatio, imageProp)
       : getWatermarkHeroImage(imageRatio, imageProp);
