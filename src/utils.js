@@ -1,5 +1,5 @@
 import { format, utcToZonedTime } from "date-fns-tz";
-import { entries, get } from "lodash";
+import { entries } from "lodash";
 import { URL, URLSearchParams } from "url";
 
 export function objectToTags(object) {
@@ -33,8 +33,7 @@ export function isStoryPublic(story) {
   return story.access === undefined || story.access === null || story.access === "public";
 }
 
-export function getWatermarkImage(story, cdnSrc, cdnURL) {
-  const watermarkImageS3Key = get(story, ["watermark", "social", "image-s3-key"], false);
+export function getWatermarkImage(cdnSrc, cdnURL, watermarkImageS3Key) {
   if (cdnSrc && cdnSrc.includes("gumlet") && watermarkImageS3Key) {
     return `https://${cdnURL}/${watermarkImageS3Key}`;
   }
