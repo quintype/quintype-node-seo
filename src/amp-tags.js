@@ -42,10 +42,11 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     ? getDomain(currentHostUrl, domainSlug) || config["sketches-host"]
     : "";
   const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug) : encodeURIComponent(story.slug);
+  const { ampPageBasePath = "/amp/story" } = seoConfig;
   const ampUrl =
     story["story-template"] === "visual-story"
       ? `${ampUrlAppend}/${storySlug}`
-      : `${ampUrlAppend}/amp/story/${storySlug}`;
+      : `${ampUrlAppend}${ampPageBasePath}/${storySlug}`;
   const ignoreStoryTemplate = templatesToIgnore.includes(story["story-template"]);
   if (showAmpTag(seoConfig, pageType, story) && !ignoreStoryTemplate) {
     return [
