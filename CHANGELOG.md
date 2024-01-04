@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 * disable amp for a particular story ([6b5a76d](https://github.com/quintype/quintype-node-seo/commit/6b5a76da754bf2cbabd9a8d0787095366bf18609))
 
+## [1.43.0](https://github.com/quintype/quintype-node-seo/compare/v1.43.0-config-amp-story-path.1...v1.43.0) (2023-12-01)
+
 ### [1.42.2](https://github.com/quintype/quintype-node-seo/compare/v1.42.1...v1.42.2) (2023-07-06)
 
 
