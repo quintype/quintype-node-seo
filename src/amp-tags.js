@@ -6,6 +6,12 @@ function showAmpTag({ ampStoryPages = true }, pageType, story) {
     return false;
   }
 
+  const isAmpDisabled = get(story, ["metadata", "story-attributes", "disable-amp-for-single-story", "0"], "false");
+
+  if (isAmpDisabled === "true") {
+    return false;
+  }
+
   if (ampStoryPages === "public" && !isStoryPublic(story)) {
     return false;
   }
@@ -25,6 +31,9 @@ const getDomain = (url, domainSlug) => {
 /**
  * StoryAmpTags adds the amphref to stories which support amp.
  *
+ * To disable adding amphref for a specific story, you need to create a story attribute in bold with the slug {disable-amp-for-single-story} and values {true} and {false}. Set its value to "true" in the story which you want to disable amp. Please make sure to name the attributes and values in the exact same way as mentioned
+ * attribute slug: "disable-amp-for-single-story" values: "true" , "false"
+ *
  * @extends Generator
  * @param {*} seoConfig
  * @param {(boolean|"public")} seoConfig.ampStoryPages Should amp story pages be shown for all stories (true), not shown (false), or only be shown for public stories ("public"). Default: true
@@ -42,11 +51,10 @@ export function StoryAmpTags(seoConfig, config, pageType, data = {}, opts) {
     ? getDomain(currentHostUrl, domainSlug) || config["sketches-host"]
     : "";
   const storySlug = seoConfig.decodeAmpUrl ? decodeURIComponent(story.slug) : encodeURIComponent(story.slug);
-  const { ampPageBasePath = "/amp/story" } = seoConfig;
   const ampUrl =
     story["story-template"] === "visual-story"
       ? `${ampUrlAppend}/${storySlug}`
-      : `${ampUrlAppend}${ampPageBasePath}/${storySlug}`;
+      : `${ampUrlAppend}/amp/story/${storySlug}`;
   const ignoreStoryTemplate = templatesToIgnore.includes(story["story-template"]);
   if (showAmpTag(seoConfig, pageType, story) && !ignoreStoryTemplate) {
     return [

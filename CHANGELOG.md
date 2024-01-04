@@ -2,8 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.43.0](https://github.com/quintype/quintype-node-seo/compare/v1.43.0-config-amp-story-path.1...v1.43.0) (2023-12-01)
-
 ### [1.42.2](https://github.com/quintype/quintype-node-seo/compare/v1.42.1...v1.42.2) (2023-07-06)
 
 
