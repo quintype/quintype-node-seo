@@ -262,10 +262,6 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
 function getEmbedUrl(cards) {
   let embedUrl = "";
-
-  // not using the return value of top level find
-  // coz we only need the embed url
-  // find is used for early exit
   cards.find((card) => {
     const storyElements = get(card, ["story-elements"], []);
     return storyElements.find((elem) => {
@@ -273,6 +269,11 @@ function getEmbedUrl(cards) {
         embedUrl = elem["embed-url"];
         return true;
       }
+      if (elem.subtype === "brightcove-video" && get(elem, ["metadata", "embed-code"])) {
+        embedUrl = Buffer.from(elem.metadata["embed-code"], "base64").toString();
+        return true;
+      }
+
       return false;
     });
   });
