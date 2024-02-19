@@ -179,7 +179,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: getImageContent([40, 21]),
+      content: getImageContent([1.91, 1]),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
@@ -187,7 +187,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableOgTags) {
     tags.push({
       property: "og:image",
-      content: getImageContent([40, 21]),
+      content: getImageContent([1.91, 1]),
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {
