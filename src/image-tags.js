@@ -164,14 +164,16 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
     return includesHost ? getFallbackImage() : `https://${imageCdnUrl}/${image.path(imageRatio, watermarkImageProps)}`;
   };
 
+
   const getImageContent = (imageRatio) => {
     const imageProp = {
       w: 1200,
+      h: 628,
       ar: imageRatio.join(":"),
       auto: "format,compress",
       ogImage: true,
-      mode: "crop",
-      enlarge: true,
+      // mode: "crop",
+      // enlarge: true,
     };
     return isWatermarkDisabled ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
   };
@@ -179,19 +181,28 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
   if (seoConfig.enableTwitterCards) {
     tags.push({
       name: "twitter:image",
-      content: getImageContent([1.91, 1]),
+      content: getImageContent([1.91, 1], {
+        w: 1600,
+        h: 900,
+        ogImage: true,
+      }),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
   }
 
   if (seoConfig.enableOgTags) {
+    const imageProp = {
+      w: 1200,
+      h: 628,
+      ogImage: true,
+    };
     tags.push({
       property: "og:image",
-      content: getImageContent([1.91, 1]),
+      content: getImageContent([1.91, 1], imageProp),
     });
     tags.push({ property: "og:image:width", content: 1200 });
     if (get(image, ["metadata", "focus-point"])) {
-      tags.push({ property: "og:image:height", content: 630 });
+      tags.push({ property: "og:image:height", content: 628 });
     }
     alt && tags.push({ property: "og:image:alt", content: alt });
   }

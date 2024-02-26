@@ -49,11 +49,11 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/>',
       ampPageString
     );
   });
@@ -93,11 +93,11 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image:width" content="1200"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;overlay=my%2Fwatermark-image.png&amp;overlay_position=bottom&amp;overlay_width=100"/><meta property="og:image:width" content="1200"/>',
       ampPageString
     );
   });
@@ -174,17 +174,17 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, {});
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, {});
     assertContains(
-      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>',
+      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="628"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fsocialimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="628"/>',
       ampPageString
     );
     assertContains('<meta property="og:image:width" content="1200"/>', string);
-    assertContains('<meta property="og:image:height" content="630"/>', string);
+    assertContains('<meta property="og:image:height" content="628"/>', string);
     assertContains('<meta property="og:image:width" content="1200"/>', ampPageString);
-    assertContains('<meta property="og:image:height" content="630"/>', ampPageString);
+    assertContains('<meta property="og:image:height" content="628"/>', ampPageString);
   });
 
   it("gets card image values instead of story image values on card share", function () {
@@ -226,7 +226,7 @@ describe("ImageTags", function () {
 
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
     assertContains(
-      'or.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="twitter:image:alt" content="share-card-title"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:alt" content="share-card-title"/>',
+      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="twitter:image:alt" content="share-card-title"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fcard%2Fimage.jpg?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:alt" content="share-card-title"/>',
       string
     );
   });
@@ -410,11 +410,11 @@ describe("ImageTags", function () {
     const string = getSeoMetadata(seoConfig, config, "story-page", { data: { story: story } }, opts);
     const ampPageString = getSeoMetadata(seoConfig, config, "story-page-amp", { data: { story: story } }, opts);
     assertContains(
-      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="robots" content="max-image-preview:large"/><meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/>',
       string
     );
     assertContains(
-      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/>',
+      '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/>',
       ampPageString
     );
   });
@@ -434,13 +434,12 @@ describe("ImageTags", function () {
         },
       };
       const string = getSeoMetadata(seoConfig, config, "home-page", { data: { collection: collection } }, {});
-      console.log(string, "<--string");
       assertContains(
-        '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true&amp;mode=crop&amp;enlarge=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>',
+        '<meta name="twitter:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image" content="https://thumbor.assettype.com/my%2Fimage.png?rect=0%2C0%2C2400%2C1257&amp;w=1200&amp;h=628&amp;ar=1.91%3A1&amp;auto=format%2Ccompress&amp;ogImage=true"/><meta property="og:image:width" content="1200"/><meta property="og:image:height" content="628"/>',
         string
       );
       assertContains('<meta property="og:image:width" content="1200"/>', string);
-      assertContains('<meta property="og:image:height" content="630"/>', string);
+      assertContains('<meta property="og:image:height" content="628"/>', string);
     });
 
     it("pulls images with alt from the collection if present", function () {
