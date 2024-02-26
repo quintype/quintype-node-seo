@@ -172,6 +172,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       ar: imageRatio.join(":"),
       auto: "format,compress",
       ogImage: true,
+      fit: 'contain',
       // mode: "crop",
       // enlarge: true,
     };
@@ -185,6 +186,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
         w: 1600,
         h: 900,
         ogImage: true,
+        fit: 'contain',
       }),
     });
     alt && tags.push({ property: "twitter:image:alt", content: alt });
@@ -195,6 +197,7 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       w: 1200,
       h: 628,
       ogImage: true,
+      fit: 'contain',
     };
     tags.push({
       property: "og:image",
