@@ -201,13 +201,30 @@ describe('TextTags', function () {
           "sections": [],
           "seo-metadata": []
         };
-        const collection = { name: "Collection Title", summary: "Collection Description" };
+        const collection = { name: "Collection Title", summary: "Collection Description", metadata: {} };
         const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
         assertContains('<title>Collection Title</title>', string);
         assertContains('<meta name="description" content="Collection Description"/>', string);
         assertContains('<meta name="title" content="Collection Title"/>', string);
         assertDoesNotContains('canonical', string);
         assertDoesNotContains('og:url', string);
+      });
+
+      it("fallback to collection canonical url if someone passes a section-page with no customSeo metadata", function () {
+        const seoConfig = {
+          generators: [TextTags],
+        };
+        const config = {
+          'sketches-host': "http://foo.com",
+          "sections": [],
+          "seo-metadata": []
+        };
+        const collection = { name: "Collection Title", summary: "Collection Description", metadata: { "canonical-url": "http://bar123.com" } };
+        const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
+        assertContains('<title>Collection Title</title>', string);
+        assertContains('<meta name="description" content="Collection Description"/>', string);
+        assertContains('<meta name="title" content="Collection Title"/>', string);
+        assertContains('<link rel="canonical" href="http://bar123.com"/>', string);
       });
 
       it("picks up the home page description if the collection is missing the description", function () {
@@ -219,7 +236,7 @@ describe('TextTags', function () {
           "sections": [],
           "seo-metadata": [{ "owner-type": 'home', "owner-id": null, data: { 'description': 'Home Description' } }]
         };
-        const collection = { name: "Collection Title" };
+        const collection = { name: "Collection Title", metadata: {} };
         const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
         assertContains('<title>Collection Title</title>', string);
         assertContains('<meta name="description" content="Home Description"/>', string);
@@ -235,7 +252,7 @@ describe('TextTags', function () {
           "sections": [],
           "seo-metadata": []
         };
-        const collection = { name: "Collection Title" };
+        const collection = { name: "Collection Title", metadata: {} };
         const string = getSeoMetadata(seoConfig, config, 'section-page', { data: { collection } }, { url: url.parse("/") });
         assertContains('<title>Collection Title</title>', string);
         assertDoesNotContains('description', string);
@@ -830,7 +847,7 @@ describe('TextTags', function () {
         "sections": [],
         "seo-metadata": []
       };
-      const collection = { name: "Collection Title", summary: "Collection Description" };
+      const collection = { name: "Collection Title", summary: "Collection Description", metadata: {} };
       const string = getSeoMetadata(seoConfig, config, 'collection-page', { data: { collection } }, { url: url.parse("/") });
       assertContains('<title>Collection Title</title>', string);
       assertContains('<meta name="description" content="Collection Description"/>', string);
@@ -838,6 +855,7 @@ describe('TextTags', function () {
       assertDoesNotContains('canonical', string);
       assertDoesNotContains('og:url', string);
     });
+
     it("Gets home data as fallback if the collection data is falsy", function () {
       const seoConfig = {
         generators: [TextTags],
