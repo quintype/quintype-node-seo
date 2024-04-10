@@ -179,13 +179,14 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
     const { sections = [] } = config;
     const section = sections.find((section) => ownerType == "section" && section.id === ownerId) || {};
     const customSeo = get(data, ["data", "customSeo"], {});
+    const sectionCollMetadata = get(data, ["data", "collection", "metadata"], {});
     if (seoMetadata.data || section.id || !isEmpty(customSeo)) {
       const result = Object.assign(
         {},
         {
           "page-title": customSeo["page-title"] || section.name,
           title: customSeo.title || section.name,
-          canonicalUrl: customSeo["canonicalUrl"] || section["section-url"] || undefined,
+          canonicalUrl: customSeo["canonicalUrl"] || sectionCollMetadata["canonical-url"] || section["section-url"] || undefined,
         },
         seoMetadata.data
       );
@@ -260,7 +261,7 @@ function getSeoData(config, pageType, data, url = {}, seoConfig = {}) {
 
 function getSeoDataFromCollection(config, data) {
   if (get(data, ["data", "collection", "name"])) {
-    let { name, summary } = get(data, ["data", "collection"]);
+    let { name, summary, metadata } = get(data, ["data", "collection"]);
     const customSeo = get(data, ["data", "customSeo"], {});
 
     if (!summary) {
@@ -271,13 +272,14 @@ function getSeoDataFromCollection(config, data) {
     const ogTitle = customSeo.ogTitle || title;
     const description = customSeo.description || summary;
     const ogDescription = customSeo.ogDescription || summary;
+    const collCanonicalUrl = metadata["canonical-url"] || SKIP_CANONICAL;
     return {
       "page-title": pageTitle,
       title,
       ogTitle,
       description,
       ogDescription,
-      canonicalUrl: SKIP_CANONICAL,
+      canonicalUrl: collCanonicalUrl,
     };
   }
 }

@@ -142,13 +142,6 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       overlay_position: "bottom",
     });
 
-    console.log(
-      "getWatermarkHeroImage LOGS 222:",
-      imageCdnSrc,
-      imageCdnUrl,
-      overlayWatermarkProps
-    );
-
     const watermarkImageProps =
       imageCdnSrc && imageCdnSrc.includes("gumlet")
         ? Object.assign({}, overlayWatermarkProps, {
@@ -182,11 +175,9 @@ export function ImageTags(seoConfig, config, pageType, data, { url = {} }) {
       enlarge: true,
     };
 
-    console.log(
-      "getImageContent LOGS 111:",
-      !watermarkImageS3Key || isWatermarkDisabled
-    );
-    return !watermarkImageS3Key || isWatermarkDisabled ? getHeroImage(imageRatio, imageProp) : getWatermarkHeroImage(imageRatio, imageProp);
+    return !watermarkImageS3Key || isWatermarkDisabled
+      ? getHeroImage(imageRatio, imageProp)
+      : getWatermarkHeroImage(imageRatio, imageProp);
   };
 
   if (seoConfig.enableTwitterCards) {

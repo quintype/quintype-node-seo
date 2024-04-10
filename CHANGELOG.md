@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.45.0](https://github.com/quintype/quintype-node-seo/compare/v1.44.1...v1.45.0) (2024-03-20)
+
+
+### Features
+
+* **Default Collection:** Avail Canonical Url field for Default Collections ([#556](https://github.com/quintype/quintype-node-seo/issues/556)) ([3224d52](https://github.com/quintype/quintype-node-seo/commit/3224d52eb154c37238604681c5aac3fd1033a318))
+
 ### [1.44.1](https://github.com/quintype/quintype-node-seo/compare/v1.44.0...v1.44.1) (2024-01-04)
 
 ## [1.44.0](https://github.com/quintype/quintype-node-seo/compare/v1.43.0...v1.44.0) (2024-01-04)
