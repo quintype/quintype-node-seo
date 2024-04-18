@@ -105,7 +105,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const imageHeight = 675;
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
-
+  const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
@@ -119,9 +119,9 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
       image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
-      isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfDataForArticle(story, publisherConfig),
     },
+    isAccessibleForFree,
+    { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
     articleSectionObj(story)
   );
 }
@@ -208,14 +208,15 @@ function generateHasPartData(storyAccess) {
 function generateNewsArticleData(structuredData = {}, story = {}, publisherConfig = {}, pageType = "") {
   const { alternative = {} } = story.alternative || {};
   const storyAccessType = storyAccess(story["access"]);
+  const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   return Object.assign(
     {},
     {
       alternativeHeadline: alternative.home && alternative.home.default ? alternative.home.default.headline : "",
       description: story.summary,
-      isAccessibleForFree: storyAccessType,
-      isPartOf: generateIsPartOfDataForNewsArticle(story, publisherConfig, pageType, structuredData),
     },
+    isAccessibleForFree,
+    { isPartOf: generateIsPartOfDataForNewsArticle(story, publisherConfig, pageType, structuredData) },
     generateHasPartData(storyAccessType)
   );
 }
