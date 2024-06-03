@@ -491,8 +491,8 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   function generateAuthorPageSchema(publisherConfig, data, url) {
-    const sketchesHost = publisherConfig?.["sketches-host"];
-    const authorHREF = url?.["href"];
+    const sketchesHost = publisherConfig["sketches-host"];
+    const authorHREF = url["href"];
     const authorURL = `${sketchesHost}${authorHREF}`;
     console.log(JSON.stringify(data));
     console.log("========================");
