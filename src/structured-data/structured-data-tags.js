@@ -2,6 +2,7 @@ import get from "lodash/get";
 import { getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
+  generateAuthorPageSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -20,9 +21,6 @@ function getLdJsonFields(type, fields) {
 
 function ldJson(type, fields) {
   const json = JSON.stringify(getLdJsonFields(type, fields)).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-  console.log({ json });
-  console.log("=====================");
 
   return {
     tag: "script",
@@ -491,18 +489,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   if (!isStructuredDataEmpty && pageType === "author-page") {
     tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
-  }
-
-  function generateAuthorPageSchema(publisherConfig, data, url) {
-    const sketchesHost = publisherConfig["sketches-host"];
-    const authorHREF = url["href"];
-    const authorURL = `${sketchesHost}${authorHREF}`;
-    const authorName = get(data, ["author", "name"], "");
-    return {
-      name: authorName,
-      jobTitle: "Journalist",
-      url: authorURL,
-    };
   }
 
   function generateNewsArticleTags() {
