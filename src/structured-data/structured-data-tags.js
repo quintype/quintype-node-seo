@@ -21,6 +21,9 @@ function getLdJsonFields(type, fields) {
 function ldJson(type, fields) {
   const json = JSON.stringify(getLdJsonFields(type, fields)).replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+  console.log({ json });
+  console.log("=====================");
+
   return {
     tag: "script",
     type: "application/ld+json",
@@ -495,8 +498,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const authorHREF = url["href"];
     const authorURL = `${sketchesHost}${authorHREF}`;
     const authorName = get(data, ["author", "name"], "");
-    console.log(JSON.stringify(data));
-    console.log("========================");
     return {
       name: authorName,
       jobTitle: "Journalist",
@@ -530,9 +531,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
     return {};
   }
-
-  console.log({ tags });
-  console.log("========================");
 
   // All Pages have: Publisher, Site
   // Story Page have : Article/NewsArticle/LiveBlog/Review as appropriate
