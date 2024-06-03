@@ -438,10 +438,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   let articleData = {};
 
-  console.log("============================");
-  console.log({ structuredData, config, pageType, response, url });
-  console.log("============================");
-
   if (!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
@@ -488,6 +484,23 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       const entityTags = generateTagsForEntity(entity, ldJson);
       entityTags && tags.push(entityTags);
     }
+  }
+
+  if (!isStructuredDataEmpty && pageType === "author-page") {
+    tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
+  }
+
+  function generateAuthorPageSchema(publisherConfig, data, url) {
+    const sketchesHost = publisherConfig?.["sketches-host"];
+    const authorHREF = url?.["href"];
+    const authorURL = `${sketchesHost}${authorHREF}`;
+    console.log(JSON.stringify(data));
+    console.log("========================");
+    return {
+      name: data?.author?.name,
+      jobTitle: "Journalist",
+      url: authorURL,
+    };
   }
 
   function generateNewsArticleTags() {
