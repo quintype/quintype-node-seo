@@ -7,15 +7,15 @@ import { generateStaticData, generateStructuredData } from "./src/generate-commo
 import { ImageTags } from "./src/image-tags.js";
 import { StaticTags } from "./src/static-tags.js";
 import { StructuredDataTags } from "./src/structured-data/structured-data-tags.js";
-import { getTitle, TextTags } from "./src/text-tags.js";
+import { TextTags, getTitle } from "./src/text-tags.js";
 
 export {
-  TextTags,
-  StaticTags,
   AuthorTags,
   ImageTags,
-  StructuredDataTags,
+  StaticTags,
   StoryAmpTags,
+  StructuredDataTags,
+  TextTags,
   generateStaticData,
   generateStructuredData,
 };
@@ -113,6 +113,9 @@ export class SEO {
   }
 
   getMetaTags(config, pageType, data, params = {}) {
+    console.log("============================");
+    console.log({ config, pageType, data, params });
+    console.log("============================");
     pageType = get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
     return new MetaTagList(
       flatMap(this.generators, (generator) => generator(this.seoConfig, config, pageType, data, params))
