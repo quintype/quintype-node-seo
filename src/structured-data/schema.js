@@ -135,19 +135,17 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
 
 export function generateAuthorPageSchema(publisherConfig, data, url) {
   const sketchesHost = publisherConfig["sketches-host"];
+  const publisherName = publisherConfig["publisher-name"];
   const authorHREF = url["href"];
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
-  console.log("----------------");
-  console.log({ publisherConfig, data, url });
-  console.log("----------------");
   return {
     name: authorName,
     jobTitle: "Author",
     url: authorURL,
     worksFor: {
-      "@type": "News Media Organization",
-      name: "",
+      "@type": "NewsMediaOrganization",
+      name: publisherName,
       url: sketchesHost,
     },
   };
