@@ -438,6 +438,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   let articleData = {};
 
+  console.log("============================");
+  console.log({ structuredData, config, pageType, response, url });
+  console.log("============================");
+
   if (!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
@@ -512,6 +516,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
     return {};
   }
+
+  console.log({ tags });
+  console.log("========================");
 
   // All Pages have: Publisher, Site
   // Story Page have : Article/NewsArticle/LiveBlog/Review as appropriate

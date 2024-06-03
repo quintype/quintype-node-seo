@@ -113,9 +113,6 @@ export class SEO {
   }
 
   getMetaTags(config, pageType, data, params = {}) {
-    console.log("============================");
-    console.log({ config, pageType, data, params });
-    console.log("============================");
     pageType = get(this.seoConfig, ["pageTypeAliases", pageType], pageType);
     return new MetaTagList(
       flatMap(this.generators, (generator) => generator(this.seoConfig, config, pageType, data, params))
