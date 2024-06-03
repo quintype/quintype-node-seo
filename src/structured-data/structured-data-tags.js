@@ -494,10 +494,11 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const sketchesHost = publisherConfig["sketches-host"];
     const authorHREF = url["href"];
     const authorURL = `${sketchesHost}${authorHREF}`;
+    const authorName = get(data, ["author", "name"], "");
     console.log(JSON.stringify(data));
     console.log("========================");
     return {
-      name: data?.author?.name,
+      name: authorName,
       jobTitle: "Journalist",
       url: authorURL,
     };
