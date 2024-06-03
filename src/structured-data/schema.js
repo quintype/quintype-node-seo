@@ -139,11 +139,16 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
   console.log("----------------");
-  console.log({ author: data.author });
+  console.log({ publisherConfig, data, url });
   console.log("----------------");
   return {
     name: authorName,
-    jobTitle: "Journalist",
+    jobTitle: "Author",
     url: authorURL,
+    worksFor: {
+      "@type": "News Media Organization",
+      name: "",
+      url: sketchesHost,
+    },
   };
 }
