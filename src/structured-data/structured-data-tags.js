@@ -488,6 +488,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && pageType === "author-page") {
+    console.log("-------", { config, publisherConfig, data: response.data });
     tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
   }
 
