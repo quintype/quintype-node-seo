@@ -1,4 +1,5 @@
 import { get } from "lodash";
+import { getTitle } from "../generate-common-seo";
 import { stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" };
 
@@ -135,7 +136,7 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
 
 export function generateAuthorPageSchema(publisherConfig, data, url) {
   const sketchesHost = publisherConfig["sketches-host"];
-  const publisherName = publisherConfig["publisher-name"];
+  const publisherName = getTitle(publisherConfig);
   const authorHREF = url["href"];
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
