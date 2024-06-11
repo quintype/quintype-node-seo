@@ -97,6 +97,7 @@
 import { getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
+  generateAuthorPageSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -579,6 +580,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       const entityTags = generateTagsForEntity(entity, ldJson);
       entityTags &amp;&amp; tags.push(entityTags);
     }
+  }
+
+  if (!isStructuredDataEmpty &amp;&amp; pageType === "author-page") {
+    tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
   }
 
   function generateNewsArticleTags() {
