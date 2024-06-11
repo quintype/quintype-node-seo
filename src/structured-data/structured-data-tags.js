@@ -2,6 +2,7 @@ import get from "lodash/get";
 import { getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
+  generateAuthorPageSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -484,6 +485,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       const entityTags = generateTagsForEntity(entity, ldJson);
       entityTags && tags.push(entityTags);
     }
+  }
+
+  if (!isStructuredDataEmpty && pageType === "author-page") {
+    tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
   }
 
   function generateNewsArticleTags() {

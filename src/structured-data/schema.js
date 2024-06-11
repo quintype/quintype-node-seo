@@ -1,4 +1,5 @@
 import { get } from "lodash";
+import { getTitle } from "../generate-common-seo";
 import { stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" };
 
@@ -131,4 +132,22 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
     getSchemaListItem(index + 1, name, url)
   );
   return Object.assign({}, getSchemaContext, getSchemaType("BreadcrumbList"), { itemListElement });
+}
+
+export function generateAuthorPageSchema(publisherConfig, data, url) {
+  const sketchesHost = publisherConfig["sketches-host"];
+  const publisherName = getTitle(publisherConfig);
+  const authorHREF = url["href"];
+  const authorURL = `${sketchesHost}${authorHREF}`;
+  const authorName = get(data, ["author", "name"], "");
+  return {
+    name: authorName,
+    jobTitle: "Author",
+    url: authorURL,
+    worksFor: {
+      "@type": "NewsMediaOrganization",
+      name: publisherName,
+      url: sketchesHost,
+    },
+  };
 }
