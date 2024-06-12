@@ -6,6 +6,7 @@ function pickImageFromCard(story, cardId) {
   const { metadata = {} } = story.cards.find((card) => card.id === cardId) || {};
   if (metadata && !isEmpty(metadata) && get(metadata, ["social-share", "image", "key"], false)) {
     const alt =
+      metadata["social-share"].image["alt-text"] ||
       metadata["social-share"].image.attribution ||
       metadata["social-share"].title ||
       metadata["social-share"].message ||
@@ -19,8 +20,8 @@ function pickImageFromCard(story, cardId) {
 
 function getAttribution(story) {
   return (
-    story["hero-image-attribution"] ||
-    story.summary ||
+    story["hero-image-alt-text"] || story["hero-image-attribution"] ||
+    story.summary || get(story, ["alternative", "home", "default", "hero-image", "hero-image-alt-text"]) ||
     get(story, ["alternative", "home", "default", "headline"]) ||
     story.headline
   );
@@ -45,13 +46,14 @@ function pickImageFromStory({ story, config, seoConfig }) {
   const fallbackSocialImage = get(seoConfig, ["fallbackSocialImage"]);
   const altHeroImg = getAlt("home", "hero-image-s3-key", null);
   const altSocialHeroImg = getAlt("social", "hero-image-s3-key", null);
+  const altSocialAltText = getAlt("social", "hero-image-alt-text", getAttribution(story));
   const storyHeroImage = get(story, ["hero-image-s3-key"]);
   const logo_url = get(config, ["theme-attributes", "logo_url"]);
   const logo = get(config, ["theme-attributes", "logo"]);
 
   if (altSocialHeroImg) {
     const metadata = getAlt("social", "hero-image-metadata", {});
-    return { image: new FocusedImage(altSocialHeroImg, metadata), alt };
+    return { image: new FocusedImage(altSocialHeroImg, metadata), altSocialAltText };
   } else if (altHeroImg) {
     const metadata = getAlt("home", "hero-image-metadata", {});
     return { image: new FocusedImage(altHeroImg, metadata), alt };
