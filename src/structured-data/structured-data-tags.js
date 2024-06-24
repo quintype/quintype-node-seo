@@ -265,15 +265,28 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 function getEmbedUrl(cards) {
   let embedUrl = "";
 
-  // not using the return value of top level find
-  // coz we only need the embed url
-  // find is used for early exit
-  cards.find((card) => {
+  const urlKeys = [
+    "embed-url",
+    "instagram-url",
+    "dailymotion-url",
+    "facebook-url",
+    "tweet-url",
+    "vimeo-url",
+    "player-url"
+  ];
+
+  cards.some(card => {
     const storyElements = get(card, ["story-elements"], []);
-    return storyElements.find((elem) => {
-      if (elem["embed-url"]) {
-        embedUrl = elem["embed-url"];
-        return true;
+    return storyElements.some(elem => {
+      for (let key of urlKeys) {
+        if (elem[key]) {
+          embedUrl = elem[key];
+          return true;
+        }
+        if (elem.metadata && elem.metadata[key]) {
+          embedUrl = elem.metadata[key];
+          return true;
+        }
       }
       return false;
     });
