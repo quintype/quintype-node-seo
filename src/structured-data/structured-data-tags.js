@@ -266,7 +266,7 @@ function getEmbedUrl(cards) {
   let embedUrl = "";
 
   const urlKeys = [
-    "embed-url",
+    "url",
     "instagram-url",
     "dailymotion-url",
     "facebook-url",
