@@ -263,36 +263,32 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 }
 
 function getEmbedUrl(cards) {
-  let embedUrl = "";
+  const matchSubtypeWithUrl = {
+    "dailymotion-embed-script": "dailymotion-url",
+    "instagram": "instagram-url",
+    "facebook-video": "facebook-url",
+    "tweet": "tweet-url",
+    "vimeo-video": "vimeo-url",
+    "brightcove-video": "player-url"
+  };
 
-  const urlKeys = [
-    "url",
-    "instagram-url",
-    "dailymotion-url",
-    "facebook-url",
-    "tweet-url",
-    "vimeo-url",
-    "player-url"
-  ];
-
-  cards.some(card => {
+  for (const card of cards) {
     const storyElements = get(card, ["story-elements"], []);
-    return storyElements.some(elem => {
-      for (let key of urlKeys) {
-        if (elem[key]) {
-          embedUrl = elem[key];
-          return true;
-        }
+    for (const elem of storyElements) {
+      if (elem.subtype && matchSubtypeWithUrl[elem.subtype]) {
+        const key = matchSubtypeWithUrl[elem.subtype];
         if (elem.metadata && elem.metadata[key]) {
-          embedUrl = elem.metadata[key];
-          return true;
+          return elem.metadata[key];
+        }
+      } else if (elem.type === "youtube-video" && elem.subtype === null) {
+        if (elem.url) {
+          return elem.url;
         }
       }
-      return false;
-    });
-  });
+    }
+  }
 
-  return embedUrl;
+  return "";
 }
 
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
