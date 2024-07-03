@@ -280,7 +280,8 @@ function getEmbedUrl(cards) {
         if (elem.metadata && elem.metadata[playerUrlField]) {
           return elem.metadata[playerUrlField];
         }
-      } else if (elem.type === "youtube-video" && elem.subtype === null) {
+      };
+      if (elem.type === "youtube-video" && elem.subtype === null) {
         if (elem.url) {
           return elem.url;
         }
