@@ -263,7 +263,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 }
 
 function getEmbedUrl(cards) {
-  const matchSubtypeWithUrl = {
+  const playerUrlMapping = {
     "dailymotion-embed-script": "dailymotion-url",
     "instagram": "instagram-url",
     "facebook-video": "facebook-url",
@@ -275,10 +275,10 @@ function getEmbedUrl(cards) {
   for (const card of cards) {
     const storyElements = get(card, ["story-elements"], []);
     for (const elem of storyElements) {
-      if (elem.subtype && matchSubtypeWithUrl[elem.subtype]) {
-        const key = matchSubtypeWithUrl[elem.subtype];
-        if (elem.metadata && elem.metadata[key]) {
-          return elem.metadata[key];
+      if (elem.subtype && elem.subtype in playerUrlMapping) {
+        const playerUrlField = playerUrlMapping[elem.subtype];
+        if (elem.metadata && elem.metadata[playerUrlField]) {
+          return elem.metadata[playerUrlField];
         }
       } else if (elem.type === "youtube-video" && elem.subtype === null) {
         if (elem.url) {
