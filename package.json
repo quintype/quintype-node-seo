@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.46.3-fix-video-schema.2",
+  "version": "1.46.3-fix-video-schema.3",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
