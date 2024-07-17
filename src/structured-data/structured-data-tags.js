@@ -263,23 +263,33 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 }
 
 function getEmbedUrl(cards) {
-  let embedUrl = "";
+  const playerUrlMapping = {
+    "dailymotion-embed-script": "dailymotion-url",
+    "instagram": "instagram-url",
+    "facebook-video": "facebook-url",
+    "tweet": "tweet-url",
+    "vimeo-video": "vimeo-url",
+    "brightcove-video": "player-url"
+  };
 
-  // not using the return value of top level find
-  // coz we only need the embed url
-  // find is used for early exit
-  cards.find((card) => {
+  for (const card of cards) {
     const storyElements = get(card, ["story-elements"], []);
-    return storyElements.find((elem) => {
-      if (elem["embed-url"]) {
-        embedUrl = elem["embed-url"];
-        return true;
+    for (const elem of storyElements) {
+      if (elem.subtype && elem.subtype in playerUrlMapping) {
+        const playerUrlField = playerUrlMapping[elem.subtype];
+        if (elem.metadata && elem.metadata[playerUrlField]) {
+          return elem.metadata[playerUrlField];
+        }
+      };
+      if (elem.type === "youtube-video" && elem.subtype === null) {
+        if (elem.url) {
+          return elem.url;
+        }
       }
-      return false;
-    });
-  });
+    }
+  }
 
-  return embedUrl;
+  return "";
 }
 
 function generateVideoArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
