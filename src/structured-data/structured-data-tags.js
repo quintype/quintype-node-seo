@@ -265,11 +265,11 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 function getEmbedUrl(cards) {
   const playerUrlMapping = {
     "dailymotion-embed-script": "dailymotion-url",
-    "instagram": "instagram-url",
+    instagram: "instagram-url",
     "facebook-video": "facebook-url",
-    "tweet": "tweet-url",
+    tweet: "tweet-url",
     "vimeo-video": "vimeo-url",
-    "brightcove-video": "player-url"
+    "brightcove-video": "player-url",
   };
 
   for (const card of cards) {
@@ -280,7 +280,7 @@ function getEmbedUrl(cards) {
         if (elem.metadata && elem.metadata[playerUrlField]) {
           return elem.metadata[playerUrlField];
         }
-      };
+      }
       if (elem.type === "youtube-video" && elem.subtype === null) {
         if (elem.url) {
           return elem.url;
@@ -446,9 +446,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
-
   let articleData = {};
 
+  // generateRecipePageSchema(publisherConfig, response.data, url, story);
   if (!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
