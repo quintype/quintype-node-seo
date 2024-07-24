@@ -168,7 +168,7 @@ export function generateRecipePageSchema(publisherConfig, data, url, story) {
       "@type": "Person",
       name: story["author-name"],
     },
-    image: { "@type": "ImageObject", url: story.recipeUrl },
+    image: { "@type": "ImageObject", url: story.url },
     description: story.description,
     recipeIngredient: ["1 cup sugar", "2 cups flour", "1 cup chocolate chips"],
     recipeInstructions: [

@@ -3,6 +3,7 @@ import { getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
+  generateRecipePageSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -448,7 +449,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
   let articleData = {};
 
-  // generateRecipePageSchema(publisherConfig, response.data, url, story);
   if (!isStructuredDataEmpty) {
     articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
@@ -475,6 +475,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "recipe") {
+      const recipeTags = generateRecipePageSchema(publisherConfig, response.data, url, story);
+      tags.push(recipeTags);
+    }
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
