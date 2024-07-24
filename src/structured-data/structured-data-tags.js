@@ -476,8 +476,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
     if (story["story-template"] === "recipe") {
-      const recipeTags = generateRecipePageSchema(publisherConfig, response.data, url, story);
-      tags.push(recipeTags);
+      tags.push(ldJson("Recipe", generateRecipePageSchema(publisherConfig, response.data, url, story)));
     }
   }
 
