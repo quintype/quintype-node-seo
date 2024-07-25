@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { getTitle } from "../generate-common-seo";
-import { stripMillisecondsFromTime } from "../utils";
+import { extractTextFromHtmlString, getCardAttributes, stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" };
 
 export function getSchemaType(type) {
@@ -152,46 +152,28 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   };
 }
 
-export function generateRecipePageSchema(publisherConfig, data, url, story) {
-  const sketchesHost = publisherConfig["sketches-host"];
-  const publisherName = getTitle(publisherConfig);
-  const authorHREF = url["href"];
-  const authorURL = `${sketchesHost}${authorHREF}`;
-  const authorName = get(data, ["author", "name"], "");
-  // console.log("generateRecipePageSchema --->", { publisherConfig, data, url, story });
+export function generateRecipePageSchema(story) {
+  const { headline, url, "author-name": authorName } = story;
+
+  const cardsWithAttributes = story.cards.filter((card) => getCardAttributes(card, "cardtype"));
+  const cardWithIngredients = cardsWithAttributes.filter((card) =>
+    getCardAttributes(card, "cardtype").includes("ingredients ")
+  );
+  const ingredientsRichText = cardWithIngredients[0]["story-elements"][0].text;
+  const ingredients = extractTextFromHtmlString(ingredientsRichText);
+  const instructions = [];
+
   return {
     "@context": "https://schema.org/",
     "@type": "Recipe",
-    name: story.headline,
-    url: story.url,
+    name: headline,
+    url: url,
     author: {
       "@type": "Person",
-      name: story["author-name"],
+      name: authorName,
     },
-    image: { "@type": "ImageObject", url: story.url },
     description: story.description,
-    recipeIngredient: ["1 cup sugar", "2 cups flour", "1 cup chocolate chips"],
-    recipeInstructions: [
-      {
-        "@type": "HowToStep",
-        text: "Preheat the oven to 350 degrees F.",
-      },
-      {
-        "@type": "HowToStep",
-        text: "Mix the sugar and flour.",
-      },
-      {
-        "@type": "HowToStep",
-        text: "Add the chocolate chips and bake for 10 minutes.",
-      },
-    ],
-    recipeYield: "24 cookies",
-    prepTime: "PT20M",
-    cookTime: "PT10M",
-    totalTime: "PT30M",
-    nutrition: {
-      "@type": "NutritionInformation",
-      calories: "200 calories",
-    },
+    recipeIngredient: ingredients,
+    recipeInstructions: instructions,
   };
 }
