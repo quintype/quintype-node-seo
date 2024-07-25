@@ -153,7 +153,7 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
 }
 
 export function generateRecipePageSchema(story) {
-  const { headline, url, "author-name": authorName } = story;
+  const { headline, url, "author-name": authorName, description } = story;
 
   const cardsWithAttributes = story.cards.filter((card) => getCardAttributes(card, "cardtype"));
   const cardWithIngredients = cardsWithAttributes.filter((card) =>
@@ -161,7 +161,6 @@ export function generateRecipePageSchema(story) {
   );
   const ingredientsRichText = cardWithIngredients[0]["story-elements"][0].text;
   const ingredients = extractTextFromHtmlString(ingredientsRichText);
-  const instructions = [];
 
   return {
     "@context": "https://schema.org/",
@@ -172,8 +171,7 @@ export function generateRecipePageSchema(story) {
       "@type": "Person",
       name: authorName,
     },
-    description: story.description,
+    description: description,
     recipeIngredient: ingredients,
-    recipeInstructions: instructions,
   };
 }
