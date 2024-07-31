@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { getTitle } from "../generate-common-seo";
-import { stripMillisecondsFromTime } from "../utils";
+import { extractTextFromHtmlString, getCardAttributes, stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" };
 
 export function getSchemaType(type) {
@@ -149,5 +149,29 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
       name: publisherName,
       url: sketchesHost,
     },
+  };
+}
+
+export function generateRecipePageSchema(story) {
+  const { headline, url, "author-name": authorName, description } = story;
+
+  const cardsWithAttributes = story.cards.filter((card) => getCardAttributes(card, "cardtype"));
+  const cardWithIngredients = cardsWithAttributes.filter((card) =>
+    getCardAttributes(card, "cardtype").includes("ingredients ")
+  );
+  const ingredientsRichText = get(cardWithIngredients, ["0", "story-elements", "0", "text"], "");
+  const ingredients = extractTextFromHtmlString(ingredientsRichText);
+
+  return {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    name: headline,
+    url: url,
+    author: {
+      "@type": "Person",
+      name: authorName,
+    },
+    description: description,
+    recipeIngredient: ingredients,
   };
 }
