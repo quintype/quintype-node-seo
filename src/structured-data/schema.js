@@ -159,7 +159,7 @@ export function generateRecipePageSchema(story) {
   const cardWithIngredients = cardsWithAttributes.filter((card) =>
     getCardAttributes(card, "cardtype").includes("ingredients ")
   );
-  const ingredientsRichText = cardWithIngredients[0]["story-elements"][0].text;
+  const ingredientsRichText = get(cardWithIngredients, ["0", "story-elements", "0", "text"], "");
   const ingredients = extractTextFromHtmlString(ingredientsRichText);
 
   return {
