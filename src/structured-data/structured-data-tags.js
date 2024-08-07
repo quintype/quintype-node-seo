@@ -228,6 +228,16 @@ function findStoryElementField(card, type, field, defaultValue) {
   else return defaultValue;
 }
 
+function getTextElementsOfOneCard(storyElements = []) {
+  return storyElements.filter((element) => element.type === "text");
+}
+
+function getCompleteTextOfOneCard(storyElements, stripHtmlFromArticleBody) {
+  return getTextElementsOfOneCard(storyElements)
+    .map((item) => (stripHtmlFromArticleBody ? getPlainText(item.text) : item.text))
+    .join(".");
+}
+
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const imageWidth = 1200;
   const imageHeight = 675;
@@ -242,8 +252,11 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
 
-    liveBlogUpdate: story.cards.map((card) =>
-      getSchemaBlogPosting(
+    liveBlogUpdate: story.cards.map((card) => {
+      const storyElements = get(card, ["story-elements"]);
+      const cardArticleBody = getCompleteTextOfOneCard(storyElements, structuredData.stripHtmlFromArticleBody) || "";
+
+      return getSchemaBlogPosting(
         card,
         authorData(story.authors, authorSchema, publisherConfig),
         findStoryElementField(card, "title", "text", story.headline),
@@ -256,9 +269,9 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
         structuredData,
         story,
         timezone,
-        articleBody
-      )
-    ),
+        cardArticleBody
+      );
+    }),
   };
 }
 
