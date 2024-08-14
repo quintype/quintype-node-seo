@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.46.3",
+  "version": "1.46.4-fix-pb-3258.1",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
