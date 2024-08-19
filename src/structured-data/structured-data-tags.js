@@ -497,6 +497,23 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "recipe") {
+      const recipeTags = generateRecipePageSchema(story);
+      recipeTags.image = Object.assign(
+        {
+          "@type": "ImageObject",
+        },
+        generateArticleImageData(story["hero-image-s3-key"], publisherConfig)
+      );
+      recipeTags.video = Object.assign(
+        {
+          "@type": "VideoObject",
+        },
+        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
+      );
+
+      tags.push(ldJson("Recipe", recipeTags));
+    }
   }
 
   if (!isStructuredDataEmpty && structuredData.header) {
