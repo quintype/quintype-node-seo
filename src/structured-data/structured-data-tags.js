@@ -245,7 +245,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   const { website: { url = "" } = {} } = structuredData;
   const orgUrl = get(structuredData, ["organization", "url"], "");
 
-  const mainEntityOfPage = getSchemaMainEntityOfPage(`${url}/${story.slug}`);
+  const { mainEntityOfPage } = getSchemaMainEntityOfPage(`${url}/${story.slug}`);
   const { publisher } = getSchemaPublisher(structuredData.organization, orgUrl);
 
   return {
