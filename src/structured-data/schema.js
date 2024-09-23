@@ -54,16 +54,10 @@ export function getSchemaBlogPosting(
   });
 }
 
-export function getSchemaPublisher(organization, orgUrl, includeLogo = true) {
+export function getSchemaPublisher(organization, orgUrl) {
   const id = { id: orgUrl };
-  const { name, url, logo, sameAs } = organization;
-  if (includeLogo) {
-    return {
-      publisher: Object.assign({}, getSchemaType("Organization"), getSchemaContext, organization, id),
-    };
-  }
   return {
-    publisher: Object.assign({}, getSchemaType("Organization"), getSchemaContext, { name, url, sameAs }, id),
+    publisher: Object.assign({}, getSchemaType("Organization"), getSchemaContext, organization, id),
   };
 }
 

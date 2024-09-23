@@ -38,7 +38,7 @@ function imageUrl(publisherConfig, s3Key, width, height) {
   return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
 }
 
-function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone, includeLogo) {
+function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
   const mainEntityUrl =
@@ -56,7 +56,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     },
     getSchemaMainEntityOfPage(mainEntityUrl),
-    getSchemaPublisher(structuredData.organization, orgUrl, includeLogo)
+    getSchemaPublisher(structuredData.organization, orgUrl)
   );
 }
 
@@ -98,7 +98,7 @@ function articleSectionObj(story) {
   }
 }
 
-function generateArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone, includeLogo) {
+function generateArticleData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const metaKeywords = (story.seo && story.seo["meta-keywords"]) || [];
   const authors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
   const storyKeysPresence = Object.keys(story).length > 0;
@@ -109,7 +109,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   return Object.assign(
     {},
-    generateCommonData(structuredData, story, publisherConfig, timezone, includeLogo),
+    generateCommonData(structuredData, story, publisherConfig, timezone),
     {
       author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
@@ -466,11 +466,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
 
   let articleData = {};
-  let articleDataWithoutLogo = {};
+
   if (!isStructuredDataEmpty) {
-    const includeLogo = false;
-    articleData = generateArticleData(structuredData, story, publisherConfig, timezone, includeLogo);
-    articleDataWithoutLogo = generateArticleData(structuredData, story, publisherConfig, timezone, !includeLogo);
+    articleData = generateArticleData(structuredData, story, publisherConfig, timezone);
     structuredDataTags.map((type) => {
       if (pageType === type) {
         tags.push(ldJson("Organization", structuredData.organization));
@@ -543,7 +541,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
 
     if (structuredData.enableNewsArticle !== "withoutArticleSchema") {
-      return ldJson("Article", articleDataWithoutLogo);
+      return ldJson("Article", articleData);
     }
     return {};
   }
