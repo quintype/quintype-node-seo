@@ -242,15 +242,21 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   const imageWidth = 1200;
   const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
-  const storyKeysPresence = Object.keys(story).length > 0;
-  const articleBody = (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "";
+  const { website: { url = "" } = {} } = structuredData;
+  const orgUrl = get(structuredData, ["organization", "url"], "");
+
+  const { mainEntityOfPage } = getSchemaMainEntityOfPage(`${url}/${story.slug}`);
+  const { publisher } = getSchemaPublisher(structuredData.organization, orgUrl);
+
   return {
     headline: story.headline,
     description: story.summary || story.headline,
-    author: story["author-name"],
+    author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+    mainEntityOfPage,
+    publisher,
 
     liveBlogUpdate: story.cards.map((card) => {
       const storyElements = get(card, ["story-elements"]);
@@ -258,7 +264,6 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
       return getSchemaBlogPosting(
         card,
-        authorData(story.authors, authorSchema, publisherConfig),
         findStoryElementField(card, "title", "text", story.headline),
         imageUrl(
           publisherConfig,
@@ -278,11 +283,11 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 function getEmbedUrl(cards) {
   const playerUrlMapping = {
     "dailymotion-embed-script": "dailymotion-url",
-    "instagram": "instagram-url",
+    instagram: "instagram-url",
     "facebook-video": "facebook-url",
-    "tweet": "tweet-url",
+    tweet: "tweet-url",
     "vimeo-video": "vimeo-url",
-    "brightcove-video": "player-url"
+    "brightcove-video": "player-url",
   };
 
   for (const card of cards) {
@@ -293,7 +298,7 @@ function getEmbedUrl(cards) {
         if (elem.metadata && elem.metadata[playerUrlField]) {
           return elem.metadata[playerUrlField];
         }
-      };
+      }
       if (elem.type === "youtube-video" && elem.subtype === null) {
         if (elem.url) {
           return elem.url;
