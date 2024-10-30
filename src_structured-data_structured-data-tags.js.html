@@ -202,6 +202,9 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema &amp;&amp; structuredData.authorSchema(story)) || [];
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
+  const metadata = get(story, ["metadata"], {});
+  const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
@@ -217,6 +220,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
     },
     isAccessibleForFree,
+    sponsor,
     { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
     articleSectionObj(story)
   );
@@ -305,12 +309,16 @@ function generateNewsArticleData(structuredData = {}, story = {}, publisherConfi
   const { alternative = {} } = story.alternative || {};
   const storyAccessType = storyAccess(story["access"]);
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
+  const metadata = get(story, ["metadata"], {});
+  const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+
   return Object.assign(
     {},
     {
       alternativeHeadline: alternative.home &amp;&amp; alternative.home.default ? alternative.home.default.headline : "",
       description: story.summary,
     },
+    sponsor,
     isAccessibleForFree,
     { isPartOf: generateIsPartOfDataForNewsArticle(story, publisherConfig, pageType, structuredData) },
     generateHasPartData(storyAccessType)
