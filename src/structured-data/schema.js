@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { getTitle } from "../generate-common-seo";
-import { extractTextFromHtmlString, getCardAttributes, stripMillisecondsFromTime } from "../utils";
+import { stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "http://schema.org" };
 
 export function getSchemaType(type) {
@@ -153,14 +153,13 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
 }
 
 export function generateRecipePageSchema(story) {
-  const { headline, url, "author-name": authorName, description } = story;
-
-  const cardsWithAttributes = story.cards.filter((card) => getCardAttributes(card, "cardtype"));
-  const cardWithIngredients = cardsWithAttributes.filter((card) =>
-    getCardAttributes(card, "cardtype").includes("ingredients ")
-  );
-  const ingredientsRichText = get(cardWithIngredients, ["0", "story-elements", "0", "text"], "");
-  const ingredients = extractTextFromHtmlString(ingredientsRichText);
+  const { headline, url, "author-name": authorName, description, metadata } = story;
+  const servings = get(metadata, ["servings"], "");
+  const ingredients = get(metadata, ["ingredients"], "");
+  const recipeAttributes = get(metadata, ["story-attributes"], "");
+  const cuisine = get(recipeAttributes, ["cuisine", "0"], "");
+  const preperationtime = get(recipeAttributes, ["preparationtime", "0"], "");
+  const cookingtime = get(recipeAttributes, ["cookingtime", "0"], "");
 
   return {
     "@context": "https://schema.org/",
@@ -173,5 +172,9 @@ export function generateRecipePageSchema(story) {
     },
     description: description,
     recipeIngredient: ingredients,
+    prepTime: preperationtime,
+    cookTime: cookingtime,
+    recipeCuisine: cuisine,
+    recipeYield: servings,
   };
 }

@@ -8,22 +8,6 @@ export function objectToTags(object) {
     .map(([key, value]) => ({ [getPropertyName(key)]: key, content: value }));
 }
 
-export function extractTextFromHtmlString(html) {
-  const regex = /<p>(.*?)<\/p>/g;
-  const textContents = [];
-
-  let match;
-  while ((match = regex.exec(html)) !== null) {
-    textContents.push(match[1]);
-  }
-
-  return textContents;
-}
-
-export const getCardAttributes = (card, type) => {
-  return card.metadata.attributes[type];
-};
-
 function getPropertyName(key) {
   return key.startsWith("fb:") || key.startsWith("og:") ? "property" : "name";
 }
