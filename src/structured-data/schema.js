@@ -141,3 +141,30 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
     },
   };
 }
+
+export function generateRecipePageSchema(story) {
+  const { headline, url, "author-name": authorName, description, metadata } = story;
+  const servings = get(metadata, ["servings"], "");
+  const ingredients = get(metadata, ["ingredients"], "");
+  const recipeAttributes = get(metadata, ["story-attributes"], "");
+  const cuisine = get(recipeAttributes, ["cuisine", "0"], "");
+  const preperationtime = get(recipeAttributes, ["preparationtime", "0"], "");
+  const cookingtime = get(recipeAttributes, ["cookingtime", "0"], "");
+
+  return {
+    "@context": "https://schema.org/",
+    "@type": "Recipe",
+    name: headline,
+    url: url,
+    author: {
+      "@type": "Person",
+      name: authorName,
+    },
+    description: description,
+    recipeIngredient: ingredients,
+    prepTime: preperationtime,
+    cookTime: cookingtime,
+    recipeCuisine: cuisine,
+    recipeYield: servings,
+  };
+}

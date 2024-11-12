@@ -3,6 +3,7 @@ import { getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
+  generateRecipePageSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -472,7 +473,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
-
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -501,11 +501,45 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "recipe") {
+      const recipeTags = generateRecipePageSchema(story);
+      recipeTags.image = Object.assign(
+        {
+          "@type": "ImageObject",
+        },
+        generateArticleImageData(story["hero-image-s3-key"], publisherConfig)
+      );
+      recipeTags.video = Object.assign(
+        {
+          "@type": "VideoObject",
+        },
+        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
+      );
+
+      tags.push(ldJson("Recipe", recipeTags));
+    }
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "recipe") {
+      const recipeTags = generateRecipePageSchema(story);
+      recipeTags.image = Object.assign(
+        {
+          "@type": "ImageObject",
+        },
+        generateArticleImageData(story["hero-image-s3-key"], publisherConfig)
+      );
+      recipeTags.video = Object.assign(
+        {
+          "@type": "VideoObject",
+        },
+        generateVideoArticleData(structuredData, story, publisherConfig, timezone)
+      );
+
+      tags.push(ldJson("Recipe", recipeTags));
+    }
   }
 
   if (!isStructuredDataEmpty && structuredData.header) {
