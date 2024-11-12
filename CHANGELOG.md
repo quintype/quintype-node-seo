@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.47.0](https://github.com/quintype/quintype-node-seo/compare/v1.46.5...v1.47.0) (2024-10-30)
+
+
+### Features
+
+* **sponsor schema:** update article and news article schema for sponsored stories ([#564](https://github.com/quintype/quintype-node-seo/issues/564)) ([ca2cf07](https://github.com/quintype/quintype-node-seo/commit/ca2cf07ed54d6b7508b4d21b1570f45f711b5dc2))
+
+### [1.46.5](https://github.com/quintype/quintype-node-seo/compare/v1.46.4...v1.46.5) (2024-09-25)
+
+
+### Bug Fixes
+
+* **Liveblog schema:** Remove duplicate keys for author and logo in schema ([#563](https://github.com/quintype/quintype-node-seo/issues/563)) ([9e417b9](https://github.com/quintype/quintype-node-seo/commit/9e417b9adf29e542417e2edb30c37be8ad5300a4))
+
+### [1.46.4](https://github.com/quintype/quintype-node-seo/compare/v1.46.3...v1.46.4) (2024-08-14)
+
 ### [1.46.3](https://github.com/quintype/quintype-node-seo/compare/v1.46.2...v1.46.3) (2024-07-17)
 
 ### [1.46.2](https://github.com/quintype/quintype-node-seo/compare/v1.46.1...v1.46.2) (2024-06-12)

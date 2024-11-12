@@ -37,7 +37,6 @@ export function getSchemaHeader({ cssSelector }) {
 
 export function getSchemaBlogPosting(
   card = {},
-  author = {},
   headline = "",
   image = "",
   structuredData = {},
@@ -45,23 +44,14 @@ export function getSchemaBlogPosting(
   timezone,
   articleBody
 ) {
-  const { website: { url = "" } = {} } = structuredData;
-  const orgUrl = get(structuredData, ["organization", "url"], "");
-  return Object.assign(
-    {},
-    getSchemaType("BlogPosting"),
-    getSchemaMainEntityOfPage(`${url}/${story.slug}`),
-    getSchemaPublisher(structuredData.organization, orgUrl),
-    {
-      articleBody: articleBody,
-      dateModified: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
-      dateCreated: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
-      datePublished: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
-      author: author,
-      headline: headline,
-      image: image,
-    }
-  );
+  return Object.assign({}, getSchemaType("BlogPosting"), {
+    articleBody: articleBody,
+    dateModified: stripMillisecondsFromTime(new Date(card["card-updated-at"]), timezone),
+    dateCreated: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
+    datePublished: stripMillisecondsFromTime(new Date(card["card-added-at"]), timezone),
+    headline: headline,
+    image: image,
+  });
 }
 
 export function getSchemaPublisher(organization, orgUrl) {

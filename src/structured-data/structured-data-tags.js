@@ -108,6 +108,9 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const storyAccessType = storyAccess(story["access"]);
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
+  const metadata = get(story, ["metadata"], {});
+  const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
@@ -123,6 +126,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
     },
     isAccessibleForFree,
+    sponsor,
     { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
     articleSectionObj(story)
   );
@@ -211,12 +215,16 @@ function generateNewsArticleData(structuredData = {}, story = {}, publisherConfi
   const { alternative = {} } = story.alternative || {};
   const storyAccessType = storyAccess(story["access"]);
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
+  const metadata = get(story, ["metadata"], {});
+  const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+
   return Object.assign(
     {},
     {
       alternativeHeadline: alternative.home && alternative.home.default ? alternative.home.default.headline : "",
       description: story.summary,
     },
+    sponsor,
     isAccessibleForFree,
     { isPartOf: generateIsPartOfDataForNewsArticle(story, publisherConfig, pageType, structuredData) },
     generateHasPartData(storyAccessType)
@@ -229,24 +237,42 @@ function findStoryElementField(card, type, field, defaultValue) {
   else return defaultValue;
 }
 
+function getTextElementsOfOneCard(storyElements = []) {
+  return storyElements.filter((element) => element.type === "text");
+}
+
+function getCompleteTextOfOneCard(storyElements, stripHtmlFromArticleBody) {
+  return getTextElementsOfOneCard(storyElements)
+    .map((item) => (stripHtmlFromArticleBody ? getPlainText(item.text) : item.text))
+    .join(".");
+}
+
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const imageWidth = 1200;
   const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
-  const storyKeysPresence = Object.keys(story).length > 0;
-  const articleBody = (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "";
+  const { website: { url = "" } = {} } = structuredData;
+  const orgUrl = get(structuredData, ["organization", "url"], "");
+
+  const { mainEntityOfPage } = getSchemaMainEntityOfPage(`${url}/${story.slug}`);
+  const { publisher } = getSchemaPublisher(structuredData.organization, orgUrl);
+
   return {
     headline: story.headline,
     description: story.summary || story.headline,
-    author: story["author-name"],
+    author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+    mainEntityOfPage,
+    publisher,
 
-    liveBlogUpdate: story.cards.map((card) =>
-      getSchemaBlogPosting(
+    liveBlogUpdate: story.cards.map((card) => {
+      const storyElements = get(card, ["story-elements"]);
+      const cardArticleBody = getCompleteTextOfOneCard(storyElements, structuredData.stripHtmlFromArticleBody) || "";
+
+      return getSchemaBlogPosting(
         card,
-        authorData(story.authors, authorSchema, publisherConfig),
         findStoryElementField(card, "title", "text", story.headline),
         imageUrl(
           publisherConfig,
@@ -257,9 +283,9 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
         structuredData,
         story,
         timezone,
-        articleBody
-      )
-    ),
+        cardArticleBody
+      );
+    }),
   };
 }
 
