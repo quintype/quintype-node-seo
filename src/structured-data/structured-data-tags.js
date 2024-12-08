@@ -506,6 +506,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "visual-story") {
+      tags.push(mediaGallerySchema());
+    }
   }
 
   if (!isStructuredDataEmpty && structuredData.header) {
@@ -552,6 +555,37 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       return ldJson("Article", articleData);
     }
     return {};
+  }
+
+  function mediaGallerySchema() {
+    if (!story || !publisherConfig) return null;
+    const storyCards = get(story, ["cards"], []);
+
+    const galleryItems = storyCards.flatMap((card) =>
+      card["story-elements"]
+        .filter((element) => element.type === "image")
+        .map((imageElement) => ({
+          "@type": "ImageObject",
+          image: imageUrl(publisherConfig, imageElement["image-s3-key"]),
+          name: imageElement.title,
+          contentUrl: story.url,
+          description: imageElement.description || "",
+        }))
+    );
+
+    const metaDescription = get(story, ["seo", "meta-description"], "");
+    const subHeadline = get(story, ["subheadline"], "");
+    const headline = get(story, ["headline"], "");
+    const schema = Object.assign(
+      {},
+      {
+        name: story.headline || "Media Gallery",
+        description: metaDescription || subHeadline || headline,
+        author: authorData(story.authors, [], publisherConfig),
+        mainEntityOfPage: { "@type": "ImageGallery", associatedMedia: galleryItems },
+      }
+    );
+    return ldJson("MediaGallery", schema);
   }
 
   // All Pages have: Publisher, Site
