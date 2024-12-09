@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { getQueryParams, stripMillisecondsFromTime } from "../utils";
+import { canTakeCard, getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
@@ -507,7 +507,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
     if (story["story-template"] === "visual-story") {
-      tags.push(mediaGallerySchema());
+      tags.push(visualStorySchema());
     }
   }
 
@@ -557,34 +557,45 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     return {};
   }
 
-  function mediaGallerySchema() {
+  function visualStorySchema() {
     if (!story || !publisherConfig) return null;
-    const storyCards = get(story, ["cards"], []);
-
-    const galleryItems = storyCards.flatMap((card) =>
-      card["story-elements"]
-        .filter((element) => element.type === "image")
-        .map((imageElement) => ({
-          "@type": "ImageObject",
-          image: imageUrl(publisherConfig, imageElement["image-s3-key"]),
-          name: imageElement.title,
-          contentUrl: story.url,
-          description: imageElement.description || "",
-        }))
-    );
+    const storyCards = get(story, ["cards"], []).filter((card) => canTakeCard(card));
+    const galleryItems = storyCards.map((card) => {
+      const imageElement = card["story-elements"].find((el) => el.type === "image");
+      if (!imageElement) return; // for now schema is added only for images
+      const titleElement = card["story-elements"].find((el) => el.type === "title");
+      const textElements = card["story-elements"].filter((el) => el.type === "text" && el.subtype !== "cta");
+      const description = textElements.reduce((acc, current) => `${acc}. ${current.text}`, "");
+      return {
+        "@type": "ImageObject",
+        image: imageUrl(publisherConfig, imageElement["image-s3-key"]),
+        name: get(titleElement, ["text"]),
+        contentUrl: story.url,
+        description: description,
+        caption: get(imageElement, ["title"]),
+      };
+    });
+    const heroImgSrc = story["hero-image-s3-key"];
+    if (heroImgSrc) {
+      galleryItems.unshift({
+        "@type": "ImageObject",
+        image: imageUrl(publisherConfig, heroImgSrc),
+        name: get(story, ["headline"]),
+        contentUrl: story.url,
+        description: get(story, ["subheadline"]),
+        caption: get(story, ["hero-image-caption"]),
+      });
+    }
 
     const metaDescription = get(story, ["seo", "meta-description"], "");
     const subHeadline = get(story, ["subheadline"], "");
     const headline = get(story, ["headline"], "");
-    const schema = Object.assign(
-      {},
-      {
-        name: story.headline || "Media Gallery",
-        description: metaDescription || subHeadline || headline,
-        author: authorData(story.authors, [], publisherConfig),
-        mainEntityOfPage: { "@type": "ImageGallery", associatedMedia: galleryItems },
-      }
-    );
+    const schema = Object.assign({}, getSchemaMainEntityOfPage(story.url), {
+      name: story.headline || "Media Gallery",
+      description: metaDescription || subHeadline || headline,
+      // author: authorData(story.authors, [], publisherConfig),
+      hasPart: { "@type": "ImageGallery", associatedMedia: galleryItems },
+    });
     return ldJson("MediaGallery", schema);
   }
 

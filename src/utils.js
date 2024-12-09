@@ -40,3 +40,19 @@ export function getWatermarkImage(story, cdnSrc, cdnURL) {
   }
   return watermarkImageS3Key;
 }
+
+export function canTakeCard(card) {
+  const storyElementWhitelist = ["text", "title", "image", "video"];
+  const validCards = card["story-elements"].some((el) => {
+    if (el.type === "jsembed") {
+      const videoUrl = el && atob(`${el["embed-js"]}`);
+      const formatWhitelist = ["mp4", "webm", "ogv"];
+      const isValidVideoUrl = formatWhitelist.some((format) => {
+        return videoUrl && videoUrl.endsWith(format);
+      });
+      return isValidVideoUrl;
+    }
+    return storyElementWhitelist.includes(el.type);
+  });
+  return validCards;
+}
