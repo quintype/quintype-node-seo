@@ -41,7 +41,7 @@ export function getWatermarkImage(story, cdnSrc, cdnURL) {
   return watermarkImageS3Key;
 }
 
-export function canTakeCard(card) {
+export function getAllowedCards(card) {
   const storyElementWhitelist = ["text", "title", "image", "video"];
   const validCards = card["story-elements"].some((el) => {
     if (el.type === "jsembed") {

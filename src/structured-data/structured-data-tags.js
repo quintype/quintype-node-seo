@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { canTakeCard, getQueryParams, stripMillisecondsFromTime } from "../utils";
+import { getAllowedCards, getQueryParams, stripMillisecondsFromTime } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
@@ -559,7 +559,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   function visualStorySchema() {
     if (!story || !publisherConfig) return null;
-    const storyCards = get(story, ["cards"], []).filter((card) => canTakeCard(card));
+    const storyCards = get(story, ["cards"], []).filter((card) => getAllowedCards(card));
     const galleryItems = storyCards.map((card) => {
       const imageElement = card["story-elements"].find((el) => el.type === "image");
       if (!imageElement) return; // for now schema is added only for images
