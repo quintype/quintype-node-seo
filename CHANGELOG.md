@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.48.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.48.0) (2024-12-11)
+
+
+### Features
+
+* **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
+
 ## [1.47.0](https://github.com/quintype/quintype-node-seo/compare/v1.46.5...v1.47.0) (2024-10-30)
 
 
