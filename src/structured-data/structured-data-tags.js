@@ -565,25 +565,27 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       if (!imageElement) return; // for now schema is added only for images
       const titleElement = card["story-elements"].find((el) => el.type === "title");
       const textElements = card["story-elements"].filter((el) => el.type === "text" && el.subtype !== "cta");
-      const description = textElements.reduce((acc, current) => `${acc}. ${current.text}`, "");
+      const description = textElements.reduce((acc, current) => `${acc}. ${getPlainText(current.text)}`, "");
+      const imgUrl = imageUrl(publisherConfig, imageElement["image-s3-key"]);
       return {
         "@type": "ImageObject",
-        image: imageUrl(publisherConfig, imageElement["image-s3-key"]),
+        image: imgUrl,
         name: get(titleElement, ["text"]),
-        contentUrl: story.url,
+        contentUrl: imgUrl,
         description: description,
-        caption: get(imageElement, ["title"]),
+        caption: getPlainText(get(imageElement, ["title"], "")),
       };
     });
     const heroImgSrc = story["hero-image-s3-key"];
     if (heroImgSrc) {
+      const imgUrl = imageUrl(publisherConfig, heroImgSrc);
       galleryItems.unshift({
         "@type": "ImageObject",
-        image: imageUrl(publisherConfig, heroImgSrc),
+        image: imgUrl,
         name: get(story, ["headline"]),
-        contentUrl: story.url,
+        contentUrl: imgUrl,
         description: get(story, ["subheadline"]),
-        caption: get(story, ["hero-image-caption"]),
+        caption: getPlainText(get(story, ["hero-image-caption"], "")),
       });
     }
 
@@ -593,7 +595,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const schema = Object.assign({}, getSchemaMainEntityOfPage(story.url), {
       name: story.headline || "Media Gallery",
       description: metaDescription || subHeadline || headline,
-      // author: authorData(story.authors, [], publisherConfig),
       hasPart: { "@type": "ImageGallery", associatedMedia: galleryItems },
     });
     return ldJson("MediaGallery", schema);
