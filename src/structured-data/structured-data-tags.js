@@ -565,7 +565,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       if (!imageElement) return; // for now schema is added only for images
       const titleElement = card["story-elements"].find((el) => el.type === "title");
       const textElements = card["story-elements"].filter((el) => el.type === "text" && el.subtype !== "cta");
-      const description = textElements.reduce((acc, current) => `${acc}. ${getPlainText(current.text)}`, "");
+      const description = textElements.reduce((acc, current) => `${acc}. ${getPlainText(current.text) || ""}`, "");
       const imgUrl = imageUrl(publisherConfig, imageElement["image-s3-key"]);
       return {
         "@type": "ImageObject",
@@ -573,7 +573,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
         name: get(titleElement, ["text"]),
         contentUrl: imgUrl,
         description: description,
-        caption: getPlainText(get(imageElement, ["title"], "")),
+        caption: getPlainText(get(imageElement, ["title"]) || ""),
       };
     });
     const heroImgSrc = story["hero-image-s3-key"];
@@ -585,7 +585,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
         name: get(story, ["headline"]),
         contentUrl: imgUrl,
         description: get(story, ["subheadline"]),
-        caption: getPlainText(get(story, ["hero-image-caption"], "")),
+        caption: getPlainText(get(story, ["hero-image-caption"]) || ""),
       });
     }
 
