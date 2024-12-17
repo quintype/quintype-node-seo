@@ -56,3 +56,13 @@ export function getAllowedCards(card) {
   });
   return validCards;
 }
+
+export function stripQueryParams(url) {
+  try {
+    const urlObj = new URL(url);
+    urlObj.search = "";
+    return urlObj.toString();
+  } catch (e) {
+    return "";
+  }
+}

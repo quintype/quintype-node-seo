@@ -1,5 +1,5 @@
 import get from "lodash/get";
-import { getAllowedCards, getQueryParams, stripMillisecondsFromTime } from "../utils";
+import { getAllowedCards, getQueryParams, stripMillisecondsFromTime, stripQueryParams } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
@@ -565,13 +565,17 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       if (!imageElement) return; // for now schema is added only for images
       const titleElement = card["story-elements"].find((el) => el.type === "title");
       const textElements = card["story-elements"].filter((el) => el.type === "text" && el.subtype !== "cta");
-      const description = textElements.reduce((acc, current) => `${acc}. ${getPlainText(current.text) || ""}`, "");
+      const description = textElements.reduce(
+        (acc, current) => (acc ? `${acc}. ${getPlainText(current.text) || ""}` : getPlainText(current.text) || ""),
+        ""
+      );
       const imgUrl = imageUrl(publisherConfig, imageElement["image-s3-key"]);
+      const strippedImgUrl = stripQueryParams(imgUrl);
       return {
         "@type": "ImageObject",
-        image: imgUrl,
+        image: strippedImgUrl,
         name: get(titleElement, ["text"]),
-        contentUrl: imgUrl,
+        contentUrl: strippedImgUrl,
         description: description,
         caption: getPlainText(get(imageElement, ["title"]) || ""),
       };
@@ -579,11 +583,12 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const heroImgSrc = story["hero-image-s3-key"];
     if (heroImgSrc) {
       const imgUrl = imageUrl(publisherConfig, heroImgSrc);
+      const strippedImgUrl = stripQueryParams(imgUrl);
       galleryItems.unshift({
         "@type": "ImageObject",
-        image: imgUrl,
+        image: strippedImgUrl,
         name: get(story, ["headline"]),
-        contentUrl: imgUrl,
+        contentUrl: strippedImgUrl,
         description: get(story, ["subheadline"]),
         caption: getPlainText(get(story, ["hero-image-caption"]) || ""),
       });
