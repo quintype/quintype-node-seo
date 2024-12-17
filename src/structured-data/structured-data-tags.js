@@ -598,7 +598,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const subHeadline = get(story, ["subheadline"], "");
     const headline = get(story, ["headline"], "");
     const schema = Object.assign({}, getSchemaMainEntityOfPage(story.url), {
-      name: story.headline || "Media Gallery",
+      headline: story.headline || "Media Gallery",
       description: metaDescription || subHeadline || headline,
       hasPart: { "@type": "ImageGallery", associatedMedia: galleryItems },
     });
