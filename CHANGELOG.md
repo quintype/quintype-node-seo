@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.48.1](https://github.com/quintype/quintype-node-seo/compare/v1.48.0...v1.48.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
+
 ## [1.48.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.48.0) (2024-12-11)
 
 
