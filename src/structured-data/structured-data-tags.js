@@ -198,7 +198,7 @@ function generateIsPartOfDataForNewsArticle(story = {}, publisherConfig = {}, pa
 
 function generateHasPartData(storyAccess) {
   return storyAccess
-    ? {}
+    ? { isAccessibleForFree: storyAccess }
     : {
         hasPart: [
           {
