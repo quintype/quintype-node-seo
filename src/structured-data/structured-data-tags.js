@@ -407,7 +407,7 @@ function generateEventsSchema(story = {}) {
     mix: "https://schema.org/MixedEventAttendanceMode"
   }
   const organizerData = organizername ? {Organizer : Object.assign({}, getSchemaType(organizertype), {name: organizername,url: organizerurl, email: organizeremail,telephone: organizertelephone})} : {}
-  const eventsData = Object.assign({}, getSchemaContext, getSchemaType("Event"), { name: story.headline, description: story.subheadline || "", url: story.url, image: story["hero-image-s3-key"] || "", startDate: startdate, endDate: enddate, eventAttendanceMode: eventMode[mode], isAccessibleForFree: paidevent, eventStatus: "https://schema.org/EventScheduled", location: location, organizerData});
+  const eventsData = Object.assign({}, getSchemaContext, getSchemaType("Event"), { name: story.headline, description: story.subheadline || "", url: story.url, image: story["hero-image-s3-key"] || "", startDate: startdate, endDate: enddate, eventAttendanceMode: eventMode[mode], isAccessibleForFree: paidevent, eventStatus: "https://schema.org/EventScheduled", location: location}, organizerData);
   return eventsData;
 }
 
