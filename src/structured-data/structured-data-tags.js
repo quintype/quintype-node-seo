@@ -399,16 +399,56 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
 
-function generateEventsSchema(story = {}) {
-  const {location = "", startdate = "", enddate = "", mode = "offline", paidevent = false, organizertype = "Organization", organizername = "", organizeremail="", organizerurl="", organizertelephone=""} = story.eventDetails || {};
+function generateEventsSchema (story = {}, publisherConfig = {}) {
+  const {
+    location = '',
+    startdate = '',
+    enddate = '',
+    mode = 'offline',
+    paidevent = false,
+    organizertype = 'Organization',
+    organizername = '',
+    organizeremail = '',
+    organizerurl = '',
+    organizertelephone = ''
+  } = story.eventDetails || {}
   const eventMode = {
-    online: "https://schema.org/OnlineEventAttendanceMode",
-    offline: "https://schema.org/OfflineEventAttendanceMode",
-    mix: "https://schema.org/MixedEventAttendanceMode"
+    online: 'https://schema.org/OnlineEventAttendanceMode',
+    offline: 'https://schema.org/OfflineEventAttendanceMode',
+    mix: 'https://schema.org/MixedEventAttendanceMode'
   }
-  const organizerData = organizername ? {Organizer : Object.assign({}, getSchemaType(organizertype), {name: organizername,url: organizerurl, email: organizeremail,telephone: organizertelephone})} : {}
-  const eventsData = Object.assign({}, getSchemaContext, getSchemaType("Event"), { name: story.headline, description: story.subheadline || "", url: story.url, image: story["hero-image-s3-key"] || "", startDate: startdate, endDate: enddate, eventAttendanceMode: eventMode[mode], isAccessibleForFree: paidevent, eventStatus: "https://schema.org/EventScheduled", location: location}, organizerData);
-  return eventsData;
+  const imageWidth = 1200
+  const imageHeight = 675
+  const image = imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)
+  const organizerData = organizername
+    ? {
+        Organizer: Object.assign({}, getSchemaType(organizertype), {
+          name: organizername,
+          url: organizerurl,
+          email: organizeremail,
+          telephone: organizertelephone
+        })
+      }
+    : {}
+  const eventsData = Object.assign(
+    {},
+    getSchemaContext,
+    getSchemaType('Event'),
+    {
+      name: story.headline,
+      description: story.subheadline || '',
+      url: story.url,
+      image: image,
+      startDate: startdate,
+      endDate: enddate,
+      eventAttendanceMode: eventMode[mode],
+      isAccessibleForFree: paidevent,
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: location
+    },
+    organizerData
+  )
+  return eventsData
 }
 
 /**
@@ -511,7 +551,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if(structuredData.enableEventsData && pageType === "story-page" && story.enableSeoEventsData){
-    tags.push(ldJson("Event", generateEventsSchema(story)));
+    tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page") {
