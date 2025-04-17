@@ -524,7 +524,8 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
-
+  const enableEventsData = get(structuredData, ["enableEventsData"], null);
+  const enableStorySeoEventsData = get(story, ["enableSeoEventsData"], null);
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -550,7 +551,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 
-  if(structuredData?.enableEventsData && pageType === "story-page" && story?.enableSeoEventsData){
+  if(enableEventsData && pageType === "story-page" && enableStorySeoEventsData){
     tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
 
