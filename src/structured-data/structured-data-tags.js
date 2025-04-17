@@ -550,7 +550,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 
-  if(structuredData.enableEventsData && pageType === "story-page" && story.enableSeoEventsData){
+  if(structuredData?.enableEventsData && pageType === "story-page" && story?.enableSeoEventsData){
     tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
 
