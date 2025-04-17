@@ -399,6 +399,58 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
 
+function generateEventsSchema (story = {}, publisherConfig = {}) {
+  const {
+    location = '',
+    startdate = '',
+    enddate = '',
+    mode = 'offline',
+    paidevent = false,
+    organizertype = 'Organization',
+    organizername = '',
+    organizeremail = '',
+    organizerurl = '',
+    organizertelephone = ''
+  } = story.eventDetails || {}
+  const eventMode = {
+    online: 'https://schema.org/OnlineEventAttendanceMode',
+    offline: 'https://schema.org/OfflineEventAttendanceMode',
+    mix: 'https://schema.org/MixedEventAttendanceMode'
+  }
+  const imageWidth = 1200
+  const imageHeight = 675
+  const image = imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)
+  const organizerData = organizername
+    ? {
+        Organizer: Object.assign({}, getSchemaType(organizertype), {
+          name: organizername,
+          url: organizerurl,
+          email: organizeremail,
+          telephone: organizertelephone
+        })
+      }
+    : {}
+  const eventsData = Object.assign(
+    {},
+    getSchemaContext,
+    getSchemaType('Event'),
+    {
+      name: story.headline,
+      description: story.subheadline || '',
+      url: story.url,
+      image: image,
+      startDate: startdate,
+      endDate: enddate,
+      eventAttendanceMode: eventMode[mode],
+      isAccessibleForFree: paidevent,
+      eventStatus: 'https://schema.org/EventScheduled',
+      location: location
+    },
+    organizerData
+  )
+  return eventsData
+}
+
 /**
  * Options for a schema.org Organization
  * Example
@@ -472,7 +524,8 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const isStructuredDataEmpty = Object.keys(structuredData).length === 0;
   const enableBreadcrumbList = get(structuredData, ["enableBreadcrumbList"], true);
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
-
+  const enableEventsData = get(structuredData, ["enableEventsData"], null);
+  const enableStorySeoEventsData = get(story, ["enableSeoEventsData"], null);
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -496,6 +549,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   if (!isStructuredDataEmpty && enableBreadcrumbList) {
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
+  }
+
+  if(enableEventsData && pageType === "story-page" && enableStorySeoEventsData){
+    tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page") {
