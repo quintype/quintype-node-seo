@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.49.0](https://github.com/quintype/quintype-node-seo/compare/v1.48.1...v1.49.0) (2025-04-24)
+
+
+### Features
+
+* add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
+
 ### [1.48.1](https://github.com/quintype/quintype-node-seo/compare/v1.48.0...v1.48.1) (2024-12-17)
 
 
