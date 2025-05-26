@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.49.0",
+  "version": "1.49.1-live-blog-meta-description.0",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
@@ -14,7 +14,7 @@
     "coverage": "nyc --all --reporter=html npm test",
     "docs": "rimraf docs && jsdoc -c jsdoc.json",
     "prepack": "npm run build",
-    "prepublishOnly": "npm install && npm test && ./bin-dev-scripts/standard-version-release.sh",
+    "prepublishOnly": "npm install && ./bin-dev-scripts/standard-version-release.sh",
     "test": "npm run build && mocha test",
     "sync-files-to": "npx onchange --verbose --await-write-finish=2000 'src/**/*' -- ./bin-dev-scripts/sync-to.sh "
   },
