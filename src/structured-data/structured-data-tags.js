@@ -258,7 +258,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
   return {
     headline: story.headline,
-    description: story.seo["meta-description"] || story.summary || story.headline,
+    description: story?.seo?.["meta-description"] || story.summary || story.headline,
     author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
