@@ -258,7 +258,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
 
   return {
     headline: story.headline,
-    description: get(story, ["seo", "meta-description"]) || story.summary || story.headline,
+    description: story.summary || get(story, ["seo", "meta-description"]) || story.subheadline,
     author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
@@ -399,56 +399,56 @@ function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = 
   return getSchemaBreadcrumbList(breadcrumbsDataList);
 }
 
-function generateEventsSchema (story = {}, publisherConfig = {}) {
+function generateEventsSchema(story = {}, publisherConfig = {}) {
   const {
-    location = '',
-    startdate = '',
-    enddate = '',
-    mode = 'offline',
+    location = "",
+    startdate = "",
+    enddate = "",
+    mode = "offline",
     paidevent = false,
-    organizertype = 'Organization',
-    organizername = '',
-    organizeremail = '',
-    organizerurl = '',
-    organizertelephone = ''
-  } = story.eventDetails || {}
+    organizertype = "Organization",
+    organizername = "",
+    organizeremail = "",
+    organizerurl = "",
+    organizertelephone = "",
+  } = story.eventDetails || {};
   const eventMode = {
-    online: 'https://schema.org/OnlineEventAttendanceMode',
-    offline: 'https://schema.org/OfflineEventAttendanceMode',
-    mix: 'https://schema.org/MixedEventAttendanceMode'
-  }
-  const imageWidth = 1200
-  const imageHeight = 675
-  const image = imageUrl(publisherConfig, story['hero-image-s3-key'], imageWidth, imageHeight)
+    online: "https://schema.org/OnlineEventAttendanceMode",
+    offline: "https://schema.org/OfflineEventAttendanceMode",
+    mix: "https://schema.org/MixedEventAttendanceMode",
+  };
+  const imageWidth = 1200;
+  const imageHeight = 675;
+  const image = imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight);
   const organizerData = organizername
     ? {
         Organizer: Object.assign({}, getSchemaType(organizertype), {
           name: organizername,
           url: organizerurl,
           email: organizeremail,
-          telephone: organizertelephone
-        })
+          telephone: organizertelephone,
+        }),
       }
-    : {}
+    : {};
   const eventsData = Object.assign(
     {},
     getSchemaContext,
-    getSchemaType('Event'),
+    getSchemaType("Event"),
     {
       name: story.headline,
-      description: story.subheadline || '',
+      description: story.subheadline || "",
       url: story.url,
       image: image,
       startDate: startdate,
       endDate: enddate,
       eventAttendanceMode: eventMode[mode],
       isAccessibleForFree: paidevent,
-      eventStatus: 'https://schema.org/EventScheduled',
-      location: location
+      eventStatus: "https://schema.org/EventScheduled",
+      location: location,
     },
     organizerData
-  )
-  return eventsData
+  );
+  return eventsData;
 }
 
 /**
@@ -551,7 +551,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
   }
 
-  if(enableEventsData && pageType === "story-page" && enableStorySeoEventsData){
+  if (enableEventsData && pageType === "story-page" && enableStorySeoEventsData) {
     tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
 
