@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.49.1](https://github.com/quintype/quintype-node-seo/compare/v1.49.1-live-blog-meta-description.1...v1.49.1) (2025-07-01)
+
+
+### Bug Fixes
+
+* change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
+
 ## [1.49.0](https://github.com/quintype/quintype-node-seo/compare/v1.48.1...v1.49.0) (2025-04-24)
 
 
