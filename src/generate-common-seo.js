@@ -67,7 +67,7 @@ export function generateStructuredData(config = {}) {
       logo: generateImageObject(config),
       sameAs: socialLinks ? Object.values(socialLinks) : [],
     },
-    enableNewsArticle: !!enableStructuredDataForNewsArticle,
+    enableNewsArticle: enableStructuredDataForNewsArticle,
     storyUrlAsMainEntityUrl: !!enableStructuredDataForNewsArticle,
     enableVideo: !themeConfig["structured_data_enable_video"],
     enableLiveBlog: !themeConfig["structured_data_enable_live_blog"],
