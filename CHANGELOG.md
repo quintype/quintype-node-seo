@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.49.2](https://github.com/quintype/quintype-node-seo/compare/v1.49.1...v1.49.2) (2025-07-07)
+
+
+### Bug Fixes
+
+* support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
+
 ### [1.49.1](https://github.com/quintype/quintype-node-seo/compare/v1.49.1-live-blog-meta-description.1...v1.49.1) (2025-07-01)
 
 
