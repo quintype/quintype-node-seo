@@ -135,9 +135,9 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
 function generateArticleHeroImageData(image, publisherConfig = {}, imageMetadata = {}) {
   const imageWidth = 1200;
   const imageHeights = [675, 900, 1200];
-  const hasMetadata = imageMetadata && Object.keys(imageMetadata).length > 0;
+  const hasFocusPoint = get(imageMetadata, ["focus-point"], null);
 
-  const focusedImage = hasMetadata ? new FocusedImage(image, imageMetadata) : null;
+  const focusedImage = hasFocusPoint ? new FocusedImage(image, imageMetadata) : null;
 
   return imageHeights.map((height) => {
     let croppedImage = "";
@@ -152,9 +152,13 @@ function generateArticleHeroImageData(image, publisherConfig = {}, imageMetadata
         auto: "format,compress",
         fit: "crop",
       });
-      const [encodedSlug] = path.split("?");
-      const rectPropsImage = decodeURIComponent(path);
-      croppedImage = `${imageSrc}/${rectPropsImage}`;
+      croppedImage = `${imageSrc}/${path}`;
+      console.log("focusedImage ----------->>>", {
+        hasFocusPoint,
+        focusedImage,
+        path,
+        croppedImage,
+      });
     }
     const finalUrl = focusedImage ? croppedImage : imageUrl(publisherConfig, image, imageWidth, height);
     return Object.assign(
