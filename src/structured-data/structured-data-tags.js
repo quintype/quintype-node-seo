@@ -153,12 +153,6 @@ function generateArticleHeroImageData(image, publisherConfig = {}, imageMetadata
         fit: "crop",
       });
       croppedImage = `${imageSrc}/${path}`;
-      console.log("focusedImage ----------->>>", {
-        hasFocusPoint,
-        focusedImage,
-        path,
-        croppedImage,
-      });
     }
     const finalUrl = focusedImage ? croppedImage : imageUrl(publisherConfig, image, imageWidth, height);
     return Object.assign(
