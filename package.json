@@ -1,6 +1,6 @@
 {
   "name": "@quintype/seo",
-  "version": "1.49.2",
+  "version": "1.49.3-article-image-array-schema.2",
   "description": "SEO Modules for Quintype",
   "main": "dist/index.cjs.js",
   "repository": "https://github.com/quintype/quintype-node-seo",
