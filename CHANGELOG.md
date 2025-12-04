@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.50.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.50.0) (2025-12-04)
+
+
+### Features
+
+* add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
+* **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
+
+
+### Bug Fixes
+
+* change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
+* change meta description in liveblog structured data ([4185cf7](https://github.com/quintype/quintype-node-seo/commit/4185cf74422a478906a740037dc765b637d29e66))
+* change meta description in liveblog structured data ([2792ce8](https://github.com/quintype/quintype-node-seo/commit/2792ce849e7a97b12d614f563ff1ee64c084982f))
+* change meta description in liveblog structured data ([347a682](https://github.com/quintype/quintype-node-seo/commit/347a6825f06388d8e180642bee62e23535b3cae7))
+* change meta description in liveblog structured data ([944252e](https://github.com/quintype/quintype-node-seo/commit/944252ed1256bd70847894d2c5b46ea717727d78))
+* **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
+* support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
+
 ### [1.49.2](https://github.com/quintype/quintype-node-seo/compare/v1.49.1...v1.49.2) (2025-07-07)
 
 
