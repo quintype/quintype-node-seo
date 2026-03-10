@@ -124,7 +124,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
-      dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+      dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
       image: generateArticleHeroImageData(story["hero-image-s3-key"], publisherConfig, story["hero-image-metadata"]),
