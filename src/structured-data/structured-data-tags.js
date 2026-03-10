@@ -111,11 +111,14 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const metadata = get(story, ["metadata"], {});
   const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
   const inLanguage = get(publisherConfig, ["language", "iso-code"]);
+  const description =
+    get(story, ["seo", "meta-description"]) || get(story, ["subheadline"]) || get(story, ["headline"]);
 
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
     {
+      description,
       author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
       thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
@@ -257,7 +260,6 @@ function generateNewsArticleData(structuredData = {}, story = {}, publisherConfi
     {},
     {
       alternativeHeadline: alternative.home && alternative.home.default ? alternative.home.default.headline : "",
-      description: story.summary,
     },
     sponsor,
     isAccessibleForFree,
