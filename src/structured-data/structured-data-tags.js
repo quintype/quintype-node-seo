@@ -17,7 +17,7 @@ import {
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
-  return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
+  return Object.assign({}, getSchemaContext, getSchemaType(type), fields);
 }
 
 function ldJson(type, fields) {
@@ -110,6 +110,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   const metadata = get(story, ["metadata"], {});
   const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+  const inLanguage = get(publisherConfig, ["language", "iso-code"]);
 
   return Object.assign(
     {},
@@ -125,6 +126,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       name: (storyKeysPresence && story.headline) || "",
       image: generateArticleHeroImageData(story["hero-image-s3-key"], publisherConfig, story["hero-image-metadata"]),
     },
+    inLanguage && { inLanguage },
     isAccessibleForFree,
     sponsor,
     { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
