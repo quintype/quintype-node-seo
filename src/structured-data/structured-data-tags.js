@@ -300,7 +300,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
     author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
-    dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+    dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
     mainEntityOfPage,
     publisher,
 
