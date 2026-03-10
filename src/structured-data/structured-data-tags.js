@@ -43,7 +43,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
   const mainEntityUrl =
-    Object.keys(story).length > 0 && structuredData.storyUrlAsMainEntityUrl
+    Object.keys(story).length > 0
       ? storyUrl
       : get(structuredData, ["organization", "url"], "");
   const imageWidth = 1200;
