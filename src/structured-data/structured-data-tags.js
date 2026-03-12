@@ -1,4 +1,5 @@
 import get from "lodash/get";
+import { FocusedImage } from "quintype-js";
 import { getAllowedCards, getQueryParams, stripMillisecondsFromTime, stripQueryParams } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
@@ -122,13 +123,46 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
       dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence && story.headline) || "",
-      image: generateArticleImageData(story["hero-image-s3-key"], publisherConfig),
+      image: generateArticleHeroImageData(story["hero-image-s3-key"], publisherConfig, story["hero-image-metadata"]),
     },
     isAccessibleForFree,
     sponsor,
     { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
     articleSectionObj(story)
   );
+}
+
+function generateArticleHeroImageData(image, publisherConfig = {}, imageMetadata = {}) {
+  const imageWidth = 1200;
+  const imageHeights = [675, 900, 1200];
+  const hasFocusPoint = get(imageMetadata, ["focus-point"], null);
+
+  const focusedImage = hasFocusPoint ? new FocusedImage(image, imageMetadata) : null;
+
+  return imageHeights.map((height) => {
+    let croppedImage = "";
+    const imageSrc = /^https?.*/.test(publisherConfig["cdn-image"])
+      ? publisherConfig["cdn-image"]
+      : `https://${publisherConfig["cdn-image"]}`;
+
+    if (focusedImage) {
+      const path = focusedImage.path([imageWidth, height], {
+        w: imageWidth,
+        h: height,
+        auto: "format,compress",
+        fit: "crop",
+      });
+      croppedImage = `${imageSrc}/${path}`;
+    }
+    const finalUrl = focusedImage ? croppedImage : imageUrl(publisherConfig, image, imageWidth, height);
+    return Object.assign(
+      {
+        "@type": "ImageObject",
+        url: finalUrl,
+      },
+      getQueryParams(finalUrl)
+    );
+  });
 }
 
 function generateArticleImageData(image, publisherConfig = {}) {
