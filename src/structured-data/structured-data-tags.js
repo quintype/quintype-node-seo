@@ -43,7 +43,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
   const mainEntityUrl =
-    Object.keys(story).length > 0
+    Object.keys(story).length
       ? storyUrl
       : get(structuredData, ["organization", "url"], "");
   const imageWidth = 1200;
@@ -110,7 +110,7 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   const metadata = get(story, ["metadata"], {});
   const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
-  const inLanguage = get(publisherConfig, ["language", "iso-code"]);
+  const inLanguage = get(publisherConfig, ["language", "iso-code"], "");
   const description =
     get(story, ["seo", "meta-description"]) || get(story, ["subheadline"]) || get(story, ["headline"]);
 
