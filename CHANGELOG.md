@@ -2,73 +2,66 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.50.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.50.0) (2025-12-04)
+### [1.49.3-beta.0](https://github.com/quintype/quintype-node-seo/compare/v1.49.2...v1.49.3-beta.0) (2025-10-15)
 
+## [1.50.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.50.0) (2025-12-04)
 
 ### Features
 
-* add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
-* **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
-
+- add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
+- **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
 
 ### Bug Fixes
 
-* change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
-* change meta description in liveblog structured data ([4185cf7](https://github.com/quintype/quintype-node-seo/commit/4185cf74422a478906a740037dc765b637d29e66))
-* change meta description in liveblog structured data ([2792ce8](https://github.com/quintype/quintype-node-seo/commit/2792ce849e7a97b12d614f563ff1ee64c084982f))
-* change meta description in liveblog structured data ([347a682](https://github.com/quintype/quintype-node-seo/commit/347a6825f06388d8e180642bee62e23535b3cae7))
-* change meta description in liveblog structured data ([944252e](https://github.com/quintype/quintype-node-seo/commit/944252ed1256bd70847894d2c5b46ea717727d78))
-* **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
-* support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
+- change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
+- change meta description in liveblog structured data ([4185cf7](https://github.com/quintype/quintype-node-seo/commit/4185cf74422a478906a740037dc765b637d29e66))
+- change meta description in liveblog structured data ([2792ce8](https://github.com/quintype/quintype-node-seo/commit/2792ce849e7a97b12d614f563ff1ee64c084982f))
+- change meta description in liveblog structured data ([347a682](https://github.com/quintype/quintype-node-seo/commit/347a6825f06388d8e180642bee62e23535b3cae7))
+- change meta description in liveblog structured data ([944252e](https://github.com/quintype/quintype-node-seo/commit/944252ed1256bd70847894d2c5b46ea717727d78))
+- **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
+- support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
 
 ### [1.49.2](https://github.com/quintype/quintype-node-seo/compare/v1.49.1...v1.49.2) (2025-07-07)
 
-
 ### Bug Fixes
 
-* support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
+- support article schema when enableNewsArticle is not set to "withoutArticleSchema" value ([#569](https://github.com/quintype/quintype-node-seo/issues/569)) ([bfacda1](https://github.com/quintype/quintype-node-seo/commit/bfacda161f4d9b2e5d220acb1c3088081c0f04ec))
 
 ### [1.49.1](https://github.com/quintype/quintype-node-seo/compare/v1.49.1-live-blog-meta-description.1...v1.49.1) (2025-07-01)
 
-
 ### Bug Fixes
 
-* change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
+- change meta description in liveblog structured data ([0bafc42](https://github.com/quintype/quintype-node-seo/commit/0bafc42f3654dd5a588da8d944dcd59c9dd5162d))
 
 ## [1.49.0](https://github.com/quintype/quintype-node-seo/compare/v1.48.1...v1.49.0) (2025-04-24)
 
-
 ### Features
 
-* add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
+- add event schema support when eventDetails exist in story data ([#567](https://github.com/quintype/quintype-node-seo/issues/567)) ([941b86e](https://github.com/quintype/quintype-node-seo/commit/941b86eedd93845fd7a295341a75bd667c35fc85))
 
 ### [1.48.1](https://github.com/quintype/quintype-node-seo/compare/v1.48.0...v1.48.1) (2024-12-17)
 
-
 ### Bug Fixes
 
-* **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
+- **schema:** fix media gallery schema ([#566](https://github.com/quintype/quintype-node-seo/issues/566)) ([549bd12](https://github.com/quintype/quintype-node-seo/commit/549bd12c2b788acb0f2017c807368c9f242e5c2e))
 
 ## [1.48.0](https://github.com/quintype/quintype-node-seo/compare/v1.47.0...v1.48.0) (2024-12-11)
 
-
 ### Features
 
-* **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
+- **media-gallery:** add media gallery schema to visual stories ([#565](https://github.com/quintype/quintype-node-seo/issues/565)) ([34ded03](https://github.com/quintype/quintype-node-seo/commit/34ded036225af150d8085c6d108b5c8bbacece73))
 
 ## [1.47.0](https://github.com/quintype/quintype-node-seo/compare/v1.46.5...v1.47.0) (2024-10-30)
 
-
 ### Features
 
-* **sponsor schema:** update article and news article schema for sponsored stories ([#564](https://github.com/quintype/quintype-node-seo/issues/564)) ([ca2cf07](https://github.com/quintype/quintype-node-seo/commit/ca2cf07ed54d6b7508b4d21b1570f45f711b5dc2))
+- **sponsor schema:** update article and news article schema for sponsored stories ([#564](https://github.com/quintype/quintype-node-seo/issues/564)) ([ca2cf07](https://github.com/quintype/quintype-node-seo/commit/ca2cf07ed54d6b7508b4d21b1570f45f711b5dc2))
 
 ### [1.46.5](https://github.com/quintype/quintype-node-seo/compare/v1.46.4...v1.46.5) (2024-09-25)
 
-
 ### Bug Fixes
 
-* **Liveblog schema:** Remove duplicate keys for author and logo in schema ([#563](https://github.com/quintype/quintype-node-seo/issues/563)) ([9e417b9](https://github.com/quintype/quintype-node-seo/commit/9e417b9adf29e542417e2edb30c37be8ad5300a4))
+- **Liveblog schema:** Remove duplicate keys for author and logo in schema ([#563](https://github.com/quintype/quintype-node-seo/issues/563)) ([9e417b9](https://github.com/quintype/quintype-node-seo/commit/9e417b9adf29e542417e2edb30c37be8ad5300a4))
 
 ### [1.46.4](https://github.com/quintype/quintype-node-seo/compare/v1.46.3...v1.46.4) (2024-08-14)
 
@@ -80,22 +73,19 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.46.0](https://github.com/quintype/quintype-node-seo/compare/v1.44.1...v1.46.0) (2024-04-18)
 
-
 ### Features
 
-* **Default Collection:** Avail Canonical Url field for Default Collections ([#556](https://github.com/quintype/quintype-node-seo/issues/556)) ([3224d52](https://github.com/quintype/quintype-node-seo/commit/3224d52eb154c37238604681c5aac3fd1033a318))
-
+- **Default Collection:** Avail Canonical Url field for Default Collections ([#556](https://github.com/quintype/quintype-node-seo/issues/556)) ([3224d52](https://github.com/quintype/quintype-node-seo/commit/3224d52eb154c37238604681c5aac3fd1033a318))
 
 ### Bug Fixes
 
-* **structure data:** remove paywall content for free story ([#557](https://github.com/quintype/quintype-node-seo/issues/557)) ([e2104f8](https://github.com/quintype/quintype-node-seo/commit/e2104f80223582d17e9702349b6193d1f4a5980a))
+- **structure data:** remove paywall content for free story ([#557](https://github.com/quintype/quintype-node-seo/issues/557)) ([e2104f8](https://github.com/quintype/quintype-node-seo/commit/e2104f80223582d17e9702349b6193d1f4a5980a))
 
 ## [1.45.0](https://github.com/quintype/quintype-node-seo/compare/v1.44.1...v1.45.0) (2024-03-20)
 
-
 ### Features
 
-* **Default Collection:** Avail Canonical Url field for Default Collections ([#556](https://github.com/quintype/quintype-node-seo/issues/556)) ([3224d52](https://github.com/quintype/quintype-node-seo/commit/3224d52eb154c37238604681c5aac3fd1033a318))
+- **Default Collection:** Avail Canonical Url field for Default Collections ([#556](https://github.com/quintype/quintype-node-seo/issues/556)) ([3224d52](https://github.com/quintype/quintype-node-seo/commit/3224d52eb154c37238604681c5aac3fd1033a318))
 
 ### [1.44.1](https://github.com/quintype/quintype-node-seo/compare/v1.44.0...v1.44.1) (2024-01-04)
 
@@ -105,49 +95,43 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.43.0-disable-amp-story.0](https://github.com/quintype/quintype-node-seo/compare/v1.42.2...v1.43.0-disable-amp-story.0) (2023-11-22)
 
-
 ### Features
 
-* disable amp for a particular story ([6b5a76d](https://github.com/quintype/quintype-node-seo/commit/6b5a76da754bf2cbabd9a8d0787095366bf18609))
+- disable amp for a particular story ([6b5a76d](https://github.com/quintype/quintype-node-seo/commit/6b5a76da754bf2cbabd9a8d0787095366bf18609))
 
 ## [1.43.0](https://github.com/quintype/quintype-node-seo/compare/v1.43.0-config-amp-story-path.1...v1.43.0) (2023-12-01)
 
 ### [1.42.2](https://github.com/quintype/quintype-node-seo/compare/v1.42.1...v1.42.2) (2023-07-06)
 
-
 ### Bug Fixes
 
-* Add fallback for watermark image ([#547](https://github.com/quintype/quintype-node-seo/issues/547)) ([f59206d](https://github.com/quintype/quintype-node-seo/commit/f59206d34e24e8e1c0c22d7e4baaa8544291ee4e))
+- Add fallback for watermark image ([#547](https://github.com/quintype/quintype-node-seo/issues/547)) ([f59206d](https://github.com/quintype/quintype-node-seo/commit/f59206d34e24e8e1c0c22d7e4baaa8544291ee4e))
 
 ### [1.42.1](https://github.com/quintype/quintype-node-seo/compare/v1.42.0...v1.42.1) (2023-04-06)
 
 ## [1.42.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.10...v1.42.0) (2023-04-06)
 
-
 ### Features
 
-* **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
-
+- **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
 
 ### Bug Fixes
 
-* **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
-* **dates:**  update  datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
-* **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
-* **live-blog:** Support articleBody in BlogPosting schema ([#532](https://github.com/quintype/quintype-node-seo/issues/532)) ([4389509](https://github.com/quintype/quintype-node-seo/commit/43895094aa2d7c1cafb347a539ad70a16b06727e))
+- **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
+- **dates:** update datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
+- **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
+- **live-blog:** Support articleBody in BlogPosting schema ([#532](https://github.com/quintype/quintype-node-seo/issues/532)) ([4389509](https://github.com/quintype/quintype-node-seo/commit/43895094aa2d7c1cafb347a539ad70a16b06727e))
 
 ## [1.42.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.13...v1.42.0) (2023-04-03)
 
-
 ### Features
 
-* **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
-
+- **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
 
 ### Bug Fixes
 
-* **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
-* **dates:**  update  datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
+- **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
+- **dates:** update datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
 
 ### [1.41.4](https://github.com/quintype/quintype-node-seo/compare/v1.41.4-gsc-errors-fix.0...v1.41.4) (2022-12-12)
 
@@ -159,92 +143,81 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.41.0](https://github.com/quintype/quintype-node-seo/compare/v1.40.15...v1.41.0) (2022-11-29)
 
-
 ### Features
 
-* **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
-
+- **canonical:** Add canonical url toggle ([#539](https://github.com/quintype/quintype-node-seo/issues/539)) ([3c18124](https://github.com/quintype/quintype-node-seo/commit/3c181249b7adb06061a8a4c16aa71b640b21679c))
 
 ### Bug Fixes
 
-* **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
+- **canonical:** Toggle canonical tags ([1f8a4fe](https://github.com/quintype/quintype-node-seo/commit/1f8a4fe0955688080095275290dabe79dc6344d6))
 
 ### [1.40.15](https://github.com/quintype/quintype-node-seo/compare/v1.40.14...v1.40.15) (2022-11-17)
 
 ### [1.40.14](https://github.com/quintype/quintype-node-seo/compare/v1.40.11...v1.40.14) (2022-11-16)
 
-
 ### Bug Fixes
 
-* **dates:**  update  datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
-* **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
+- **dates:** update datePublished ([#537](https://github.com/quintype/quintype-node-seo/issues/537)) ([b81f1ae](https://github.com/quintype/quintype-node-seo/commit/b81f1aeef63937673f376203a8d7a45b7a0de2b3))
+- **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
 
 ### [1.40.13](https://github.com/quintype/quintype-node-seo/compare/v1.40.12...v1.40.13) (2022-10-27)
 
 ### [1.40.12](https://github.com/quintype/quintype-node-seo/compare/v1.40.11...v1.40.12) (2022-10-19)
 
-
 ### Bug Fixes
 
-* **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
+- **discover-meta:** Add max image meta tag to story pages ([e96fa17](https://github.com/quintype/quintype-node-seo/commit/e96fa17637e2a625aa39601d2ace8ad2ea46d786))
 
 ### [1.40.11](https://github.com/quintype/quintype-node-seo/compare/v1.40.8...v1.40.11) (2022-09-06)
 
-
 ### Bug Fixes
 
-* **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
-* **live-blog:** Support articleBody in BlogPosting schema ([#532](https://github.com/quintype/quintype-node-seo/issues/532)) ([4389509](https://github.com/quintype/quintype-node-seo/commit/43895094aa2d7c1cafb347a539ad70a16b06727e))
+- **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
+- **live-blog:** Support articleBody in BlogPosting schema ([#532](https://github.com/quintype/quintype-node-seo/issues/532)) ([4389509](https://github.com/quintype/quintype-node-seo/commit/43895094aa2d7c1cafb347a539ad70a16b06727e))
 
 ### [1.40.10](https://github.com/quintype/quintype-node-seo/compare/v1.40.5...v1.40.10) (2022-07-29)
 
-
 ### Bug Fixes
 
-* Amphtml error  ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
-* **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
-* **video-structured-data:** use correct embed url ([#528](https://github.com/quintype/quintype-node-seo/issues/528)) ([abe449f](https://github.com/quintype/quintype-node-seo/commit/abe449fd7e75d45f9b9896444f3ef644ca2cf497))
+- Amphtml error ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
+- **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
+- **video-structured-data:** use correct embed url ([#528](https://github.com/quintype/quintype-node-seo/issues/528)) ([abe449f](https://github.com/quintype/quintype-node-seo/commit/abe449fd7e75d45f9b9896444f3ef644ca2cf497))
 
 ### [1.40.9](https://github.com/quintype/quintype-node-seo/compare/v1.40.8...v1.40.9) (2022-07-12)
 
-
 ### Bug Fixes
 
-* **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
+- **embed-url:** use fallback when story elements are not there ([#530](https://github.com/quintype/quintype-node-seo/issues/530)) ([cf9ab06](https://github.com/quintype/quintype-node-seo/commit/cf9ab06d022a1b2d4c3d6843adcea32606712669))
 
 ### [1.40.8](https://github.com/quintype/quintype-node-seo/compare/v1.40.5...v1.40.8) (2022-07-11)
 
-
 ### Bug Fixes
 
-* Amphtml error  ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
-* **video-structured-data:** use correct embed url ([#528](https://github.com/quintype/quintype-node-seo/issues/528)) ([abe449f](https://github.com/quintype/quintype-node-seo/commit/abe449fd7e75d45f9b9896444f3ef644ca2cf497))
+- Amphtml error ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
+- **video-structured-data:** use correct embed url ([#528](https://github.com/quintype/quintype-node-seo/issues/528)) ([abe449f](https://github.com/quintype/quintype-node-seo/commit/abe449fd7e75d45f9b9896444f3ef644ca2cf497))
 
 ### [1.40.7](https://github.com/quintype/quintype-node-seo/compare/v1.40.6...v1.40.7) (2022-07-11)
 
-
 ### Bug Fixes
 
-* Amphtml error  ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
+- Amphtml error ([#526](https://github.com/quintype/quintype-node-seo/issues/526)) ([24b6c61](https://github.com/quintype/quintype-node-seo/commit/24b6c616118f3db1a2cdda0d98d2827bf2a0d099))
 
 ### [1.40.6](https://github.com/quintype/quintype-node-seo/compare/v1.40.5...v1.40.6) (2022-07-11)
 
 ### [1.40.5](https://github.com/quintype/quintype-node-seo/compare/v1.40.1...v1.40.5) (2022-06-30)
 
-
 ### Bug Fixes
 
-* og image for stories with no image | fallback og image ([454aef9](https://github.com/quintype/quintype-node-seo/commit/454aef9e0a1bc5acfde1aa56d223c518255376a2))
-* Update image schema ([#522](https://github.com/quintype/quintype-node-seo/issues/522)) ([5e42cdc](https://github.com/quintype/quintype-node-seo/commit/5e42cdcbb14d587251b7a3f932a4f98dd358f188))
+- og image for stories with no image | fallback og image ([454aef9](https://github.com/quintype/quintype-node-seo/commit/454aef9e0a1bc5acfde1aa56d223c518255376a2))
+- Update image schema ([#522](https://github.com/quintype/quintype-node-seo/issues/522)) ([5e42cdc](https://github.com/quintype/quintype-node-seo/commit/5e42cdcbb14d587251b7a3f932a4f98dd358f188))
 
 ### [1.40.4](https://github.com/quintype/quintype-node-seo/compare/v1.40.4-amptag.0...v1.40.4) (2022-03-22)
 
 ### [1.40.3](https://github.com/quintype/quintype-node-seo/compare/v1.40.2...v1.40.3) (2022-02-23)
 
-
 ### Bug Fixes
 
-* Update image schema ([#522](https://github.com/quintype/quintype-node-seo/issues/522)) ([5e42cdc](https://github.com/quintype/quintype-node-seo/commit/5e42cdcbb14d587251b7a3f932a4f98dd358f188))
+- Update image schema ([#522](https://github.com/quintype/quintype-node-seo/issues/522)) ([5e42cdc](https://github.com/quintype/quintype-node-seo/commit/5e42cdcbb14d587251b7a3f932a4f98dd358f188))
 
 ### [1.40.2](https://github.com/quintype/quintype-node-seo/compare/v1.40.2-ogImgFix.0...v1.40.2) (2022-02-11)
 
@@ -252,82 +225,71 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.40.0](https://github.com/quintype/quintype-node-seo/compare/v1.38.37-fix-canonical-url.0...v1.40.0) (2021-12-16)
 
-
 ### Features
 
-* generate subscription based schema for news article ([#515](https://github.com/quintype/quintype-node-seo/issues/515)) ([39b2bad](https://github.com/quintype/quintype-node-seo/commit/39b2badaaa156ed6f01e8552e0d1f120b15361c0))
-* **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
-* **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡  ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
-
+- generate subscription based schema for news article ([#515](https://github.com/quintype/quintype-node-seo/issues/515)) ([39b2bad](https://github.com/quintype/quintype-node-seo/commit/39b2badaaa156ed6f01e8552e0d1f120b15361c0))
+- **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
+- **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡ ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
 
 ### Bug Fixes
 
-* **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
+- **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
 
 ## [1.39.0](https://github.com/quintype/quintype-node-seo/compare/v1.38.36...v1.39.0) (2021-08-23)
 
-
 ### Features
 
-* generate subscription based schema for news article ([#515](https://github.com/quintype/quintype-node-seo/issues/515)) ([39b2bad](https://github.com/quintype/quintype-node-seo/commit/39b2badaaa156ed6f01e8552e0d1f120b15361c0))
-* **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
-* **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡  ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
-
+- generate subscription based schema for news article ([#515](https://github.com/quintype/quintype-node-seo/issues/515)) ([39b2bad](https://github.com/quintype/quintype-node-seo/commit/39b2badaaa156ed6f01e8552e0d1f120b15361c0))
+- **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
+- **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡ ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
 
 ### Bug Fixes
 
-* **canonical:** remove canonical url for shell pages ([66cdebf](https://github.com/quintype/quintype-node-seo/commit/66cdebfb8f910adefa16d31d53f7e7473a06be4e))
-* **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
+- **canonical:** remove canonical url for shell pages ([66cdebf](https://github.com/quintype/quintype-node-seo/commit/66cdebfb8f910adefa16d31d53f7e7473a06be4e))
+- **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
 
 ### [1.38.41](https://github.com/quintype/quintype-node-seo/compare/v1.38.41-news-article-schema.1...v1.38.41) (2021-08-17)
 
 ### [1.38.40](https://github.com/quintype/quintype-node-seo/compare/v1.38.39...v1.38.40) (2021-07-28)
 
-
 ### Features
 
-* **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡  ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
+- **Structure data tool testing:** Add support for testing structure data with all necessary schemas ⚡ ([#507](https://github.com/quintype/quintype-node-seo/issues/507)) ([aeea32a](https://github.com/quintype/quintype-node-seo/commit/aeea32a994bf4cf64cdf538d2ec3d785203b3817))
 
 ### [1.38.39](https://github.com/quintype/quintype-node-seo/compare/v1.38.38...v1.38.39) (2021-07-27)
 
-
 ### Bug Fixes
 
-* **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
+- **pickImage:** image is undefined of pickImage ([#508](https://github.com/quintype/quintype-node-seo/issues/508)) ([fecc8be](https://github.com/quintype/quintype-node-seo/commit/fecc8be44c86220456a511a89d197b52d60875c6))
 
 ### [1.38.38](https://github.com/quintype/quintype-node-seo/compare/v1.38.37...v1.38.38) (2021-07-26)
 
-
 ### Features
 
-* **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
+- **ImageTags:** Added support for og:image:alt and twitter:image:alt ([#501](https://github.com/quintype/quintype-node-seo/issues/501)) ([3d271ab](https://github.com/quintype/quintype-node-seo/commit/3d271ab21e009e0520ce1e6949bb1c8d32eeefa1))
 
 ### [1.38.37](https://github.com/quintype/quintype-node-seo/compare/v1.38.37-fix-canonical-url.0...v1.38.37) (2021-07-15)
 
 ### [1.38.36](https://github.com/quintype/quintype-node-seo/compare/v1.38.35...v1.38.36) (2021-06-17)
 
-
 ### Bug Fixes
 
-* update node version in circle ci config ([#470](https://github.com/quintype/quintype-node-seo/issues/470)) ([accecd1](https://github.com/quintype/quintype-node-seo/commit/accecd1144804d57488d11fd27d396fdf8a3a83f))
+- update node version in circle ci config ([#470](https://github.com/quintype/quintype-node-seo/issues/470)) ([accecd1](https://github.com/quintype/quintype-node-seo/commit/accecd1144804d57488d11fd27d396fdf8a3a83f))
 
 ### [1.38.35](https://github.com/quintype/quintype-node-seo/compare/v1.38.34...v1.38.35) (2021-06-17)
 
-
 ### Bug Fixes
 
-* standardize-linter to avoid lint issue ([#469](https://github.com/quintype/quintype-node-seo/issues/469)) ([a14085b](https://github.com/quintype/quintype-node-seo/commit/a14085bc1ffd3966b77d5329dd82674cd2a7461e))
+- standardize-linter to avoid lint issue ([#469](https://github.com/quintype/quintype-node-seo/issues/469)) ([a14085b](https://github.com/quintype/quintype-node-seo/commit/a14085bc1ffd3966b77d5329dd82674cd2a7461e))
 
 ### [1.38.34](https://github.com/quintype/quintype-node-seo/compare/v1.38.32...v1.38.34) (2021-06-17)
 
-
 ### Bug Fixes
 
-* downgrade standard-release ([ff386ae](https://github.com/quintype/quintype-node-seo/commit/ff386ae712b91423ec60dacf6cffa7a4a814f613))
+- downgrade standard-release ([ff386ae](https://github.com/quintype/quintype-node-seo/commit/ff386ae712b91423ec60dacf6cffa7a4a814f613))
 
 ### [1.38.31](https://github.com/quintype/quintype-node-seo/compare/v1.38.33...v1.38.31) (2021-06-16)
 
-
 ### Bug Fixes
 
-* downgrade standard-release ([ff386ae](https://github.com/quintype/quintype-node-seo/commit/ff386ae712b91423ec60dacf6cffa7a4a814f613))
+- downgrade standard-release ([ff386ae](https://github.com/quintype/quintype-node-seo/commit/ff386ae712b91423ec60dacf6cffa7a4a814f613))
