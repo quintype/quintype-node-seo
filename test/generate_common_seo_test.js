@@ -117,9 +117,7 @@ describe("Seo Helpers", function () {
           name: "abc",
           url: "abc.com",
           logo: {
-            "@context": "http://schema.org",
             "@type": "ImageObject",
-            author: "abc",
             contentUrl: "https://quintype.com/abc.png?w=300&h=300",
             url: "https://quintype.com/abc.png?w=300&h=300",
             name: "logo",
@@ -178,9 +176,7 @@ describe("Seo Helpers", function () {
           name: "abc",
           url: "abc.com",
           logo: {
-            "@context": "http://schema.org",
             "@type": "ImageObject",
-            author: "abc",
             contentUrl: "https://quintype.com/abc.png?w=300&h=300",
             url: "https://quintype.com/abc.png?w=300&h=300",
             name: "logo",
@@ -240,9 +236,7 @@ describe("Seo Helpers", function () {
           name: "abc",
           url: "abc.com",
           logo: {
-            "@context": "http://schema.org",
             "@type": "ImageObject",
-            author: "Abc",
             contentUrl: "https://quintype.com/abc.png",
             url: "https://quintype.com/abc.png",
             name: "logo",
