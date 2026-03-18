@@ -112,7 +112,7 @@ import {
 } from "./schema";
 
 function getLdJsonFields(type, fields) {
-  return Object.assign({}, fields, getSchemaType(type), getSchemaContext);
+  return Object.assign({}, getSchemaContext, getSchemaType(type), fields);
 }
 
 function ldJson(type, fields) {
@@ -138,7 +138,7 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
   const mainEntityUrl =
-    Object.keys(story).length > 0 &amp;&amp; structuredData.storyUrlAsMainEntityUrl
+    Object.keys(story).length
       ? storyUrl
       : get(structuredData, ["organization", "url"], "");
   const imageWidth = 1200;
@@ -205,21 +205,26 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const isAccessibleForFree = storyAccessType ? {} : { isAccessibleForFree: storyAccessType };
   const metadata = get(story, ["metadata"], {});
   const sponsor = metadata.hasOwnProperty("sponsored-by") ? { sponsor: { name: metadata["sponsored-by"] } } : {};
+  const inLanguage = get(publisherConfig, ["language", "iso-code"], "");
+  const description =
+    get(story, ["seo", "meta-description"]) || get(story, ["subheadline"]) || get(story, ["headline"]);
 
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
     {
+      description,
       author: authorData(authors, authorSchema, publisherConfig),
       keywords: metaKeywords.join(","),
       thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
       articleBody: (storyKeysPresence &amp;&amp; getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
-      dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+      dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
       name: (storyKeysPresence &amp;&amp; story.headline) || "",
       image: generateArticleHeroImageData(story["hero-image-s3-key"], publisherConfig, story["hero-image-metadata"]),
     },
+    inLanguage &amp;&amp; { inLanguage },
     isAccessibleForFree,
     sponsor,
     { isPartOf: generateIsPartOfDataForArticle(story, publisherConfig) },
@@ -350,7 +355,6 @@ function generateNewsArticleData(structuredData = {}, story = {}, publisherConfi
     {},
     {
       alternativeHeadline: alternative.home &amp;&amp; alternative.home.default ? alternative.home.default.headline : "",
-      description: story.summary,
     },
     sponsor,
     isAccessibleForFree,
@@ -391,7 +395,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
     author: authorData(story.authors, authorSchema, publisherConfig),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
-    dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
+    dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
     mainEntityOfPage,
     publisher,
 
