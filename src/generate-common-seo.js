@@ -33,9 +33,7 @@ export function generateStaticData(config) {
 export function generateImageObject(config = {}) {
   const { "theme-attributes": themeConfig = {} } = config;
   return {
-    "@context": "http://schema.org",
     "@type": "ImageObject",
-    author: config["publisher-name"],
     contentUrl: themeConfig.logo,
     url: themeConfig.logo,
     name: "logo",
