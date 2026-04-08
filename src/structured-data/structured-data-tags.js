@@ -560,6 +560,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const structuredDataTags = get(structuredData, ["structuredDataTags"], []);
   const enableEventsData = get(structuredData, ["enableEventsData"], null);
   const enableStorySeoEventsData = get(story, ["enableSeoEventsData"], null);
+  const enableAffiliateMarketing = get(structuredData, ["enableAffiliateMarketing"], false);
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -592,6 +593,13 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+  }
+
+  if (enableAffiliateMarketing && !isStructuredDataEmpty && pageType === "story-page" && story["story-template"] === "affiliate-marketing") {
+    const affiliateProductTags = generateAffiliateProductData();
+    if (affiliateProductTags) {
+      affiliateProductTags.forEach((tag) => tags.push(tag));
+    }
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
@@ -694,6 +702,48 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
       hasPart: { "@type": "ImageGallery", associatedMedia: galleryItems },
     });
     return ldJson("MediaGallery", schema);
+  }
+
+  function generateAffiliateProductData() {
+    const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
+    const authorName = get(story, ["authors", 0, "name"]) || story["author-name"] || "";
+    const datePublished = stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone);
+    const cards = get(story, ["cards"], []);
+
+    const products = cards.reduce((acc, card) => {
+      const elements = get(card, ["story-elements"], []);
+      const titleEl = elements.find((el) => el.type === "title");
+      if (!titleEl) return acc;
+
+      const name = getPlainText(titleEl.text || titleEl.title || "");
+      if (!name) return acc;
+
+      const imageEl = elements.find((el) => el.type === "image");
+      const ctaEl = elements.find((el) => el.type === "text" && el.subtype === "cta");
+      const textEl = elements.find((el) => el.type === "text" && el.subtype !== "cta");
+      const reviewBody = getPlainText(get(textEl, ["text"], ""));
+      const ctaUrl = get(ctaEl, ["metadata", "cta-url"]);
+
+      const product = {
+        name,
+        url: ctaUrl || `${storyUrl}#${card.id}`,
+        review: {
+          "@type": "Review",
+          author: getSchemaPerson(authorName),
+          reviewBody,
+          datePublished,
+        },
+      };
+
+      if (imageEl && imageEl["image-s3-key"]) {
+        product.image = imageUrl(publisherConfig, imageEl["image-s3-key"]);
+      }
+
+      acc.push(ldJson("Product", product));
+      return acc;
+    }, []);
+
+    return products.length ? products : null;
   }
 
   // All Pages have: Publisher, Site
