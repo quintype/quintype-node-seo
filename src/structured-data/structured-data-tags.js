@@ -602,7 +602,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (enableAffiliateMarketing && !isStructuredDataEmpty && pageType === "story-page" && story["story-template"] === "affiliate-marketing") {
     const affiliateProductTags = generateAffiliateProductData();
     if (affiliateProductTags) {
-      affiliateProductTags.forEach((tag) => tags.push(tag));
+      tags.push(...affiliateProductTags);
     }
   }
 
@@ -716,15 +716,19 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
     const products = cards.reduce((acc, card) => {
       const elements = get(card, ["story-elements"], []);
-      const titleEl = elements.find((el) => el.type === "title");
+      let titleEl, imageEl, ctaEl, textEl;
+      for (const el of elements) {
+        if (!titleEl && el.type === "title") titleEl = el;
+        else if (!imageEl && el.type === "image") imageEl = el;
+        else if (!ctaEl && el.type === "text" && el.subtype === "cta") ctaEl = el;
+        else if (!textEl && el.type === "text" && el.subtype !== "cta") textEl = el;
+      }
+
       if (!titleEl) return acc;
 
       const name = getPlainText(titleEl.text || titleEl.title || "");
       if (!name) return acc;
 
-      const imageEl = elements.find((el) => el.type === "image");
-      const ctaEl = elements.find((el) => el.type === "text" && el.subtype === "cta");
-      const textEl = elements.find((el) => el.type === "text" && el.subtype !== "cta");
       const reviewBody = getPlainText(get(textEl, ["text"], ""));
       const ctaUrl = get(ctaEl, ["metadata", "cta-url"]);
 
