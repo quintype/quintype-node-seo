@@ -724,10 +724,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
         else if (!textEl && el.type === "text" && el.subtype !== "cta") textEl = el;
       }
 
-      if (!titleEl) return acc;
+      if (!titleEl && !imageEl && !ctaEl) return acc;
 
-      const name = getPlainText(titleEl.text || titleEl.title || "");
-      if (!name) return acc;
+      const name = titleEl ? getPlainText(titleEl.text || titleEl.title || "") : "";
 
       const reviewBody = getPlainText(get(textEl, ["text"], ""));
       const ctaUrl = get(ctaEl, ["metadata", "cta-url"]);
