@@ -1303,6 +1303,51 @@ describe("StructuredDataTags", function () {
     });
   });
 
+  describe("movie review structured data", function () {
+    it("emits Review schema for movie-review template using metadata fields", function () {
+      const movieReviewStory = sampleStoryData("movie-review", [], sampleAuthorsData(), null, {
+        metadata: {
+          director: "Rishabh",
+          cast: "Rishab, Rakshith",
+          duration: "2:30 Hours",
+          moviepublishedon: "2026-02-15",
+          language: "kn",
+          "review-title": "Kantara",
+          "review-rating": {
+            label: "4.5",
+            value: "4.5",
+          },
+          moviename: "Kantara",
+        },
+      });
+      movieReviewStory.data.timezone = "UTC";
+
+      const storyPageTags = getSeoMetadata(getSeoConfig(), {}, "story-page", movieReviewStory, {
+        url: url.parse("/"),
+      });
+
+      const ampPageTags = getSeoMetadata(getSeoConfig(), {}, "story-page-amp", movieReviewStory, {
+        url: url.parse("/"),
+      });
+
+      assertContains('"@type":"Review"', storyPageTags);
+      assertContains('"name":"Kantara"', storyPageTags);
+      assertContains('"inLanguage":"kn"', storyPageTags);
+      assertContains('"reviewRating":{"@type":"Rating","ratingValue":"4.5"}', storyPageTags);
+      assertContains('"itemReviewed":{"@type":"Movie","name":"Kantara"', storyPageTags);
+      assertContains('"datePublished":"2026-02-15T00:00:00+00:00"', storyPageTags);
+      assertContains('"duration":[{"@type":"QuantitativeValue","value":"2:30 Hours"}]', storyPageTags);
+      assertContains('"author":{"@type":"Person","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
+      assertContains('"actor":[{"@type":"Person","name":"Rishab"},{"@type":"Person","name":"Rakshith"}]', storyPageTags);
+      assertContains('"director":{"@type":"Person","name":"Rishabh"}', storyPageTags);
+      assertContains('"publisher":{"@type":"Organization","name":"Quintype","sameAs":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"}', storyPageTags);
+      assertDoesNotContains('"@type":"Article"', storyPageTags);
+
+      assertContains('"@type":"Review"', ampPageTags);
+      assertDoesNotContains('"@type":"Article"', ampPageTags);
+    });
+  });
+
   context("Structured DataTags for Entity", function () {
     it("generate Structured DataTags for Movie Entities", function () {
       const movieEntity = {
