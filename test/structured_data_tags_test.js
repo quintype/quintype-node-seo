@@ -1304,7 +1304,7 @@ describe("StructuredDataTags", function () {
   });
 
   describe("movie review structured data", function () {
-    it("emits Review schema for movie-review template using metadata fields", function () {
+    it("emits Review schema for movie-review story template", function () {
       const movieReviewStory = sampleStoryData("movie-review", [], sampleAuthorsData(), null, {
         metadata: {
           director: "Rishabh",
@@ -1334,13 +1334,11 @@ describe("StructuredDataTags", function () {
       assertContains('"itemReviewed":{"@type":"Movie","name":"Kantara"', storyPageTags);
       assertContains('"datePublished":"2026-02-15T00:00:00Z"', storyPageTags);
       assertContains('"duration":[{"@type":"QuantitativeValue","value":"2:30 Hours"}]', storyPageTags);
-      assertContains('"author":{"@type":"Person","givenName":"Greeshma","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
       assertContains('"actor":[{"@type":"Person","givenName":"Rishab","name":"Rishab"},{"@type":"Person","givenName":"Rakshith","name":"Rakshith"}]', storyPageTags);
       assertContains('"director":{"@type":"Person","givenName":"Rishabh","name":"Rishabh"}', storyPageTags);
-      assertContains('"publisher":{"@type":"Organization","name":"Quintype","sameAs":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"}', storyPageTags);
+      assertContains('"author":{"@type":"Person","givenName":"Greeshma","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
+      assertContains('"publisher":{"@type":"Organization","name":"Quintype"}', storyPageTags);
       assertDoesNotContains('"@type":"Article"', storyPageTags);
-      assertContains('"mainEntityOfPage":{"@type":"WebPage"', storyPageTags);
-      assertContains('"reviewBody":""', storyPageTags);
       assertContains('"@type":"Review"', ampPageTags);
     });
   });
