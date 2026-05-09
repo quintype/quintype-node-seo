@@ -392,7 +392,7 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
   const storyKeysPresence = Object.keys(story).length > 0;
   const authors = authorData(storyAuthors, authorSchema, publisherConfig);
   const storyHeadline = get(story, ["headline"]) || "";
-  const storyDescription = get(story, ["subheadline"])  || "";
+  const storySubheadline = get(story, ["subheadline"])  || "";
   const metadata = get(story, ["metadata"], {});
   const inLanguage = get(metadata, ["language"], "");
   const movieName = get(metadata, ["moviename"], "") || "";
@@ -440,11 +440,11 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
 
   return Object.assign(
     {},
-    generateCommonData(structuredData, story, publisherConfig, timezone),
     {
       name: movieName,
       headline: storyHeadline,
-      description: storyDescription,
+      description: storySubheadline,
+      image: movieImage,
       reviewBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
       url: storyUrl,
       datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
