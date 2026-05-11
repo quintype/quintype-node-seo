@@ -391,18 +391,19 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
   const storyAuthors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
   const storyKeysPresence = Object.keys(story).length > 0;
   const authors = authorData(storyAuthors, authorSchema, publisherConfig);
-  const storyHeadline = get(story, ["headline"]) || "";
-  const storySubheadline = get(story, ["subheadline"])  || "";
+  const storyHeadline = get(story, ["headline"], "");
+  const storySubheadline = get(story, ["subheadline"], "");
   const metadata = get(story, ["metadata"], {});
   const inLanguage = get(metadata, ["language"], "");
-  const movieName = get(metadata, ["moviename"], "") || "";
+  const movieName = get(metadata, ["movie-name"], "");
   const director = get(metadata, ["director"], "");
+  const screenWriter = get(metadata, ["screen-writer"], "");
+  const screenwriters = parseCommaSeparatedValues(screenWriter).map((name) => getSchemaPerson(name));
   const actor = parseCommaSeparatedValues(get(metadata, ["cast"], "")).map((name) => getSchemaPerson(name));
   const movieDuration = get(metadata, ["duration"], "");
   const ratingValue = get(metadata, ["review-rating"], "");
-  const moviePublishedOnRaw = get(metadata, ["moviepublishedon"], "");
+  const moviePublishedOnRaw = get(metadata, ["published-on"], "");
   const moviePublishedOn = stripMillisecondsFromTime(new Date(moviePublishedOnRaw), timezone)
-
   const movieImage = imageUrl(publisherConfig, story["hero-image-s3-key"], 1200, 675);
   const organizationName = get(structuredData, ["organization", "name"], publisherConfig["publisher-name"]);
   const organizationUrl = get(structuredData, ["organization", "url"], publisherConfig["sketches-host"]);
@@ -435,7 +436,8 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
       ],
     },
     actor.length > 0 && { actor },
-    director && { director: getSchemaPerson(director) }
+    director && { director: getSchemaPerson(director) },
+    screenwriters.length > 0 && { author: screenwriters }
   );
 
   return Object.assign(
@@ -684,6 +686,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
+      tags.push(ldJson("Article", articleData));
+    }
   }
 
   if (enableAffiliateMarketing && !isStructuredDataEmpty && pageType === "story-page" && story["story-template"] === "affiliate-marketing") {
@@ -696,6 +701,11 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+
+    if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
+      tags.push(ldJson("Article", articleData));
+    }
+
     if (story["story-template"] === "visual-story") {
       tags.push(visualStorySchema());
     }

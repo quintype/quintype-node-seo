@@ -1308,13 +1308,14 @@ describe("StructuredDataTags", function () {
       const movieReviewStory = sampleStoryData("movie-review", [], sampleAuthorsData(), null, {
         metadata: {
           director: "Rishabh",
+          "screen-writer": "Writer One, Writer Two",
           cast: "Rishab, Rakshith",
           duration: "2:30 Hours",
-          moviepublishedon: "2026-02-15",
+          "published-on": "2026-02-15",
           language: "kn",
           "review-title": "Kantara",
           "review-rating": "4.5",
-          moviename: "Kantara",
+          "movie-name": "Kantara",
         },
       });
       movieReviewStory.data.timezone = "UTC";
@@ -1336,10 +1337,12 @@ describe("StructuredDataTags", function () {
       assertContains('"duration":[{"@type":"QuantitativeValue","value":"2:30 Hours"}]', storyPageTags);
       assertContains('"actor":[{"@type":"Person","givenName":"Rishab","name":"Rishab"},{"@type":"Person","givenName":"Rakshith","name":"Rakshith"}]', storyPageTags);
       assertContains('"director":{"@type":"Person","givenName":"Rishabh","name":"Rishabh"}', storyPageTags);
+      assertContains('"author":[{"@type":"Person","givenName":"Writer One","name":"Writer One"},{"@type":"Person","givenName":"Writer Two","name":"Writer Two"}]', storyPageTags);
       assertContains('"author":{"@type":"Person","givenName":"Greeshma","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
       assertContains('"publisher":{"@type":"Organization","name":"Quintype"}', storyPageTags);
-      assertDoesNotContains('"@type":"Article"', storyPageTags);
+      assertContains('"@type":"Article"', storyPageTags);
       assertContains('"@type":"Review"', ampPageTags);
+      assertContains('"@type":"Article"', ampPageTags);
     });
   });
 
