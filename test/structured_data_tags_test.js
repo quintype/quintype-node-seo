@@ -1311,6 +1311,7 @@ describe("StructuredDataTags", function () {
           "screen-writer": "Writer One, Writer Two",
           cast: "Rishab, Rakshith",
           duration: "2:30 Hours",
+          "release-platform": "Theatrical",
           "published-on": "2026-02-15",
           language: "kn",
           "review-title": "Kantara",
@@ -1338,6 +1339,7 @@ describe("StructuredDataTags", function () {
       assertContains('"actor":[{"@type":"Person","givenName":"Rishab","name":"Rishab"},{"@type":"Person","givenName":"Rakshith","name":"Rakshith"}]', storyPageTags);
       assertContains('"director":{"@type":"Person","givenName":"Rishabh","name":"Rishabh"}', storyPageTags);
       assertContains('"author":[{"@type":"Person","givenName":"Writer One","name":"Writer One"},{"@type":"Person","givenName":"Writer Two","name":"Writer Two"}]', storyPageTags);
+      assertContains('"releasedEvent":{"@type":"PublicationEvent","name":"Theatrical Release","location":"Theatrical"}', storyPageTags);
       assertContains('"author":{"@type":"Person","givenName":"Greeshma","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
       assertContains('"publisher":{"@type":"Organization","name":"Quintype"}', storyPageTags);
       assertContains('"@type":"Article"', storyPageTags);

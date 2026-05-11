@@ -401,6 +401,7 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
   const screenwriters = parseCommaSeparatedValues(screenWriter).map((name) => getSchemaPerson(name));
   const actor = parseCommaSeparatedValues(get(metadata, ["cast"], "")).map((name) => getSchemaPerson(name));
   const movieDuration = get(metadata, ["duration"], "");
+  const releasePlatform = get(metadata, ["release-platform"], "");
   const ratingValue = get(metadata, ["review-rating"], "");
   const moviePublishedOnRaw = get(metadata, ["published-on"], "");
   const moviePublishedOn = stripMillisecondsFromTime(new Date(moviePublishedOnRaw), timezone)
@@ -437,7 +438,14 @@ function generateMovieReviewData(structuredData = {}, story = {}, publisherConfi
     },
     actor.length > 0 && { actor },
     director && { director: getSchemaPerson(director) },
-    screenwriters.length > 0 && { author: screenwriters }
+    screenwriters.length > 0 && { author: screenwriters },
+    releasePlatform && {
+      releasedEvent: {
+        "@type": "PublicationEvent",
+        name: `${releasePlatform} Release`,
+        location: releasePlatform,
+      },
+    }
   );
 
   return Object.assign(
