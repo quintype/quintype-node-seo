@@ -505,7 +505,7 @@ console.log("domain slug----",domainSlug);
       const title = get(item, ["title"]);
       const children = get(item, ["children"], []);
 
-      const formattedUrl = completeUrl?.startsWith("http")
+      const formattedUrl = completeUrl.startsWith("http")
         ? completeUrl
         : url;
 
