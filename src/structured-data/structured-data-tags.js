@@ -417,27 +417,21 @@ function generateWebPageSchema(response, url) {
     },
     "tag-page": {
       title: data?.tag?.["meta-title"] || data?.tagName,
-      description:
-        data?.tag?.["meta-description"] || data?.tagDescription
+      description: data?.tag?.["meta-description"] || data?.tagDescription
     }
   };
 
   const fallbackConfig = {
-    title:
-      data?.story?.seo?.["meta-title"] ||
-      data?.story?.headline ||
-      data?.collection?.name,
-    description:
-      data?.story?.seo?.["meta-description"] ||
-      data?.story?.subheadline ||
-      data?.collection?.summary
-  };
+    title: data?.story?.seo?.["meta-title"] || data?.story?.headline || data?.collection?.name,
+    description: data?.story?.seo?.['meta-description'] || data?.story?.subheadline || data?.collection?.summary
+  }
 
   const {
     title = "",
     description = ""
   } = pageConfig[pageType] || fallbackConfig;
 
+  if (title || description) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -445,15 +439,15 @@ function generateWebPageSchema(response, url) {
   };
 
   if (title) {
-    schema.name = title;
+      schema.name = title
   }
 
   if (description) {
-    schema.description = description;
+      schema.description = description
   }
 
   // Add speakable only for valid non-404 pages
-  if (pageType !== "not-found" && (title && description)) {
+    if (pageType !== 'not-found') {
     schema.speakable = {
       "@type": "SpeakableSpecification",
       xpath: [
@@ -463,7 +457,9 @@ function generateWebPageSchema(response, url) {
     };
   }
 
-  return schema;
+    return schema
+  }
+  return {}
 }
 
 function generateSiteNavigationSchema(response = {}) {
@@ -717,7 +713,11 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && url) {
-   tags.push(ldJson("WebPage", generateWebPageSchema(response, url)));
+    const webPageSchema = generateWebPageSchema(response, url);
+   if(Object.keys(webPageSchema).length)
+   {
+    tags.push(ldJson("WebPage", generateWebPageSchema(response, url)))
+   }
   }
 
     if (!isStructuredDataEmpty && response?.data?.navigationMenu?.length) {
