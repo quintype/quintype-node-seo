@@ -1303,6 +1303,51 @@ describe("StructuredDataTags", function () {
     });
   });
 
+  describe("movie review structured data", function () {
+    it("emits Review schema for movie-review story template", function () {
+      const movieReviewStory = sampleStoryData("movie-review", [], sampleAuthorsData(), null, {
+        metadata: {
+          director: "Rishabh",
+          "screen-writer": "Writer One, Writer Two",
+          cast: "Rishab, Rakshith",
+          duration: "2:30 Hours",
+          "release-platform": "Theatrical",
+          "published-on": "2026-02-15",
+          language: "kn",
+          "review-title": "Kantara",
+          "review-rating": "4.5",
+          "movie-name": "Kantara",
+        },
+      });
+      movieReviewStory.data.timezone = "UTC";
+
+      const storyPageTags = getSeoMetadata(getSeoConfig(), {}, "story-page", movieReviewStory, {
+        url: url.parse("/"),
+      });
+
+      const ampPageTags = getSeoMetadata(getSeoConfig(), {}, "story-page-amp", movieReviewStory, {
+        url: url.parse("/"),
+      });
+
+      assertContains('"@type":"Review"', storyPageTags);
+      assertContains('"name":"Kantara"', storyPageTags);
+      assertContains('"inLanguage":"kn"', storyPageTags);
+      assertContains('"reviewRating":{"@type":"Rating","ratingValue":"4.5"}', storyPageTags);
+      assertContains('"itemReviewed":{"@type":"Movie","name":"Kantara"', storyPageTags);
+      assertContains('"datePublished":"2026-02-15T00:00:00Z"', storyPageTags);
+      assertContains('"duration":[{"@type":"QuantitativeValue","value":"2:30 Hours"}]', storyPageTags);
+      assertContains('"actor":[{"@type":"Person","givenName":"Rishab","name":"Rishab"},{"@type":"Person","givenName":"Rakshith","name":"Rakshith"}]', storyPageTags);
+      assertContains('"director":{"@type":"Person","givenName":"Rishabh","name":"Rishabh"}', storyPageTags);
+      assertContains('"author":[{"@type":"Person","givenName":"Writer One","name":"Writer One"},{"@type":"Person","givenName":"Writer Two","name":"Writer Two"}]', storyPageTags);
+      assertContains('"releasedEvent":{"@type":"PublicationEvent","name":"Theatrical Release","location":"Theatrical"}', storyPageTags);
+      assertContains('"author":{"@type":"Person","givenName":"Greeshma","name":"Greeshma","url":"https://madrid.quintype.io/author/greeshma","worksFor":{"@type":"Organization","name":"Quintype","url":"http://www.quintype.com/"}}', storyPageTags);
+      assertContains('"publisher":{"@type":"Organization","name":"Quintype"}', storyPageTags);
+      assertContains('"@type":"Article"', storyPageTags);
+      assertContains('"@type":"Review"', ampPageTags);
+      assertContains('"@type":"Article"', ampPageTags);
+    });
+  });
+
   context("Structured DataTags for Entity", function () {
     it("generate Structured DataTags for Movie Entities", function () {
       const movieEntity = {

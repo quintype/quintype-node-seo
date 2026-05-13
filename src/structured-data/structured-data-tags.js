@@ -1,6 +1,12 @@
 import get from "lodash/get";
 import { FocusedImage } from "quintype-js";
-import { getAllowedCards, getQueryParams, stripMillisecondsFromTime, stripQueryParams } from "../utils";
+import {
+  getAllowedCards,
+  getQueryParams,
+  parseCommaSeparatedValues,
+  stripMillisecondsFromTime,
+  stripQueryParams,
+} from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
@@ -380,6 +386,97 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   });
 }
 
+function generateMovieReviewData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
+  const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+  const storyAuthors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
+  const storyKeysPresence = Object.keys(story).length > 0;
+  const authors = authorData(storyAuthors, authorSchema, publisherConfig);
+  const storyHeadline = get(story, ["headline"], "");
+  const storySubheadline = get(story, ["subheadline"], "");
+  const metadata = get(story, ["metadata"], {});
+  const inLanguage = get(metadata, ["language"], "");
+  const movieName = get(metadata, ["movie-name"], "");
+  const director = get(metadata, ["director"], "");
+  const screenWriter = get(metadata, ["screen-writer"], "");
+  const screenwriters = parseCommaSeparatedValues(screenWriter).map((name) => getSchemaPerson(name));
+  const actor = parseCommaSeparatedValues(get(metadata, ["cast"], "")).map((name) => getSchemaPerson(name));
+  const movieDuration = get(metadata, ["duration"], "");
+  const releasePlatform = get(metadata, ["release-platform"], "");
+  const ratingValue = get(metadata, ["review-rating"], "");
+  const moviePublishedOnRaw = get(metadata, ["published-on"], "");
+  const moviePublishedOn = stripMillisecondsFromTime(new Date(moviePublishedOnRaw), timezone)
+  const movieImage = imageUrl(publisherConfig, story["hero-image-s3-key"], 1200, 675);
+  const organizationName = get(structuredData, ["organization", "name"], publisherConfig["publisher-name"]);
+  const organizationUrl = get(structuredData, ["organization", "url"], publisherConfig["sketches-host"]);
+  const storyUrl = story.url;
+
+  const author = authors.map((author) =>
+    Object.assign({}, author, {
+      worksFor: {
+        "@type": "Organization",
+        name: organizationName,
+        url: organizationUrl,
+      },
+    })
+  );
+
+  const itemReviewed = Object.assign(
+    {},
+    {
+      "@type": "Movie",
+      name: movieName,
+      image: movieImage,
+    },
+    moviePublishedOn && { datePublished: moviePublishedOn },
+    movieDuration && {
+      duration: [
+        {
+          "@type": "QuantitativeValue",
+          value: movieDuration,
+        },
+      ],
+    },
+    actor.length > 0 && { actor },
+    director && { director: getSchemaPerson(director) },
+    screenwriters.length > 0 && { author: screenwriters },
+    releasePlatform && {
+      releasedEvent: {
+        "@type": "PublicationEvent",
+        name: `${releasePlatform} Release`,
+        location: releasePlatform,
+      },
+    }
+  );
+
+  return Object.assign(
+    {},
+    {
+      name: movieName,
+      headline: storyHeadline,
+      description: storySubheadline,
+      image: movieImage,
+      reviewBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
+      url: storyUrl,
+      datePublished: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
+      dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
+      author: author.length === 1 ? author[0] : author,
+      itemReviewed,
+      publisher: {
+        "@type": "Organization",
+        name: organizationName,
+        sameAs: storyUrl,
+      },
+    },
+    inLanguage && { inLanguage },
+    ratingValue && {
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue,
+      },
+    }
+  );
+}
+
 function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = {}) {
   return getSchemaWebsite(structuredData.website);
 }
@@ -597,6 +694,9 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+    if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
+      tags.push(ldJson("Article", articleData));
+    }
   }
 
   if (enableAffiliateMarketing && !isStructuredDataEmpty && pageType === "story-page" && story["story-template"] === "affiliate-marketing") {
@@ -609,6 +709,11 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
+
+    if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
+      tags.push(ldJson("Article", articleData));
+    }
+
     if (story["story-template"] === "visual-story") {
       tags.push(visualStorySchema());
     }
@@ -652,6 +757,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
     if (structuredData.enableVideo && story["story-template"] === "video") {
       return ldJson("VideoObject", generateVideoArticleData(structuredData, story, publisherConfig, timezone));
+    }
+
+    if (story["story-template"] === "movie-review") {
+      return ldJson("Review", generateMovieReviewData(structuredData, story, publisherConfig, timezone));
     }
 
     if (structuredData.enableNewsArticle !== "withoutArticleSchema") {
