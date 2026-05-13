@@ -384,6 +384,132 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
   return getSchemaWebsite(structuredData.website);
 }
 
+function generateWebPageSchema(response, url) {
+  const data = response?.data || {};
+  const pageType = response?.pageType;
+
+  const pageConfig = {
+    "not-found": {
+      title: data?.customSeo?.title,
+      description: data?.customSeo?.description
+    },
+    "story-page": {
+      title: data?.story?.seo?.["meta-title"] || data?.story?.headline,
+      description:
+        data?.story?.seo?.["meta-description"] ||
+        data?.story?.subheadline
+    },
+    "author-page": {
+      title: data?.author?.name,
+      description: data?.author?.bio
+    },
+    "collection-page": {
+      title: data?.collection?.name,
+      description: data?.collection?.summary
+    },
+    "section-page": {
+      title: data?.collection?.name,
+      description: data?.collection?.summary
+    },
+    "home-page": {
+      title: data?.collection?.name,
+      description: data?.collection?.summary
+    },
+    "tag-page": {
+      title: data?.tag?.["meta-title"] || data?.tagName,
+      description:
+        data?.tag?.["meta-description"] || data?.tagDescription
+    }
+  };
+
+  const fallbackConfig = {
+    title:
+      data?.story?.seo?.["meta-title"] ||
+      data?.story?.headline ||
+      data?.collection?.name,
+    description:
+      data?.story?.seo?.["meta-description"] ||
+      data?.story?.subheadline ||
+      data?.collection?.summary
+  };
+
+  const {
+    title = "",
+    description = ""
+  } = pageConfig[pageType] || fallbackConfig;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url: `${response?.config?.["sketches-host"]}${url.pathname}`
+  };
+
+  if (title) {
+    schema.name = title;
+  }
+
+  if (description) {
+    schema.description = description;
+  }
+
+  // Add speakable only for valid non-404 pages
+  if (pageType !== "not-found" && (title && description)) {
+    schema.speakable = {
+      "@type": "SpeakableSpecification",
+      xpath: [
+        "/html/head/title",
+        "/html/head/meta[@name='description']/@content"
+      ]
+    };
+  }
+
+  return schema;
+}
+
+function generateSiteNavigationSchema(response = {}) {
+  const navigationMenu = response?.data?.navigationMenu || [];
+  const domainSlug = response?.config?.domainSlug;
+  console.log("domain slug---", domainSlug);
+  console.log("navigation menu-------", navigationMenu);
+  const menuGroupSlug = domainSlug
+    ? `header-menu-${domainSlug}`
+    : "default";
+
+  const filteredMenu = navigationMenu.filter(
+    item => item?.["menu-group-slug"] === menuGroupSlug
+  );
+
+  const menuItems = [];
+
+  function processMenuItems(items = []) {
+    items.forEach(item => {
+      const formattedUrl = item?.completeUrl?.startsWith("http")
+        ? item.completeUrl
+        : item?.url;
+
+      if (item?.title && formattedUrl) {
+        menuItems.push({
+          name: item.title,
+          url: formattedUrl
+        });
+      }
+
+      if (item?.children?.length) {
+        processMenuItems(item.children);
+      }
+    });
+  }
+
+  processMenuItems(filteredMenu);
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SiteNavigationElement",
+    name: menuItems.map(item => item.name),
+    url: menuItems.map(item => item.url)
+  };
+}
+
 function generateBreadcrumbListData(pageType = "", publisherConfig = {}, data = {}) {
   const { "sketches-host": domain = "", sections = [] } = publisherConfig;
   let breadcrumbsDataList = [{ name: "Home", url: domain }];
@@ -588,6 +714,14 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
 
   if (!isStructuredDataEmpty && enableBreadcrumbList) {
     tags.push(ldJson("BreadcrumbList", generateBreadcrumbListData(pageType, publisherConfig, response.data)));
+  }
+
+  if (!isStructuredDataEmpty && url) {
+   tags.push(ldJson("WebPage", generateWebPageSchema(response, url)));
+  }
+
+    if (!isStructuredDataEmpty && response?.data?.navigationMenu?.length) {
+   tags.push(ldJson("SiteNavigationElement", generateSiteNavigationSchema(response)));
   }
 
   if (enableEventsData && pageType === "story-page" && enableStorySeoEventsData) {
