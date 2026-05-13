@@ -385,46 +385,67 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
 }
 
 function generateWebPageSchema(response, url) {
-  const data = response?.data || {};
-  const pageType = response?.pageType;
+  const data = get(response, ["data"], {});
+  const pageType = get(response, ["pageType"]);
 
   const pageConfig = {
     "not-found": {
-      title: data?.customSeo?.title,
-      description: data?.customSeo?.description
+      title: get(data, ["customSeo", "title"]),
+      description: get(data, ["customSeo", "description"])
     },
+
     "story-page": {
-      title: data?.story?.seo?.["meta-title"] || data?.story?.headline,
+      title:
+        get(data, ["story", "seo", "meta-title"]) ||
+        get(data, ["story", "headline"]),
+
       description:
-        data?.story?.seo?.["meta-description"] ||
-        data?.story?.subheadline
+        get(data, ["story", "seo", "meta-description"]) ||
+        get(data, ["story", "subheadline"])
     },
+
     "author-page": {
-      title: data?.author?.name,
-      description: data?.author?.bio
+      title: get(data, ["author", "name"]),
+      description: get(data, ["author", "bio"])
     },
+
     "collection-page": {
-      title: data?.collection?.name,
-      description: data?.collection?.summary
+      title: get(data, ["collection", "name"]),
+      description: get(data, ["collection", "summary"])
     },
+
     "section-page": {
-      title: data?.collection?.name,
-      description: data?.collection?.summary
+      title: get(data, ["collection", "name"]),
+      description: get(data, ["collection", "summary"])
     },
+
     "home-page": {
-      title: data?.collection?.name,
-      description: data?.collection?.summary
+      title: get(data, ["collection", "name"]),
+      description: get(data, ["collection", "summary"])
     },
+
     "tag-page": {
-      title: data?.tag?.["meta-title"] || data?.tagName,
-      description: data?.tag?.["meta-description"] || data?.tagDescription
+      title:
+        get(data, ["tag", "meta-title"]) ||
+        get(data, ["tagName"]),
+
+      description:
+        get(data, ["tag", "meta-description"]) ||
+        get(data, ["tagDescription"])
     }
   };
 
   const fallbackConfig = {
-    title: data?.story?.seo?.["meta-title"] || data?.story?.headline || data?.collection?.name,
-    description: data?.story?.seo?.['meta-description'] || data?.story?.subheadline || data?.collection?.summary
-  }
+    title:
+      get(data, ["story", "seo", "meta-title"]) ||
+      get(data, ["story", "headline"]) ||
+      get(data, ["collection", "name"]),
+
+    description:
+      get(data, ["story", "seo", "meta-description"]) ||
+      get(data, ["story", "subheadline"]) ||
+      get(data, ["collection", "summary"])
+  };
 
   const {
     title = "",
@@ -432,71 +453,76 @@ function generateWebPageSchema(response, url) {
   } = pageConfig[pageType] || fallbackConfig;
 
   if (title || description) {
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    url: `${response?.config?.["sketches-host"]}${url.pathname}`
-  };
-
-  if (title) {
-      schema.name = title
-  }
-
-  if (description) {
-      schema.description = description
-  }
-
-  // Add speakable only for valid non-404 pages
-    if (pageType !== 'not-found') {
-    schema.speakable = {
-      "@type": "SpeakableSpecification",
-      xpath: [
-        "/html/head/title",
-        "/html/head/meta[@name='description']/@content"
-      ]
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      url: `${get(response, ["config", "sketches-host"], "")}${url.pathname}`
     };
+
+    if (title) {
+      schema.name = title;
+    }
+
+    if (description) {
+      schema.description = description;
+    }
+
+    // Add speakable only for valid non-404 pages
+    if (pageType !== "not-found") {
+      schema.speakable = {
+        "@type": "SpeakableSpecification",
+        xpath: [
+          "/html/head/title",
+          "/html/head/meta[@name='description']/@content"
+        ]
+      };
+    }
+
+    return schema;
   }
 
-    return schema
-  }
-  return {}
+  return {};
 }
 
 function generateSiteNavigationSchema(response = {}) {
-  const navigationMenu = response?.data?.navigationMenu || [];
-  const domainSlug = response?.config?.domainSlug;
-  console.log("domain slug---", domainSlug);
-  console.log("navigation menu-------", navigationMenu);
+  const navigationMenu = get(response, ["data", "navigationMenu"], []);
+  const domainSlug = get(response, ["config", "domainSlug"]);
+console.log("domain slug----",domainSlug);
   const menuGroupSlug = domainSlug
     ? `header-menu-${domainSlug}`
     : "default";
 
   const filteredMenu = navigationMenu.filter(
-    item => item?.["menu-group-slug"] === menuGroupSlug
+    item => get(item, ["menu-group-slug"]) === menuGroupSlug
   );
 
   const menuItems = [];
 
-  function processMenuItems(items = []) {
+  function getMenuItems(items = []) {
     items.forEach(item => {
-      const formattedUrl = item?.completeUrl?.startsWith("http")
-        ? item.completeUrl
-        : item?.url;
+      const completeUrl = get(item, ["completeUrl"]);
+      const url = get(item, ["url"]);
+      const title = get(item, ["title"]);
+      const children = get(item, ["children"], []);
 
-      if (item?.title && formattedUrl) {
+      const formattedUrl = completeUrl?.startsWith("http")
+        ? completeUrl
+        : url;
+
+      if (title && formattedUrl) {
         menuItems.push({
-          name: item.title,
+          name: title,
           url: formattedUrl
         });
       }
 
-      if (item?.children?.length) {
-        processMenuItems(item.children);
+      if (children.length) {
+        getMenuItems(children);
       }
     });
   }
 
-  processMenuItems(filteredMenu);
+  getMenuItems(filteredMenu);
 
   return {
     "@context": "https://schema.org",
