@@ -713,6 +713,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const enableEventsData = get(structuredData, ["enableEventsData"], null);
   const enableStorySeoEventsData = get(story, ["enableSeoEventsData"], null);
   const enableAffiliateMarketing = get(structuredData, ["enableAffiliateMarketing"], false);
+  const navigationMenu = get(response, ["data", "navigationMenu"], []);
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -746,7 +747,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
    }
   }
 
-    if (!isStructuredDataEmpty && response?.data?.navigationMenu?.length) {
+    if (!isStructuredDataEmpty && navigationMenu.length) {
    tags.push(ldJson("SiteNavigationElement", generateSiteNavigationSchema(response)));
   }
 
