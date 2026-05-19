@@ -500,7 +500,7 @@ console.log("domain slug----",domainSlug);
 
   function getMenuItems(items = []) {
     items.forEach(item => {
-      const completeUrl = get(item, ["completeUrl"]);
+      const completeUrl = get(item, ["completeUrl"]) || "";
       const url = get(item, ["url"]);
       const title = get(item, ["title"]);
       const children = get(item, ["children"], []);
