@@ -530,6 +530,16 @@ describe('TextTags', function () {
       assertContains('<meta name="keywords" content="Footag"/>', string);
     });
 
+    it("uses seo meta-description for og:description when summary is missing", function () {
+      const seoConfig = {
+        generators: [TextTags],
+        enableOgTags: true
+      }
+      const story = { seo: { "meta-description": "Some Foobar" }, summary: null, tags: [], authors: [{ 'name': "foo" }] }
+      const string = getSeoMetadata(seoConfig, { "sketches-host": "http://foo.com" }, 'story-page', { data: { story: story } }, { url: url.parse("/my-page") })
+      assertContains('<meta property="og:description" content="Some Foobar"/>', string);
+    });
+
     it("Can generate news tags", function () {
       const seoConfig = {
         generators: [TextTags],
