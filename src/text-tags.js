@@ -33,7 +33,7 @@ function buildTagsFromStory(config, story, url = {}, data = {}) {
   const ogUrl = customSeo.ogUrl || get(seo, ["og", "url"]) || storyUrl;
   const getOgTitle =
     customSeo.ogTitle || get(story, ["alternative", "social", "default", "headline"], story.headline) || story.headline;
-  const ogDescription = customSeo.ogDescription || story.summary;
+  const ogDescription = customSeo.ogDescription || seo["meta-description"] || story.summary;
   const canonicalUrl = customSeo.canonicalUrl || story["canonical-url"] || storyUrl;
   const storyMetaData = {
     title,
