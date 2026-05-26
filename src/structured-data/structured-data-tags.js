@@ -384,11 +384,15 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
   return getSchemaWebsite(structuredData.website);
 }
 
-function generateWebPageSchema(response, url) {
+function generateWebPageSchema(response, url, pageType) {
   const data = get(response, ["data"], {});
-  const pageType = get(response, ["pageType"]);
 
   const pageConfig = {
+    "static-page": {
+      title: get(data, ["page", "metadata", "seo", "meta-title"]),
+      description: get(data, ["page", "metadata", "seo", "meta-description"])
+    },
+
     "not-found": {
       title: get(data, ["customSeo", "title"]),
       description: get(data, ["customSeo", "description"])
@@ -404,6 +408,15 @@ function generateWebPageSchema(response, url) {
         get(data, ["story", "subheadline"])
     },
 
+    "story-page-amp": {
+      title:
+        get(data, ["story", "story", "seo", "meta-title"]) ||
+        get(data, ["story", "story", "headline"]),
+      description:
+        get(data, ["story", "story", "seo", "meta-description"]) ||
+        get(data, ["story", "story", "subheadline"])
+    },
+
     "author-page": {
       title: get(data, ["author", "name"]),
       description: get(data, ["author", "bio"])
@@ -415,8 +428,8 @@ function generateWebPageSchema(response, url) {
     },
 
     "section-page": {
-      title: get(data, ["collection", "name"]),
-      description: get(data, ["collection", "summary"])
+      title: get(data, ["section", "seoMetadata", "title"]) || get(data, ["section", "seoMetadata", "page-title"]),
+      description: get(data, ["section", "seoMetadata", "description"])
     },
 
     "home-page": {
@@ -448,20 +461,17 @@ function generateWebPageSchema(response, url) {
   };
 
   const {
-    title = "",
-    description = ""
-  } = pageConfig[pageType] || fallbackConfig;
+    title = get(fallbackConfig, ["title"]) || "",
+    description = get(fallbackConfig, ["description"]) || ""
+  } = pageConfig[pageType] || {};
 
-  if (title || description) {
+  if (title) {
     const schema = {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      url: `${get(response, ["config", "sketches-host"], "")}${url.pathname}`
+      url: `${get(response, ["config", "sketches-host"], "")}${url.pathname}`,
+      name: title
     };
-
-    if (title) {
-      schema.name = title;
-    }
 
     if (description) {
       schema.description = description;
@@ -486,8 +496,12 @@ function generateWebPageSchema(response, url) {
 
 function generateSiteNavigationSchema(response = {}) {
   const navigationMenu = get(response, ["data", "navigationMenu"], []);
+
+  if (!navigationMenu.length) {
+    return {};
+  }
+
   const domainSlug = get(response, ["config", "domainSlug"]);
-console.log("domain slug----",domainSlug);
   const menuGroupSlug = domainSlug
     ? `header-menu-${domainSlug}`
     : "default";
@@ -497,7 +511,7 @@ console.log("domain slug----",domainSlug);
   );
 
   const menuItems = [];
-
+  const hostUrl = get(response, ["currentHostUrl"], get(response, ["config", "sketches-host"], ""));
   function getMenuItems(items = []) {
     items.forEach(item => {
       const completeUrl = get(item, ["completeUrl"]) || "";
@@ -508,8 +522,15 @@ console.log("domain slug----",domainSlug);
       const formattedUrl = completeUrl.startsWith("http")
         ? completeUrl
         : url;
-
-      if (title && formattedUrl) {
+      let isSameHost;
+      if (formattedUrl && formattedUrl.startsWith("http")) {
+        try {
+          isSameHost = new URL(formattedUrl).host === new URL(hostUrl).host;
+        } catch (e) {
+          isSameHost = false;
+        }
+      }
+      if (title && formattedUrl && isSameHost) {
         menuItems.push({
           name: title,
           url: formattedUrl
@@ -523,6 +544,10 @@ console.log("domain slug----",domainSlug);
   }
 
   getMenuItems(filteredMenu);
+
+  if (!menuItems.length) {
+  return {};
+  }
 
   return {
     "@context": "https://schema.org",
@@ -713,7 +738,6 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   const enableEventsData = get(structuredData, ["enableEventsData"], null);
   const enableStorySeoEventsData = get(story, ["enableSeoEventsData"], null);
   const enableAffiliateMarketing = get(structuredData, ["enableAffiliateMarketing"], false);
-  const navigationMenu = get(response, ["data", "navigationMenu"], []);
   let articleData = {};
 
   if (!isStructuredDataEmpty) {
@@ -740,15 +764,14 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && url) {
-    const webPageSchema = generateWebPageSchema(response, url);
-   if(Object.keys(webPageSchema).length)
-   {
-    tags.push(ldJson("WebPage", generateWebPageSchema(response, url)))
-   }
+    const webPageSchema = generateWebPageSchema(response, url, pageType);
+    if(Object.keys(webPageSchema).length) {
+      tags.push(ldJson("WebPage", webPageSchema));
+    }
   }
-
-    if (!isStructuredDataEmpty && navigationMenu.length) {
-   tags.push(ldJson("SiteNavigationElement", generateSiteNavigationSchema(response)));
+  const siteNavigationSchema = generateSiteNavigationSchema(response);
+  if (!isStructuredDataEmpty && Object.keys(siteNavigationSchema).length) {
+   tags.push(ldJson("SiteNavigationElement", siteNavigationSchema));
   }
 
   if (enableEventsData && pageType === "story-page" && enableStorySeoEventsData) {

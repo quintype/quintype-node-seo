@@ -741,6 +741,7 @@ describe("StructuredDataTags", function () {
       );
     });
   });
+
   describe("with given authors array in article data", function () {
     it("should read from the authors array", function () {
       const string = getSeoMetadata(getSeoConfig({}), {}, "story-page", sampleStoryData(null, [], sampleAuthorsData()));
@@ -1433,12 +1434,12 @@ describe("StructuredDataTags", function () {
         '<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://madrid.quintype.io"},{"@type":"ListItem","position":2,"name":"Section Name","item":""},{"@type":"ListItem","position":3,"name":"Personalise or perish - Why publishers need to use personalised content","item":""}]}</script>' +
         '<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","url":"https://madrid.quintype.io/","name":" Why publishers need to use personalised content","speakable":{"@type":"SpeakableSpecification","xpath":["/html/head/title","/html/head/meta[@name=\'description\']/@content"]}}</script>' +
         '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Personalise or perish - Why publishers need to use personalised content","image":[{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo%2F2018-03%2Fa27aafbf-8a27-4f42-b78f-769eb04655d6%2Fefa66751-e534-4a18-8ebe-e02189c356d9.jpg?rect=0%2C200%2C1920%2C1080&w=1200&h=675&auto=format%2Ccompress&fit=crop","width":"1200","height":"675"},{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo%2F2018-03%2Fa27aafbf-8a27-4f42-b78f-769eb04655d6%2Fefa66751-e534-4a18-8ebe-e02189c356d9.jpg?rect=78%2C0%2C1707%2C1280&w=1200&h=900&auto=format%2Ccompress&fit=crop","width":"1200","height":"900"},{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo%2F2018-03%2Fa27aafbf-8a27-4f42-b78f-769eb04655d6%2Fefa66751-e534-4a18-8ebe-e02189c356d9.jpg?rect=291%2C0%2C1280%2C1280&w=1200&h=1200&auto=format%2Ccompress&fit=crop","width":"1200","height":"1200"}],"url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","datePublished":"2018-02-28T11:11:04Z","mainEntityOfPage":{"@type":"WebPage","@id":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content"},"publisher":{"name":"Quintype","url":"http://www.quintype.com/","logo":"https://quintype.com/logo.png","sameAs":["https://www.facebook.com/quintype","https://twitter.com/quintype_inc","https://plus.google.com/+quintype","https://www.youtube.com/user/Quintype"],"id":"http://www.quintype.com/","@type":"NewsMediaOrganization"},"description":"Personalise or perish - Why publishers need to use personalised content","author":[{"@type":"Person","givenName":"Greeshma","name":"Greeshma"}],"keywords":"","thumbnailUrl":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=675&auto=format%2Ccompress&fit=max&enlarge=true","articleBody":"","dateCreated":"2018-02-28T11:11:04Z","dateModified":"2018-04-20T06:03:20Z","name":"Personalise or perish - Why publishers need to use personalised content","isPartOf":{"@type":"WebPage","url":"https://madrid.quintype.io/politics/2018/02/28/personalise-or-perish---why-publishers-need-to-use-personalised-content","primaryImageOfPage":{"@type":"ImageObject","url":"https://images.assettype.com/quintype-demo/2018-03/a27aafbf-8a27-4f42-b78f-769eb04655d6/efa66751-e534-4a18-8ebe-e02189c356d9.jpg?w=1200&h=675&auto=format%2Ccompress&fit=max&enlarge=true","width":"1200","height":"675"}},"articleSection":"Section Name"}</script>';
-      assertContains(
+
+        assertContains(
         articleTag +
           '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","actors":[{"@type":"Person","givenName":"Aishwarya Dutta","name":"Aishwarya Dutta"},{"@type":"Person","givenName":"Shariq Hassan","name":"Shariq Hassan"},{"@type":"Person","givenName":"Nithya","name":"Nithya"},{"@type":"Person","givenName":"Ramya (NSK)","name":"Ramya (NSK)"}],"directors":[{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Nithya","name":"Nithya"}],"name":"sarkar","sameAs":"","description":"ABCD","producer":[{"@type":"Person","givenName":"Vajpayee","name":"Vajpayee"},{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Mumtaj","name":"Mumtaj"}],"image":"http://thumbor-stg.assettype.com/vikatandry2/2019-03/97ff1197-f723-4745-8394-442c0f1b1dfa/0.jpg","dateCreated":"2019-03-26T11:34:37.425Z"}</script>',
         tags
       );
-
       assertContains(
         ampArticleTag +
           '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","actors":[{"@type":"Person","givenName":"Aishwarya Dutta","name":"Aishwarya Dutta"},{"@type":"Person","givenName":"Shariq Hassan","name":"Shariq Hassan"},{"@type":"Person","givenName":"Nithya","name":"Nithya"},{"@type":"Person","givenName":"Ramya (NSK)","name":"Ramya (NSK)"}],"directors":[{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Nithya","name":"Nithya"}],"name":"sarkar","sameAs":"","description":"ABCD","producer":[{"@type":"Person","givenName":"Vajpayee","name":"Vajpayee"},{"@type":"Person","givenName":"Ritvika","name":"Ritvika"},{"@type":"Person","givenName":"Mumtaj","name":"Mumtaj"}],"image":"http://thumbor-stg.assettype.com/vikatandry2/2019-03/97ff1197-f723-4745-8394-442c0f1b1dfa/0.jpg","dateCreated":"2019-03-26T11:34:37.425Z"}</script>',
@@ -1494,7 +1495,6 @@ describe("StructuredDataTags", function () {
         "home-page",
         storyData,
         { url: url.parse("/") },
-        { navigationMenu: navigationMenu }
       );
       assertContains(
       '<script type="application/ld+json">{"@context":"https://schema.org","@type":"SiteNavigationElement","name":["Home","Politics","Elections","Analysis","Technology"],"url":["https://madrid.quintype.io/","https://madrid.quintype.io/politics","https://madrid.quintype.io/politics/elections","https://madrid.quintype.io/politics/analysis","https://madrid.quintype.io/technology"]}</script>',
@@ -1522,10 +1522,17 @@ describe("StructuredDataTags", function () {
     it("should filter navigation menu by domain slug", function () {
       const navigationMenu = [
         {
-          "menu-group-slug": "header-menu-custom-domain",
+          "menu-group-slug": "header-menu-domain-one",
           title: "Custom Home",
           url: "/custom",
           completeUrl: "https://custom.quintype.io/",
+          children: []
+        },
+        {
+          "menu-group-slug": "header-menu-custom-domain",
+          title: "Custom Home",
+          url: "/custom",
+          completeUrl: "https://madrid.quintype.io/",
           children: []
         },
         {
@@ -1539,11 +1546,14 @@ describe("StructuredDataTags", function () {
 
       const storyData = sampleStoryData(null, [], sampleAuthorsData());
       const response = {
-        data: { ...storyData.data,
-            navigationMenu: navigationMenu
+        currentHostUrl: "https://madrid.quintype.io",
+        data: {
+          ...storyData.data,
+          navigationMenu: navigationMenu
         },
         config: Object.assign({}, storyData.config, { domainSlug: "custom-domain" })
       };
+
       const tags = getSeoMetadata(
         getSeoConfig({}),
         {},
@@ -1551,7 +1561,6 @@ describe("StructuredDataTags", function () {
         response,
         { url: url.parse("/") },
       );
-
       assertContains(
         '"name":["Custom Home"]',
         tags
