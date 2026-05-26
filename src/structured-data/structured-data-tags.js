@@ -30,6 +30,16 @@ function ldJson(type, fields) {
   };
 }
 
+function rawLdJson(fields) {
+  const json = JSON.stringify(fields).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  return {
+    tag: "script",
+    type: "application/ld+json",
+    dangerouslySetInnerHTML: { __html: json },
+  };
+}
+
 function imageUrl(publisherConfig, s3Key, width, height) {
   const imageSrc = /^https?.*/.test(publisherConfig["cdn-image"])
     ? publisherConfig["cdn-image"]
@@ -467,8 +477,6 @@ function generateWebPageSchema(response, url, pageType) {
 
   if (title) {
     const schema = {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
       url: `${get(response, ["config", "sketches-host"], "")}${url.pathname}`,
       name: title
     };
@@ -532,6 +540,7 @@ function generateSiteNavigationSchema(response = {}) {
       }
       if (title && formattedUrl && isSameHost) {
         menuItems.push({
+          "@type": "SiteNavigationElement",
           name: title,
           url: formattedUrl
         });
@@ -551,9 +560,7 @@ function generateSiteNavigationSchema(response = {}) {
 
   return {
     "@context": "https://schema.org",
-    "@type": "SiteNavigationElement",
-    name: menuItems.map(item => item.name),
-    url: menuItems.map(item => item.url)
+    "@graph": menuItems
   };
 }
 
@@ -771,7 +778,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
   const siteNavigationSchema = generateSiteNavigationSchema(response);
   if (!isStructuredDataEmpty && Object.keys(siteNavigationSchema).length) {
-   tags.push(ldJson("SiteNavigationElement", siteNavigationSchema));
+   tags.push(rawLdJson(siteNavigationSchema));
   }
 
   if (enableEventsData && pageType === "story-page" && enableStorySeoEventsData) {

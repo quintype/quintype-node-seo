@@ -1497,7 +1497,7 @@ describe("StructuredDataTags", function () {
         { url: url.parse("/") },
       );
       assertContains(
-      '<script type="application/ld+json">{"@context":"https://schema.org","@type":"SiteNavigationElement","name":["Home","Politics","Elections","Analysis","Technology"],"url":["https://madrid.quintype.io/","https://madrid.quintype.io/politics","https://madrid.quintype.io/politics/elections","https://madrid.quintype.io/politics/analysis","https://madrid.quintype.io/technology"]}</script>',
+      '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SiteNavigationElement","name":"Home","url":"https://madrid.quintype.io/"},{"@type":"SiteNavigationElement","name":"Politics","url":"https://madrid.quintype.io/politics"},{"@type":"SiteNavigationElement","name":"Elections","url":"https://madrid.quintype.io/politics/elections"},{"@type":"SiteNavigationElement","name":"Analysis","url":"https://madrid.quintype.io/politics/analysis"},{"@type":"SiteNavigationElement","name":"Technology","url":"https://madrid.quintype.io/technology"}]}</script>',
       tags
     );
     });
@@ -1561,8 +1561,9 @@ describe("StructuredDataTags", function () {
         response,
         { url: url.parse("/") },
       );
+
       assertContains(
-        '"name":["Custom Home"]',
+        '<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SiteNavigationElement","name":"Custom Home","url":"https://madrid.quintype.io/"}]}</script>',
         tags
       );
       assertDoesNotContains(
