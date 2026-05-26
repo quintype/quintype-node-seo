@@ -511,7 +511,7 @@ function generateSiteNavigationSchema(response = {}) {
   );
 
   const menuItems = [];
-  const hostUrl = get(response, ["currentHostUrl"], get(response, ["config", "sketches-host"], ""));
+  const hostUrl = get(response, ["currentHostUrl"]) || get(response, ["config", "sketches-host"], "");
   function getMenuItems(items = []) {
     items.forEach(item => {
       const completeUrl = get(item, ["completeUrl"]) || "";
