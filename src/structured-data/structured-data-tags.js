@@ -502,17 +502,21 @@ function generateSiteNavigationSchema(response = {}) {
   }
 
   const domainSlug = get(response, ["config", "domainSlug"]);
-  const menuGroupSlug = domainSlug
-    ? `header-menu-${domainSlug}`
-    : "default";
+  const menuGroupSlugs = domainSlug
+    ? [
+        `header-menu-${domainSlug}`,
+        `mega-menu-${domainSlug}`
+      ]
+    : ["default", "mega-menu"];
 
   const filteredMenu = navigationMenu.filter(
-    item => get(item, ["menu-group-slug"]) === menuGroupSlug
+    item => menuGroupSlugs.includes(get(item, ["menu-group-slug"]))
   );
 
   const menuItems = [];
+  const uniqueUrls = new Set();
   const hostUrl = get(response, ["currentHostUrl"]) || get(response, ["config", "sketches-host"], "");
-  function getMenuItems(items = []) {
+  function getMenuItems(items = [], parentTitle = "") {
     items.forEach(item => {
       const completeUrl = get(item, ["completeUrl"]) || "";
       const url = get(item, ["url"]);
@@ -530,15 +534,21 @@ function generateSiteNavigationSchema(response = {}) {
           isSameHost = false;
         }
       }
-      if (title && formattedUrl && isSameHost) {
+
+        const schemaTitle = parentTitle
+        ? `${parentTitle} - ${title}`
+        : title;
+
+      if (title && formattedUrl && isSameHost && !uniqueUrls.has(formattedUrl)) {
+        uniqueUrls.add(formattedUrl);
         menuItems.push({
-          name: title,
+          name: schemaTitle,
           url: formattedUrl
         });
       }
 
       if (children.length) {
-        getMenuItems(children);
+        getMenuItems(children, title);
       }
     });
   }
@@ -550,8 +560,6 @@ function generateSiteNavigationSchema(response = {}) {
   }
 
   return {
-    "@context": "https://schema.org",
-    "@type": "SiteNavigationElement",
     name: menuItems.map(item => item.name),
     url: menuItems.map(item => item.url)
   };
