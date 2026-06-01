@@ -66,3 +66,14 @@ export function stripQueryParams(url) {
     return "";
   }
 }
+
+export function parseCommaSeparatedValues(value = "") {
+  if (!value || typeof value !== "string") {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((name) => name.trim())
+    .filter((name) => Boolean(name))
+}
