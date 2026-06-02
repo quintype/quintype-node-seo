@@ -484,15 +484,14 @@ function generateWebSiteData(structuredData = {}, story = {}, publisherConfig = 
 function generateWebPageSchema(response, url, pageType) {
   const data = get(response, ["data"], {});
 
+  if(pageType === "not-found") {
+    return {};
+  }
+
   const pageConfig = {
     "static-page": {
       title: get(data, ["page", "metadata", "seo", "meta-title"]),
       description: get(data, ["page", "metadata", "seo", "meta-description"])
-    },
-
-    "not-found": {
-      title: get(data, ["customSeo", "title"]),
-      description: get(data, ["customSeo", "description"])
     },
 
     "story-page": {
@@ -574,8 +573,6 @@ function generateWebPageSchema(response, url, pageType) {
       schema.description = description;
     }
 
-    // Add speakable only for valid non-404 pages
-    if (pageType !== "not-found") {
       schema.speakable = {
         "@type": "SpeakableSpecification",
         xpath: [
@@ -583,7 +580,6 @@ function generateWebPageSchema(response, url, pageType) {
           "/html/head/meta[@name='description']/@content"
         ]
       };
-    }
 
     return schema;
   }
