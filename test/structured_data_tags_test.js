@@ -1542,7 +1542,7 @@ describe("StructuredDataTags", function () {
         { url: url.parse("/") },
       );
       assertContains(
-      '<script type="application/ld+json">{"@context":"https://schema.org","@type":"SiteNavigationElement","name":["Home","Politics","Elections","Analysis","Technology"],"url":["https://madrid.quintype.io/","https://madrid.quintype.io/politics","https://madrid.quintype.io/politics/elections","https://madrid.quintype.io/politics/analysis","https://madrid.quintype.io/technology"]}</script>',
+      '<script type="application/ld+json">{"@context":"https://schema.org","@type":"SiteNavigationElement","name":["Home","Politics","Politics - Elections","Politics - Analysis","Technology"],"url":["https://madrid.quintype.io/","https://madrid.quintype.io/politics","https://madrid.quintype.io/politics/elections","https://madrid.quintype.io/politics/analysis","https://madrid.quintype.io/technology"]}</script>',
       tags
     );
     });
