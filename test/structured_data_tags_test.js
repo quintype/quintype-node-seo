@@ -1555,7 +1555,6 @@ describe("StructuredDataTags", function () {
         "home-page",
         storyData,
         { url: url.parse("/") },
-        { navigationMenu: [] }
       );
 
       assertDoesNotContains(
