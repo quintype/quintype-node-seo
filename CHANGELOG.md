@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.51.0](https://github.com/quintype/quintype-node-seo/compare/v1.50.3...v1.51.0) (2026-06-03)
+
+
+### Features
+
+* support SiteNavigation & WebPage schema ([#575](https://github.com/quintype/quintype-node-seo/issues/575)) ([34ca38b](https://github.com/quintype/quintype-node-seo/commit/34ca38b03bd340462269ab1b27153083c51c17ea))
+
 ### [1.50.3](https://github.com/quintype/quintype-node-seo/compare/v1.50.2...v1.50.3) (2026-05-13)
 
 ### [1.50.2](https://github.com/quintype/quintype-node-seo/compare/v1.50.0...v1.50.2) (2026-05-05)
