@@ -290,6 +290,109 @@ function getCompleteTextOfOneCard(storyElements, stripHtmlFromArticleBody) {
     .join(".");
 }
 
+function getFaqQuestionItem(question = "", answer = "") {
+  const name = getPlainText(question).trim();
+  const text = getPlainText(answer).trim();
+
+  if (!name || !text) return null;
+
+  return {
+    "@type": "Question",
+    name,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text,
+    },
+  };
+}
+
+function getFaqMainEntityFromQuestionAnswerSubtypes(cards = []) {
+  const faqItems = [];
+  let pendingQuestion = null;
+
+  cards.forEach((card) => {
+    const storyElements = get(card, ["story-elements"], []);
+
+    storyElements.forEach((element) => {
+      const subtype = element.subtype;
+      if (element.type !== "text" || !subtype) return;
+
+      const text = getPlainText(get(element, ["text"], "")).trim();
+      if (!text) return;
+
+      if (subtype === "question") {
+        pendingQuestion = text;
+        return;
+      }
+
+      if (subtype === "answer" && pendingQuestion) {
+        const faqItem = getFaqQuestionItem(pendingQuestion, text);
+        if (faqItem) faqItems.push(faqItem);
+        pendingQuestion = null;
+      }
+    });
+  });
+
+  return faqItems;
+}
+
+function getQuestionAnswerFromQAndAText(rawText = "") {
+  const text = getPlainText(rawText).replace(/\r\n/g, "\n").trim();
+  if (!text) return null;
+
+  const explicitMatch = text.match(/(?:^|\s)Q(?:uestion)?\s*[:.-]\s*(.+?)\s+(?:A(?:nswer)?\s*[:.-]\s*)(.+)$/i);
+  if (explicitMatch) {
+    return { question: explicitMatch[1], answer: explicitMatch[2] };
+  }
+
+  const splitByLine = text.split("\n").map((part) => part.trim()).filter(Boolean);
+  if (splitByLine.length >= 2) {
+    return {
+      question: splitByLine[0],
+      answer: splitByLine.slice(1).join(" "),
+    };
+  }
+
+  return null;
+}
+
+function getFaqMainEntityFromQAndASubtypes(cards = []) {
+  const faqItems = [];
+
+  cards.forEach((card) => {
+    const storyElements = get(card, ["story-elements"], []);
+
+    storyElements.forEach((element) => {
+      if (element.type !== "text" || element.subtype !== "q-and-a") return;
+
+      const metadataQuestion = get(element, ["metadata", "question"], "");
+      const metadataAnswer = get(element, ["metadata", "answer"], "");
+
+      if (metadataQuestion && metadataAnswer) {
+        const metadataFaqItem = getFaqQuestionItem(metadataQuestion, metadataAnswer);
+        if (metadataFaqItem) faqItems.push(metadataFaqItem);
+        return;
+      }
+
+      const qaPair = getQuestionAnswerFromQAndAText(get(element, ["text"], ""));
+      if (!qaPair) return;
+
+      const faqItem = getFaqQuestionItem(qaPair.question, qaPair.answer);
+      if (faqItem) faqItems.push(faqItem);
+    });
+  });
+
+  return faqItems;
+}
+
+function getFaqMainEntity(story = {}) {
+  const cards = get(story, ["cards"], []);
+  return [
+    ...getFaqMainEntityFromQuestionAnswerSubtypes(cards),
+    ...getFaqMainEntityFromQAndASubtypes(cards),
+  ];
+}
+
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const imageWidth = 1200;
   const imageHeight = 675;
@@ -1048,6 +1151,20 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }, []);
 
     return products.length ? products : null;
+  }
+
+  function generateFaqTags() {
+    const mainEntity = getFaqMainEntity(story);
+    if (!mainEntity.length) return null;
+
+    return ldJson("FAQPage", { mainEntity });
+  }
+
+  if (!isStructuredDataEmpty && (pageType === "story-page" || pageType === "story-page-amp")) {
+    const faqTags = generateFaqTags();
+    if (faqTags) {
+      tags.push(faqTags);
+    }
   }
 
   // All Pages have: Publisher, Site

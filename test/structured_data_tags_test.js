@@ -662,6 +662,123 @@ describe("StructuredDataTags", function () {
     });
   });
 
+  describe("with FAQ schema data", function () {
+    it("adds FAQPage schema when question and answer elements are present", function () {
+      const cards = [
+        {
+          "story-elements": [
+            {
+              type: "text",
+              subtype: "question",
+              text: "<p>What is FAQ Schema?</p>",
+            },
+            {
+              type: "text",
+              subtype: "answer",
+              text: "<p>FAQ Schema is structured data that helps search engines understand FAQ content.</p>",
+            },
+            {
+              type: "text",
+              subtype: "question",
+              text: "Is FAQ Schema mandatory?",
+            },
+            {
+              type: "text",
+              subtype: "answer",
+              text: "No. It is optional.",
+            },
+          ],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+      const ampPageString = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page-amp",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+
+      assertContains('"@type":"FAQPage"', string);
+      assertContains('"mainEntity":[{"@type":"Question","name":"What is FAQ Schema?"', string);
+      assertContains('"acceptedAnswer":{"@type":"Answer","text":"FAQ Schema is structured data that helps search engines understand FAQ content."}', string);
+      assertContains('"@type":"FAQPage"', ampPageString);
+    });
+
+    it("adds FAQPage schema for q-and-a subtype and merges it with question-answer pairs", function () {
+      const cards = [
+        {
+          "story-elements": [
+            {
+              type: "text",
+              subtype: "question",
+              text: "What is FAQ Schema?",
+            },
+            {
+              type: "text",
+              subtype: "answer",
+              text: "FAQ Schema helps search engines understand FAQ content.",
+            },
+            {
+              type: "text",
+              subtype: "q-and-a",
+              text: "Q: Is FAQ markup mandatory? A: No, it is optional.",
+            },
+          ],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+
+      assertContains('"@type":"FAQPage"', string);
+      assertContains('"name":"What is FAQ Schema?"', string);
+      assertContains('"name":"Is FAQ markup mandatory?"', string);
+      assertContains('"text":"No, it is optional."', string);
+    });
+
+    it("does not add FAQPage schema when no valid question answer pairs are present", function () {
+      const cards = [
+        {
+          "story-elements": [
+            {
+              type: "text",
+              subtype: "question",
+              text: "What is FAQ Schema?",
+            },
+            {
+              type: "text",
+              subtype: "paragraph",
+              text: "This is not an answer subtype.",
+            },
+          ],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+
+      assertDoesNotContains('"@type":"FAQPage"', string);
+    });
+  });
+
   describe("articleBody content", function () {
     const cards = [
       {
