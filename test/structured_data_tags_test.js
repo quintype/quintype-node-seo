@@ -663,29 +663,25 @@ describe("StructuredDataTags", function () {
   });
 
   describe("with FAQ schema data", function () {
-    it("adds FAQPage schema when question and answer elements are present", function () {
+    it("adds FAQPage schema for q-and-a subtype when both question and answer are in metadata", function () {
       const cards = [
         {
           "story-elements": [
             {
               type: "text",
-              subtype: "question",
-              text: "<p>What is FAQ Schema?</p>",
+              subtype: "q-and-a",
+              metadata: {
+                question: "What is FAQ Schema?",
+                answer: "FAQ Schema is structured data that helps search engines understand FAQ content.",
+              },
             },
             {
               type: "text",
-              subtype: "answer",
-              text: "<p>FAQ Schema is structured data that helps search engines understand FAQ content.</p>",
-            },
-            {
-              type: "text",
-              subtype: "question",
-              text: "Is FAQ Schema mandatory?",
-            },
-            {
-              type: "text",
-              subtype: "answer",
-              text: "No. It is optional.",
+              subtype: "q-and-a",
+              metadata: {
+                question: "Is FAQ markup mandatory?",
+                answer: "No, it is optional.",
+              },
             },
           ],
         },
@@ -707,31 +703,29 @@ describe("StructuredDataTags", function () {
       );
 
       assertContains('"@type":"FAQPage"', string);
-      assertContains('"mainEntity":[{"@type":"Question","name":"What is FAQ Schema?"', string);
+      assertContains('"name":"What is FAQ Schema?"', string);
       assertContains('"acceptedAnswer":{"@type":"Answer","text":"FAQ Schema is structured data that helps search engines understand FAQ content."}', string);
+      assertContains('"name":"Is FAQ markup mandatory?"', string);
+      assertContains('"text":"No, it is optional."', string);
       assertContains('"@type":"FAQPage"', ampPageString);
     });
 
-    it("adds FAQPage schema for q-and-a subtype and merges it with question-answer pairs", function () {
+    it("does not add FAQPage schema when q-and-a metadata is missing question or answer", function () {
       const cards = [
         {
           "story-elements": [
             {
               type: "text",
-              subtype: "question",
-              text: "What is FAQ Schema?",
-            },
-            {
-              type: "text",
-              subtype: "answer",
-              text: "FAQ Schema helps search engines understand FAQ content.",
+              subtype: "q-and-a",
+              metadata: {
+                question: "What is FAQ Schema?",
+              },
             },
             {
               type: "text",
               subtype: "q-and-a",
               metadata: {
-                question: "Is FAQ markup mandatory?",
-                answer: "No, it is optional.",
+                answer: "Only answer, no question.",
               },
             },
           ],
@@ -746,75 +740,7 @@ describe("StructuredDataTags", function () {
         { url: url.parse("/") }
       );
 
-      assertContains('"@type":"FAQPage"', string);
-      assertContains('"name":"What is FAQ Schema?"', string);
-      assertContains('"name":"Is FAQ markup mandatory?"', string);
-      assertContains('"text":"No, it is optional."', string);
-    });
-
-    it("does not add FAQPage schema when no valid question answer pairs are present", function () {
-      const cards = [
-        {
-          "story-elements": [
-            {
-              type: "text",
-              subtype: "question",
-              text: "What is FAQ Schema?",
-            },
-            {
-              type: "text",
-              subtype: "paragraph",
-              text: "This is not an answer subtype.",
-            },
-          ],
-        },
-      ];
-
-      const string = getSeoMetadata(
-        getSeoConfig({ newsArticle: false }),
-        {},
-        "story-page",
-        sampleStoryData(null, cards, sampleAuthorsData()),
-        { url: url.parse("/") }
-      );
-
       assertDoesNotContains('"@type":"FAQPage"', string);
-    });
-
-    it("adds placeholder name when answer exists without a question", function () {
-      const cards = [
-        {
-          "story-elements": [
-            {
-              type: "text",
-              subtype: "answer",
-              text: "ONLY ANSWER",
-            },
-            {
-              type: "text",
-              subtype: "question",
-              text: "Test Question ONE",
-            },
-            {
-              type: "text",
-              subtype: "answer",
-              text: "ANSWER ONE",
-            },
-          ],
-        },
-      ];
-
-      const string = getSeoMetadata(
-        getSeoConfig({ newsArticle: false }),
-        {},
-        "story-page",
-        sampleStoryData(null, cards, sampleAuthorsData()),
-        { url: url.parse("/") }
-      );
-
-      assertContains('"@type":"FAQPage"', string);
-      assertContains('"name":"&lt;empty&gt;","acceptedAnswer":{"@type":"Answer","text":"ONLY ANSWER"}', string);
-      assertContains('"name":"Test Question ONE","acceptedAnswer":{"@type":"Answer","text":"ANSWER ONE"}', string);
     });
   });
 

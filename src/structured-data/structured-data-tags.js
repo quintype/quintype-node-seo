@@ -309,38 +309,13 @@ function getFaqQuestionItem(question = "", answer = "") {
 function getFaqMainEntity(story = {}) {
   const cards = get(story, ["cards"], []);
   const faqItems = [];
-  let pendingQuestion = "";
 
   cards.forEach((card) => {
     const storyElements = get(card, ["story-elements"], []);
 
     storyElements.forEach((element) => {
       if (element.type !== "text") return;
-
-      const subtype = element.subtype;
-      const text = getPlainText(get(element, ["text"], "")).trim();
-
-      if (subtype === "question") {
-        pendingQuestion = text;
-        return;
-      }
-
-      if (subtype === "answer") {
-        if (pendingQuestion || text) {
-          faqItems.push({
-            "@type": "Question",
-            name: pendingQuestion || "<empty>",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: text || "<empty>",
-            },
-          });
-        }
-        pendingQuestion = "";
-        return;
-      }
-
-      if (subtype !== "q-and-a") return;
+      if (element.subtype !== "q-and-a") return;
 
       const metadataQuestion = get(element, ["metadata", "question"], "");
       const metadataAnswer = get(element, ["metadata", "answer"], "");
