@@ -662,6 +662,88 @@ describe("StructuredDataTags", function () {
     });
   });
 
+  describe("with FAQ schema data", function () {
+    it("adds FAQPage schema for q-and-a subtype when both question and answer are in metadata", function () {
+      const cards = [
+        {
+          "story-elements": [
+            {
+              type: "text",
+              subtype: "q-and-a",
+              metadata: {
+                question: "What is FAQ Schema?",
+                answer: "FAQ Schema is structured data that helps search engines understand FAQ content.",
+              },
+            },
+            {
+              type: "text",
+              subtype: "q-and-a",
+              metadata: {
+                question: "Is FAQ markup mandatory?",
+                answer: "No, it is optional.",
+              },
+            },
+          ],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+      const ampPageString = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page-amp",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+
+      assertContains('"@type":"FAQPage"', string);
+      assertContains('"name":"What is FAQ Schema?"', string);
+      assertContains('"acceptedAnswer":{"@type":"Answer","text":"FAQ Schema is structured data that helps search engines understand FAQ content."}', string);
+      assertContains('"name":"Is FAQ markup mandatory?"', string);
+      assertContains('"text":"No, it is optional."', string);
+      assertContains('"@type":"FAQPage"', ampPageString);
+    });
+
+    it("does not add FAQPage schema when q-and-a metadata is missing question or answer", function () {
+      const cards = [
+        {
+          "story-elements": [
+            {
+              type: "text",
+              subtype: "q-and-a",
+              metadata: {
+                question: "What is FAQ Schema?",
+              },
+            },
+            {
+              type: "text",
+              subtype: "q-and-a",
+              metadata: {
+                answer: "Only answer, no question.",
+              },
+            },
+          ],
+        },
+      ];
+
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: false }),
+        {},
+        "story-page",
+        sampleStoryData(null, cards, sampleAuthorsData()),
+        { url: url.parse("/") }
+      );
+
+      assertDoesNotContains('"@type":"FAQPage"', string);
+    });
+  });
+
   describe("articleBody content", function () {
     const cards = [
       {

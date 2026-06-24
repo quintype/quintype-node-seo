@@ -290,6 +290,46 @@ function getCompleteTextOfOneCard(storyElements, stripHtmlFromArticleBody) {
     .join(".");
 }
 
+function getFaqQuestionItem(question = "", answer = "") {
+  const name = getPlainText(question).trim();
+  const text = getPlainText(answer).trim();
+
+  if (!name || !text) return null;
+
+  return {
+    "@type": "Question",
+    name,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text,
+    },
+  };
+}
+
+function getFaqMainEntity(story = {}) {
+  const cards = get(story, ["cards"], []);
+  const faqItems = [];
+
+  cards.forEach((card) => {
+    const storyElements = get(card, ["story-elements"], []);
+
+    storyElements.forEach((element) => {
+      if (element.type !== "text") return;
+      if (element.subtype !== "q-and-a") return;
+
+      const metadataQuestion = get(element, ["metadata", "question"], "");
+      const metadataAnswer = get(element, ["metadata", "answer"], "");
+
+      if (metadataQuestion && metadataAnswer) {
+        const metadataFaqItem = getFaqQuestionItem(metadataQuestion, metadataAnswer);
+        if (metadataFaqItem) faqItems.push(metadataFaqItem);
+      }
+    });
+  });
+
+  return faqItems;
+}
+
 function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const imageWidth = 1200;
   const imageHeight = 675;
@@ -1048,6 +1088,20 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }, []);
 
     return products.length ? products : null;
+  }
+
+  function generateFaqTags() {
+    const mainEntity = getFaqMainEntity(story);
+    if (!mainEntity.length) return null;
+
+    return ldJson("FAQPage", { mainEntity });
+  }
+
+  if (!isStructuredDataEmpty && (pageType === "story-page" || pageType === "story-page-amp")) {
+    const faqTags = generateFaqTags();
+    if (faqTags) {
+      tags.push(faqTags);
+    }
   }
 
   // All Pages have: Publisher, Site
