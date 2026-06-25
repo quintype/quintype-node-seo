@@ -10,6 +10,7 @@ import {
 import { generateTagsForEntity } from "./entity";
 import {
   generateAuthorPageSchema,
+  generateStoryAuthorSchema,
   getSchemaBlogPosting,
   getSchemaBreadcrumbList,
   getSchemaContext,
@@ -962,6 +963,10 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     }
   }
 
+  if (!isStructuredDataEmpty && (pageType === "story-page" || pageType === "story-page-amp")) {
+    tags.push(...generateStoryPagePersonSchemas());
+  }
+
   if (!isStructuredDataEmpty && pageType === "author-page") {
     tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
   }
@@ -973,6 +978,16 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
         Object.assign({}, articleData, generateNewsArticleData(structuredData, story, publisherConfig, pageType))
       );
     }
+  }
+
+  function generateStoryPagePersonSchemas() {
+    const storyAuthors = get(story, ["authors"], []);
+    const fallbackAuthorName = get(story, ["author-name"], "");
+    const authors = Array.isArray(storyAuthors) && storyAuthors.length > 0 ? storyAuthors : [{ name: fallbackAuthorName }];
+    return authors
+      .map((author) => generateStoryAuthorSchema(publisherConfig, author))
+      .filter((author) => author.name)
+      .map((author) => ldJson("Person", author));
   }
 
   function storyTags() {

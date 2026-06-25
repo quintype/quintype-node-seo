@@ -1697,4 +1697,59 @@ describe("StructuredDataTags", function () {
       );
     });
   });
+
+  describe("Person schema for authors", function () {
+    const authorMetadata = {
+      description: "Senior journalist covering technology and startups",
+      knowsAbout: "Premier League, VAR, Football Refereeing",
+      jobTitle: "Senior Correspondent",
+    };
+
+    it("adds metadata-backed Person schema for author page", function () {
+      const storyData = sampleStoryData(null, [], sampleAuthorsData());
+      const string = getSeoMetadata(
+        getSeoConfig({}),
+        {},
+        "author-page",
+        {
+          data: {
+            author: {
+              name: "Divya Shree",
+              slug: "divya-shree-n",
+              metadata: authorMetadata,
+            },
+          },
+          config: storyData.config,
+        },
+        { url: url.parse("/author/divya-shree-n") }
+      );
+
+      assertContains(
+        '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Divya Shree","jobTitle":"Senior Correspondent","url":"https://madrid.quintype.io/author/divya-shree-n","description":"Senior journalist covering technology and startups","knowsAbout":"Premier League, VAR, Football Refereeing","worksFor":{"@type":"NewsMediaOrganization","name":"Quintype Demo","url":"https://madrid.quintype.io"}}</script>',
+        string
+      );
+    });
+
+    it("adds Person schema on story page using author metadata", function () {
+      const authors = [
+        {
+          name: "Divya Shree",
+          slug: "divya-shree-n",
+          metadata: authorMetadata,
+        },
+      ];
+      const string = getSeoMetadata(
+        getSeoConfig({ newsArticle: true }),
+        {},
+        "story-page",
+        sampleStoryData(null, [], authors),
+        { url: url.parse("/") }
+      );
+
+      assertContains(
+        '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Divya Shree","jobTitle":"Senior Correspondent","url":"https://madrid.quintype.io/author/divya-shree-n","description":"Senior journalist covering technology and startups","knowsAbout":"Premier League, VAR, Football Refereeing","worksFor":{"@type":"NewsMediaOrganization","name":"Quintype Demo","url":"https://madrid.quintype.io"}}</script>',
+        string
+      );
+    });
+  });
 });
