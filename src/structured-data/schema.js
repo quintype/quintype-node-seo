@@ -126,18 +126,42 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
 
 export function generateAuthorPageSchema(publisherConfig, data, url) {
   const sketchesHost = publisherConfig["sketches-host"];
-  const publisherName = getTitle(publisherConfig);
+  const author = get(data, ["author"], {});
+  const authorMetadata = get(author, ["metadata"], {});
   const authorHREF = url["href"];
   const authorURL = `${sketchesHost}${authorHREF}`;
-  const authorName = get(data, ["author", "name"], "");
-  return {
-    name: authorName,
-    jobTitle: "Author",
-    url: authorURL,
-    worksFor: {
-      "@type": "NewsMediaOrganization",
-      name: publisherName,
-      url: sketchesHost,
+  return generateAuthorSchema(publisherConfig, author, authorURL, authorMetadata);
+}
+
+export function generateAuthorSchema(publisherConfig, author = {}, authorURL = "", authorMetadata = {}) {
+  const sketchesHost = publisherConfig["sketches-host"];
+  const publisherName = getTitle(publisherConfig);
+  const metadata = Object.assign({}, get(author, ["metadata"], {}), authorMetadata);
+  const metadataJobTitle = get(metadata, ["jobTitle"], "");
+  const description = get(metadata, ["description"], "");
+  const knowsAbout = get(metadata, ["knowsAbout"], "");
+  return Object.assign(
+    {},
+    {
+      name: get(author, ["name"], ""),
+      jobTitle: metadataJobTitle || "Author",
     },
-  };
+    authorURL && { url: authorURL },
+    description && { description },
+    knowsAbout && { knowsAbout },
+    {
+      worksFor: {
+        "@type": "NewsMediaOrganization",
+        name: publisherName,
+        url: sketchesHost,
+      },
+    }
+  );
+}
+
+export function generateStoryAuthorSchema(publisherConfig, author = {}) {
+  const sketchesHost = publisherConfig["sketches-host"];
+  const authorSlug = get(author, ["slug"], "");
+  const authorURL = get(author, ["url"], "") || (authorSlug && `${sketchesHost}/author/${authorSlug}`) || "";
+  return generateAuthorSchema(publisherConfig, author, authorURL);
 }
