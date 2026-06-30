@@ -130,14 +130,37 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   const authorHREF = url["href"];
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
-  return {
-    name: authorName,
-    jobTitle: "Author",
-    url: authorURL,
-    worksFor: {
-      "@type": "NewsMediaOrganization",
-      name: publisherName,
-      url: sketchesHost,
+  const authorImage = get(data, ["author", "avatar-url"], "");
+  const { description, knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
+  const social = get(data, ["author", "social"], {});
+  const normalizedKnowsAbout = (knowsAbout || "")
+    .split(",")
+    .map((topic) => topic.trim())
+    .filter(Boolean);
+
+  const sameAs = Object.values(social).reduce((acc, socialItem) => {
+    const rawUrl = get(socialItem, ["url"], "");
+    if (rawUrl && !acc.includes(rawUrl)) {
+      acc.push(rawUrl);
+    }
+
+    return acc;
+  }, []);
+  const authorDescription = description || get(data, ["author", "bio"], "");
+  return Object.assign(
+    {
+      name: authorName,
+      jobTitle: jobTitle || "Author",
+      url: authorURL,
+      worksFor: {
+        "@type": "NewsMediaOrganization",
+        name: publisherName,
+        url: sketchesHost,
+      },
     },
-  };
+    authorDescription && { description: authorDescription },
+    normalizedKnowsAbout.length > 0 && { knowsAbout: normalizedKnowsAbout },
+    sameAs.length > 0 && { sameAs },
+    authorImage && { image: authorImage }
+  );
 }
