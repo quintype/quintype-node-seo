@@ -131,7 +131,7 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
   const authorImage = get(data, ["author", "avatar-url"], "");
-  const { description, knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
+  const { knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
   const social = get(data, ["author", "social"], {});
   const normalizedKnowsAbout = (knowsAbout || "")
     .split(",")
@@ -146,7 +146,7 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
 
     return acc;
   }, []);
-  const authorDescription = description || get(data, ["author", "bio"], "");
+  const authorDescription = get(data, ["author", "bio"], "");
   return Object.assign(
     {
       name: authorName,
