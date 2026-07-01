@@ -133,10 +133,11 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   const authorImage = get(data, ["author", "avatar-url"], "");
   const { knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
   const social = get(data, ["author", "social"], {});
-  const normalizedKnowsAbout = (knowsAbout || "")
-    .split(",")
-    .map((topic) => topic.trim())
-    .filter(Boolean);
+
+  const normalizedKnowsAbout =
+     typeof knowsAbout === "string"
+       ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
+       : [];
 
   const sameAs = Object.values(social).reduce((acc, socialItem) => {
     const rawUrl = get(socialItem, ["url"], "");
