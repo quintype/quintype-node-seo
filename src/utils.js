@@ -77,3 +77,25 @@ export function parseCommaSeparatedValues(value = "") {
     .map((name) => name.trim())
     .filter((name) => Boolean(name))
 }
+
+export function getAuthorSocialUrls(storyAuthor = {}) {
+  const socialLinks = get(storyAuthor, ["social"], {});
+  const sameAs = Object.values(socialLinks).reduce((acc, socialItem) => {
+    const rawUrl = get(socialItem, ["url"], "");
+    if (rawUrl && !acc.includes(rawUrl)) {
+      acc.push(rawUrl);
+    }
+
+    return acc;
+  }, []);
+  return sameAs;
+}
+
+export function getAuthorKnowsAbout(storyAuthor = {}) {
+  const knowsAbout = get(storyAuthor, ["metadata", "knowsAbout"], "");
+  const normalizedKnowsAbout =
+    typeof knowsAbout === "string"
+      ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
+      : [];
+  return normalizedKnowsAbout;
+}

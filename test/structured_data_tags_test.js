@@ -67,7 +67,10 @@ function sampleAuthorsData() {
       "avatar-s3-key":
         "quintype-demo/2018-03/9a16b150-6281-45e6-bdb9-6eb1146e1a54/50b1da06-b478-4bc8-8067-fada337c55d0.jpeg",
       "twitter-handle": null,
-      bio: null,
+      bio: "description of author Greeshma as bio",
+      knowsAbout: "Politics, Economy",
+      sameAs: ["https://twitter.com/greeshma"],
+      jobTitle: "Senior Editor",
     },
   ];
 }

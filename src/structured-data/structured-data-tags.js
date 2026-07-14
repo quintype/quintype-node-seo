@@ -2,6 +2,8 @@ import get from "lodash/get";
 import { FocusedImage } from "quintype-js";
 import {
   getAllowedCards,
+  getAuthorKnowsAbout,
+  getAuthorSocialUrls,
   getQueryParams,
   parseCommaSeparatedValues,
   stripMillisecondsFromTime,
@@ -45,6 +47,25 @@ function imageUrl(publisherConfig, s3Key, width, height) {
   return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
 }
 
+function normalizeAuthorMetadata(storyAuthor = {}) {
+  const storyAuthorMetadata = get(storyAuthor, ["metadata"], {});
+  const jobTitle = get(storyAuthorMetadata, ["jobTitle"], "") || "";
+  const description = get(storyAuthorMetadata, ["description"], "") || "";
+  const authorImage = get(storyAuthor, ["avatar-url"], "");
+  const normalizedKnowsAbout = getAuthorKnowsAbout(storyAuthor);
+
+  const sameAs = getAuthorSocialUrls(storyAuthor);
+
+  return Object.assign(
+    {},
+    jobTitle && { jobTitle },
+    description && { description },
+    authorImage && { image: authorImage },
+    normalizedKnowsAbout.length > 0 && { knowsAbout: normalizedKnowsAbout },
+    sameAs.length > 0 && { sameAs },
+  );
+}
+
 function generateCommonData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const storyUrl = story.url || `${publisherConfig["sketches-host"]}/${story.slug}`;
   const orgUrl = get(structuredData, ["organization", "url"], "");
@@ -69,11 +90,15 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
 
 function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   if (authorSchema.length > 0) {
-    return authorSchema.map((author) => getSchemaPerson(author.name, author.url));
+    return authorSchema.map((author) => {
+      const authorMetadata = normalizeAuthorMetadata(author || {});
+      return Object.assign({}, getSchemaPerson(author.name, author.url), authorMetadata);
+    });
   }
   return authors.map((author) => {
     const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
-    return getSchemaPerson(author.name, authorUrl);
+    const authorMetadata = normalizeAuthorMetadata(author || {});
+    return Object.assign({}, getSchemaPerson(author.name, authorUrl), authorMetadata);
   });
 }
 
@@ -119,13 +144,13 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const inLanguage = get(publisherConfig, ["language", "iso-code"], "");
   const description =
     get(story, ["seo", "meta-description"]) || get(story, ["subheadline"]) || get(story, ["headline"]);
-
+  const storyAuthorMetadata = get(story, ["authors", "metadata"], {});
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
     {
       description,
-      author: authorData(authors, authorSchema, publisherConfig),
+      author: authorData(authors, authorSchema, publisherConfig, storyAuthorMetadata),
       keywords: metaKeywords.join(","),
       thumbnailUrl: imageUrl(publisherConfig, story["hero-image-s3-key"], imageWidth, imageHeight),
       articleBody: (storyKeysPresence && getCompleteText(story, structuredData.stripHtmlFromArticleBody)) || "",
@@ -334,6 +359,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   const imageWidth = 1200;
   const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+  const storyAuthorMetadata = get(story, ["authors", "metadata"], {});
   const { website: { url = "" } = {} } = structuredData;
   const orgUrl = get(structuredData, ["organization", "url"], "");
 
@@ -343,7 +369,7 @@ function generateLiveBlogPostingData(structuredData = {}, story = {}, publisherC
   return {
     headline: story.headline,
     description: story.summary || get(story, ["seo", "meta-description"]) || story.subheadline,
-    author: authorData(story.authors, authorSchema, publisherConfig),
+    author: authorData(story.authors, authorSchema, publisherConfig, storyAuthorMetadata),
     coverageEndTime: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
     coverageStartTime: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["updated-at"]), timezone),
@@ -413,8 +439,9 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
   const imageWidth = 1200;
   const imageHeight = 675;
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+  const storyAuthorMetadata = get(story, ["authors","metadata"], {});
   return Object.assign({}, generateCommonData(structuredData, story, publisherConfig, timezone), {
-    author: authorData(story.authors, authorSchema, publisherConfig),
+    author: authorData(story.authors, authorSchema, publisherConfig, storyAuthorMetadata),
     keywords: metaKeywords.join(","),
     dateCreated: stripMillisecondsFromTime(new Date(story["first-published-at"]), timezone),
     dateModified: stripMillisecondsFromTime(new Date(story["last-published-at"]), timezone),
@@ -428,9 +455,10 @@ function generateVideoArticleData(structuredData = {}, story = {}, publisherConf
 
 function generateMovieReviewData(structuredData = {}, story = {}, publisherConfig = {}, timezone) {
   const authorSchema = (structuredData.authorSchema && structuredData.authorSchema(story)) || [];
+  const storyAuthorMetadata = get(story, ["authors", "metadata"], {});
   const storyAuthors = story.authors && story.authors.length !== 0 ? story.authors : [{ name: story["author-name"] || "" }];
   const storyKeysPresence = Object.keys(story).length > 0;
-  const authors = authorData(storyAuthors, authorSchema, publisherConfig);
+  const authors = authorData(storyAuthors, authorSchema, publisherConfig, storyAuthorMetadata);
   const storyHeadline = get(story, ["headline"], "");
   const storySubheadline = get(story, ["subheadline"], "");
   const metadata = get(story, ["metadata"], {});

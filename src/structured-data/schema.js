@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { getTitle } from "../generate-common-seo";
-import { stripMillisecondsFromTime } from "../utils";
+import { getAuthorKnowsAbout, getAuthorSocialUrls, stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "https://schema.org" };
 
 export function getSchemaType(type) {
@@ -131,22 +131,12 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
   const authorURL = `${sketchesHost}${authorHREF}`;
   const authorName = get(data, ["author", "name"], "");
   const authorImage = get(data, ["author", "avatar-url"], "");
-  const { knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
-  const social = get(data, ["author", "social"], {});
+  const jobTitle = get(data, ["author", "metadata", "job-title"], "Author");
 
-  const normalizedKnowsAbout =
-     typeof knowsAbout === "string"
-       ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
-       : [];
+ const normalizedKnowsAbout = getAuthorKnowsAbout(get(data, ["author"], {}));
 
-  const sameAs = Object.values(social).reduce((acc, socialItem) => {
-    const rawUrl = get(socialItem, ["url"], "");
-    if (rawUrl && !acc.includes(rawUrl)) {
-      acc.push(rawUrl);
-    }
+ const sameAs = getAuthorSocialUrls(get(data, ["author"], {}));
 
-    return acc;
-  }, []);
   const authorDescription = get(data, ["author", "bio"], "");
   return Object.assign(
     {
