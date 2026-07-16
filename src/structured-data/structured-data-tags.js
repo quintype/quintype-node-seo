@@ -59,13 +59,7 @@ function normalizeAuthorMetadata(storyAuthor = {}, publisherConfig = {}) {
 
   const sameAs = getAuthorSocialUrls(storyAuthor);
   return Object.assign(
-    {
-      worksFor: {
-        "@type": "NewsMediaOrganization",
-        name: publisherName,
-        url: sketchesHost,
-      }
-    },
+    {},
     jobTitle && { jobTitle },
     description && { description },
     authorImage && { image: authorImage },
