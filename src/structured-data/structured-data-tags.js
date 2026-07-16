@@ -1,5 +1,6 @@
 import get from "lodash/get";
 import { FocusedImage } from "quintype-js";
+import { getTitle } from "../generate-common-seo";
 import {
   getAllowedCards,
   getAuthorKnowsAbout,
@@ -47,17 +48,24 @@ function imageUrl(publisherConfig, s3Key, width, height) {
   return `${imageSrc}/${s3Key}?w=${width}&h=${height}&auto=format%2Ccompress&fit=max&enlarge=true`;
 }
 
-function normalizeAuthorMetadata(storyAuthor = {}) {
+function normalizeAuthorMetadata(storyAuthor = {}, publisherConfig = {}) {
+  const sketchesHost = publisherConfig["sketches-host"];
+  const publisherName = getTitle(publisherConfig);
   const storyAuthorMetadata = get(storyAuthor, ["metadata"], {});
-  const jobTitle = get(storyAuthorMetadata, ["jobTitle"], "") || "";
-  const description = get(storyAuthorMetadata, ["description"], "") || "";
+  const jobTitle = get(storyAuthorMetadata, ["jobTitle"], "");
+  const description = get(storyAuthor, ["bio"], "");
   const authorImage = get(storyAuthor, ["avatar-url"], "");
   const normalizedKnowsAbout = getAuthorKnowsAbout(storyAuthor);
 
   const sameAs = getAuthorSocialUrls(storyAuthor);
-
   return Object.assign(
-    {},
+    {
+      worksFor: {
+        "@type": "NewsMediaOrganization",
+        name: publisherName,
+        url: sketchesHost,
+      }
+    },
     jobTitle && { jobTitle },
     description && { description },
     authorImage && { image: authorImage },
@@ -91,13 +99,13 @@ function generateCommonData(structuredData = {}, story = {}, publisherConfig = {
 function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   if (authorSchema.length > 0) {
     return authorSchema.map((author) => {
-      const authorMetadata = normalizeAuthorMetadata(author || {});
+      const authorMetadata = normalizeAuthorMetadata(author || {},publisherConfig);
       return Object.assign({}, getSchemaPerson(author.name, author.url), authorMetadata);
     });
   }
   return authors.map((author) => {
     const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
-    const authorMetadata = normalizeAuthorMetadata(author || {});
+    const authorMetadata = normalizeAuthorMetadata(author || {}, publisherConfig);
     return Object.assign({}, getSchemaPerson(author.name, authorUrl), authorMetadata);
   });
 }
