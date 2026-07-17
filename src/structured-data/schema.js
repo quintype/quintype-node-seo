@@ -128,7 +128,7 @@ export function generateAuthorPageSchema(publisherConfig, author, url) {
   const sketchesHost = publisherConfig["sketches-host"];
   const publisherName = getTitle(publisherConfig);
   const authorHREF = url["href"];
-  const authorURL = `${sketchesHost}${authorHREF}` || url;
+  const authorURL = authorHREF ? `${sketchesHost}${authorHREF}` : url;
   const authorName = get(author, ["name"], "");
   const authorImage = get(author, ["avatar-url"], "");
   const { knowsAbout, jobTitle } = get(author, ["metadata"], {});

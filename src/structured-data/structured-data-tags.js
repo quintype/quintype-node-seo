@@ -947,6 +947,13 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
 
+    const authors = story.authors && story.authors.length ? story.authors : [{ name: story["author-name"] || "" }];
+
+    authors.map((author) => {
+      const url = `${publisherConfig["sketches-host"]}/author/${author["slug"]}`;
+      tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, author, url)));
+    });
+
     if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
       tags.push(ldJson("Article", articleData));
     }
