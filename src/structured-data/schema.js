@@ -1,6 +1,6 @@
 import { get } from "lodash";
 import { getTitle } from "../generate-common-seo";
-import { getAuthorKnowsAbout, getAuthorSocialUrls, stripMillisecondsFromTime } from "../utils";
+import { stripMillisecondsFromTime } from "../utils";
 export const getSchemaContext = { "@context": "https://schema.org" };
 
 export function getSchemaType(type) {
@@ -124,20 +124,31 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
   return Object.assign({}, getSchemaContext, getSchemaType("BreadcrumbList"), { itemListElement });
 }
 
-export function generateAuthorPageSchema(publisherConfig, data, url) {
+export function generateAuthorPageSchema(publisherConfig, author, url) {
   const sketchesHost = publisherConfig["sketches-host"];
   const publisherName = getTitle(publisherConfig);
   const authorHREF = url["href"];
-  const authorURL = `${sketchesHost}${authorHREF}`;
-  const authorName = get(data, ["author", "name"], "");
-  const authorImage = get(data, ["author", "avatar-url"], "");
-  const jobTitle = get(data, ["author", "metadata", "jobTitle"], "Author");
+  const authorURL = `${sketchesHost}${authorHREF}` || url;
+  const authorName = get(author, ["name"], "");
+  const authorImage = get(author, ["avatar-url"], "");
+  const { knowsAbout, jobTitle } = get(author, ["metadata"], {});
+  const social = get(author, ["social"], {});
 
- const normalizedKnowsAbout = getAuthorKnowsAbout(get(data, ["author"], {}));
+  const normalizedKnowsAbout =
+     typeof knowsAbout === "string"
+       ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
+       : [];
 
- const sameAs = getAuthorSocialUrls(get(data, ["author"], {}));
+  const sameAs = Object.values(social).reduce((acc, socialItem) => {
+    const rawUrl = get(socialItem, ["url"], "");
+    if (rawUrl && !acc.includes(rawUrl)) {
+      acc.push(rawUrl);
+    }
 
-  const authorDescription = get(data, ["author", "bio"], "");
+    return acc;
+  }, []);
+  const authorDescription = get(author, ["bio"], "");
+
   return Object.assign(
     {
       name: authorName,
