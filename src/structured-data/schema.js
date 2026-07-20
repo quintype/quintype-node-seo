@@ -127,7 +127,7 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
 export function generateAuthorPageSchema(publisherConfig, author, url) {
   const sketchesHost = publisherConfig["sketches-host"];
   const publisherName = getTitle(publisherConfig);
-  const authorHREF = url["href"];
+  const authorHREF = url && url["href"];
   const authorURL = authorHREF ? `${sketchesHost}${authorHREF}` : url;
   const authorName = get(author, ["name"], "");
   const authorImage = get(author, ["avatar-url"], "");

@@ -918,7 +918,7 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
     const authors = story.authors && story.authors.length ? story.authors : [{ name: story["author-name"] || "" }];
 
     authors.map((author) => {
-      const url = `${publisherConfig["sketches-host"]}/author/${author["slug"]}`;
+      const url = author.slug ? `${publisherConfig["sketches-host"]}/author/${author["slug"]}` : null;
       tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, author, url)));
     });
   }
@@ -944,15 +944,15 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
-    const newsArticleTags = generateNewsArticleTags();
-    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
-
     const authors = story.authors && story.authors.length ? story.authors : [{ name: story["author-name"] || "" }];
 
     authors.map((author) => {
-      const url = `${publisherConfig["sketches-host"]}/author/${author["slug"]}`;
+      const url = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
       tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, author, url)));
     });
+
+    const newsArticleTags = generateNewsArticleTags();
+    newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
 
     if (story["story-template"] === "movie-review" && structuredData.enableNewsArticle !== "withoutArticleSchema") {
       tags.push(ldJson("Article", articleData));
