@@ -7,7 +7,7 @@ export function getSchemaType(type) {
   return { "@type": type };
 }
 
-export function getSchemaPerson(name, url = "") {
+export function getSchemaPerson(name, url = "", image = "") {
   return Object.assign(
     {},
     getSchemaType("Person"),
@@ -15,7 +15,8 @@ export function getSchemaPerson(name, url = "") {
       givenName: name,
       name: name,
     },
-    url && { url: url }
+    url && { url: url },
+    image && { image: image }
   );
 }
 

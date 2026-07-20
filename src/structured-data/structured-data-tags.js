@@ -73,7 +73,7 @@ function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   }
   return authors.map((author) => {
     const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
-    return getSchemaPerson(author.name, authorUrl);
+    return getSchemaPerson(author.name, authorUrl, author["avatar-url"]);
   });
 }
 
