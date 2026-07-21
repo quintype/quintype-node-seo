@@ -5,7 +5,7 @@ import {
   getQueryParams,
   parseCommaSeparatedValues,
   stripMillisecondsFromTime,
-  stripQueryParams,
+  stripQueryParams
 } from "../utils";
 import { generateTagsForEntity } from "./entity";
 import {
@@ -73,7 +73,7 @@ function authorData(authors = [], authorSchema = [], publisherConfig = {}) {
   }
   return authors.map((author) => {
     const authorUrl = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
-    return getSchemaPerson(author.name, authorUrl);
+    return getSchemaPerson(author.name, authorUrl, author["avatar-url"]);
   });
 }
 
@@ -119,7 +119,6 @@ function generateArticleData(structuredData = {}, story = {}, publisherConfig = 
   const inLanguage = get(publisherConfig, ["language", "iso-code"], "");
   const description =
     get(story, ["seo", "meta-description"]) || get(story, ["subheadline"]) || get(story, ["headline"]);
-
   return Object.assign(
     {},
     generateCommonData(structuredData, story, publisherConfig, timezone),
@@ -915,6 +914,16 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
    tags.push(ldJson("SiteNavigationElement", siteNavigationSchema));
   }
 
+  if (!isStructuredDataEmpty && pageType === "story-page") {
+    const authors = story.authors && story.authors.length ? story.authors : [{ name: story["author-name"] || "" }];
+
+    authors.map((author) => {
+      const url = author.slug ? `${publisherConfig["sketches-host"]}/author/${author["slug"]}` : null;
+      tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, author, url)));
+    });
+  }
+
+
   if (enableEventsData && pageType === "story-page" && enableStorySeoEventsData) {
     tags.push(ldJson("Event", generateEventsSchema(story, publisherConfig)));
   }
@@ -935,6 +944,13 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && pageType === "story-page-amp") {
+    const authors = story.authors && story.authors.length ? story.authors : [{ name: story["author-name"] || "" }];
+
+    authors.map((author) => {
+      const url = author.slug ? `${publisherConfig["sketches-host"]}/author/${author.slug}` : null;
+      tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, author, url)));
+    });
+
     const newsArticleTags = generateNewsArticleTags();
     newsArticleTags ? tags.push(storyTags(), newsArticleTags) : tags.push(storyTags());
 
@@ -963,7 +979,8 @@ export function StructuredDataTags({ structuredData = {} }, config, pageType, re
   }
 
   if (!isStructuredDataEmpty && pageType === "author-page") {
-    tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, response.data, url)));
+    const authorObj = get(response, ["data", "author"], {});
+    tags.push(ldJson("Person", generateAuthorPageSchema(publisherConfig, authorObj, url)));
   }
 
   function generateNewsArticleTags() {

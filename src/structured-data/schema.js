@@ -7,7 +7,7 @@ export function getSchemaType(type) {
   return { "@type": type };
 }
 
-export function getSchemaPerson(name, url = "") {
+export function getSchemaPerson(name, url = "", image = "") {
   return Object.assign(
     {},
     getSchemaType("Person"),
@@ -15,7 +15,8 @@ export function getSchemaPerson(name, url = "") {
       givenName: name,
       name: name,
     },
-    url && { url: url }
+    url && { url: url },
+    image && { image: image }
   );
 }
 
@@ -124,15 +125,15 @@ export function getSchemaBreadcrumbList(breadcrumbsDataList) {
   return Object.assign({}, getSchemaContext, getSchemaType("BreadcrumbList"), { itemListElement });
 }
 
-export function generateAuthorPageSchema(publisherConfig, data, url) {
+export function generateAuthorPageSchema(publisherConfig, author, url) {
   const sketchesHost = publisherConfig["sketches-host"];
   const publisherName = getTitle(publisherConfig);
-  const authorHREF = url["href"];
-  const authorURL = `${sketchesHost}${authorHREF}`;
-  const authorName = get(data, ["author", "name"], "");
-  const authorImage = get(data, ["author", "avatar-url"], "");
-  const { knowsAbout, jobTitle } = get(data, ["author", "metadata"], {});
-  const social = get(data, ["author", "social"], {});
+  const authorHREF = url && url["href"];
+  const authorURL = authorHREF ? `${sketchesHost}${authorHREF}` : url;
+  const authorName = get(author, ["name"], "");
+  const authorImage = get(author, ["avatar-url"], "");
+  const { knowsAbout, jobTitle } = get(author, ["metadata"], {});
+  const social = get(author, ["social"], {});
 
   const normalizedKnowsAbout =
      typeof knowsAbout === "string"
@@ -147,7 +148,8 @@ export function generateAuthorPageSchema(publisherConfig, data, url) {
 
     return acc;
   }, []);
-  const authorDescription = get(data, ["author", "bio"], "");
+  const authorDescription = get(author, ["bio"], "");
+
   return Object.assign(
     {
       name: authorName,
