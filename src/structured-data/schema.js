@@ -56,7 +56,7 @@ export function getSchemaBlogPosting(
 }
 
 export function getSchemaPublisher(organization, orgUrl) {
-  const id = { id: orgUrl };
+  const id = { "@id": orgUrl };
   return {
     publisher: Object.assign({}, organization, id, getSchemaType("NewsMediaOrganization")),
   };
