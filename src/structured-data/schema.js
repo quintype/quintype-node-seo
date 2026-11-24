@@ -23,16 +23,16 @@ export function getSchemaPerson(name, url = "", image = "") {
 export function getSchemaFooter({ cssSelector }) {
   return cssSelector
     ? Object.assign({}, getSchemaContext, getSchemaType("WPFooter"), {
-        cssSelector: cssSelector,
-      })
+      cssSelector: cssSelector,
+    })
     : {};
 }
 
 export function getSchemaHeader({ cssSelector }) {
   return cssSelector
     ? Object.assign({}, getSchemaContext, getSchemaType("WPHeader"), {
-        cssSelector: cssSelector,
-      })
+      cssSelector: cssSelector,
+    })
     : {};
 }
 
@@ -133,12 +133,12 @@ export function generateAuthorPageSchema(publisherConfig, author, url) {
   const authorName = get(author, ["name"], "");
   const authorImage = get(author, ["avatar-url"], "");
   const { knowsAbout, jobTitle } = get(author, ["metadata"], {});
-  const social = get(author, ["social"], {});
+  const social = get(author, ["social"], {}) || {};
 
   const normalizedKnowsAbout =
-     typeof knowsAbout === "string"
-       ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
-       : [];
+    typeof knowsAbout === "string"
+      ? knowsAbout.split(",").map((topic) => topic.trim()).filter(Boolean)
+      : [];
 
   const sameAs = Object.values(social).reduce((acc, socialItem) => {
     const rawUrl = get(socialItem, ["url"], "");
