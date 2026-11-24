@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.53.2](https://github.com/quintype/quintype-node-seo/compare/v1.53.1...v1.53.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* Handle null social field in author schema ([#582](https://github.com/quintype/quintype-node-seo/issues/582)) ([6c2cd1a](https://github.com/quintype/quintype-node-seo/commit/6c2cd1a63bc30730f526d801b2152a9821b0c93e))
+
 ### [1.53.1](https://github.com/quintype/quintype-node-seo/compare/v1.53.0...v1.53.1) (2026-07-21)
 
 ## [1.53.0](https://github.com/quintype/quintype-node-seo/compare/v1.50.3...v1.53.0) (2026-07-02)
